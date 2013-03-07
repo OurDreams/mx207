@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/new/perfix1">
+        <file>img/fatalerror_obj.gif</file>
+        <file>img/help.gif</file>
+        <file>img/news.jpg</file>
+        <file>img/ok.gif</file>
+        <file>img/property_obj.gif</file>
+        <file>img/set_action_obj.gif</file>
+    </qresource>
+</RCC>
