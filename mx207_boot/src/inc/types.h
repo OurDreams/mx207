@@ -29,7 +29,7 @@ typedef enum
     FALSE = 0,
     TRUE
 } bool_e;
-typedef int status;
+typedef int status_t;
 
 #define OK      1
 #define ERROR  -1
@@ -46,6 +46,8 @@ typedef double      (*DBLFUNCPTR) ();  /* ptr to function returning double*/
 typedef float       (*FLTFUNCPTR) ();  /* ptr to function returning float */
 typedef void (*VOIDFUNCPTRBOOL)(bool_e b);
 typedef void (*VOIDFUNCPTRBOOLE)(bool_e b);
+
+#define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
 
 #endif /* TYPES_H_ */
 /*--------------------------End of types.h-----------------------------*/

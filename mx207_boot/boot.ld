@@ -12,6 +12,7 @@ SECTIONS
         KEEP(*(.isr_vector))
         *(.text*)
         *(.rodata*)
+        _etext = .;
        
     } > FLASH
 
@@ -28,27 +29,29 @@ SECTIONS
         __exidx_end = .;
     } > FLASH
 
-
     . = ALIGN(4);
-     _etext = .;
-    /* This is used by the startup in order to initialize the .data secion */
-    the_sidata = _etext;
-    .data : AT(the_sidata)
+    .data : AT(_etext)
     {
-        the_data = .;
+        _data = .;
         *(vtable)
         *(.data*)
-        the_edata = .;
+        _edata = .;
     } > SRAM
     
     
-    .bss :
+    .bss(NOLOAD) :
     {
         . = ALIGN(4);
-        the_bss = .;
+        _bss = .;
         *(.bss*)
         *(COMMON) 
-        the_ebss = .;
+        _ebss = .;
     } > SRAM
     
+    .stackarea(NOLOAD):
+    {
+         . = ALIGN(8);
+         _stackarea = .;
+         . = ALIGN(8);
+    } > SRAM
 }
