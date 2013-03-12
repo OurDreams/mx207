@@ -11,8 +11,7 @@ SECTIONS
         _text = .;
         KEEP(*(.isr_vector))
         *(.text*)
-        *(.rodata*)
-        _etext = .;
+        *(.rodata*)  
        
     } > FLASH
 
@@ -28,10 +27,13 @@ SECTIONS
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
         __exidx_end = .;
     } > FLASH
-
+    
     . = ALIGN(4);
+    _etext = .;
+    
     .data : AT(_etext)
     {
+        . = ALIGN(4);
         _data = .;
         *(vtable)
         *(.data*)
@@ -39,7 +41,7 @@ SECTIONS
     } > SRAM
     
     
-    .bss(NOLOAD) :
+    .bss :
     {
         . = ALIGN(4);
         _bss = .;
@@ -48,10 +50,10 @@ SECTIONS
         _ebss = .;
     } > SRAM
     
-    .stackarea(NOLOAD):
+    .stackarea :
     {
-         . = ALIGN(8);
+         . = ALIGN(4);
          _stackarea = .;
-         . = ALIGN(8);
+         . = ALIGN(4);
     } > SRAM
 }

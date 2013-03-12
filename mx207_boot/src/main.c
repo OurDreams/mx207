@@ -36,7 +36,7 @@ static void dummy(void);
 static void systick_routine(void);
 //static void set_msp(uint32_t main_stack);
 static void jump_to_app(uint32_t address);
-static void mxmain(void);
+static void main(void);
 /*-----------------------------------------------------------------------------
  Section: Globals
  ----------------------------------------------------------------------------*/
@@ -160,24 +160,19 @@ static void reset_routine(void)
     uint32_t* pul_dest;
 
     /* 从闪存复制初始化数据段到SRAM中. */
-    pul_src = &_etext;
-    pul_dest = &_data;
-    while (pul_dest < &_edata)
+
+    for(pul_dest = &_data, pul_src = &_etext; pul_dest < &_edata; )
     {
-        *pul_dest = *pul_src;
-        pul_dest++;
-        pul_src++;
+        *pul_dest++ = *pul_src++;
     }
 
     /* BSS数据段清零. */
-    pul_dest = &_bss;
-    while(pul_dest < &_ebss)
+    for(pul_dest = &_bss; pul_dest < &_ebss; )
     {
-        *pul_dest = 0;
+        *pul_dest++ = 0;
     }
-
     /* 跳转到主程序. */
-    mxmain();
+    main();
 }
 
 /**
@@ -336,7 +331,7 @@ static void systick_routine(void)
  ******************************************************************************
  */
 
-void mxmain(void)
+void main(void)
 {
     /* 初始化设备 */
     hw_init();

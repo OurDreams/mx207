@@ -21,6 +21,7 @@
  Section: Private Function Prototypes
  ----------------------------------------------------------------------------*/
 static void uart_init(void);
+static void  led_init(void);
 /*-----------------------------------------------------------------------------
  Section: Globals
  ----------------------------------------------------------------------------*/
@@ -46,12 +47,16 @@ hw_init(void)
 {
     SystemInit();
 
+
     /* 使能外设 */
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
     RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
 
+    led_init();
     /* 配置UART */
     uart_init();
+
+
 }
 
 /**
@@ -145,6 +150,31 @@ uart_init(void)
 
     USART_Init(UART_BASE, &usart_inits);
     UART_BASE->CR1 |= USART_CR1_UE;
+}
+/**
+ ******************************************************************************
+ * @brief      LED初始化为全亮
+ * @param[in]  None
+ * @param[out] None
+ * @retval     None
+ *
+ * @details
+ *
+ * @note
+ ******************************************************************************
+ */
+void led_init(void)
+{
+	GPIO_InitTypeDef led_inits;
+
+	led_inits.GPIO_OType = GPIO_OType_PP;
+	led_inits.GPIO_PuPd = GPIO_PuPd_DOWN;
+	led_inits.GPIO_Mode = GPIO_Mode_OUT;
+	led_inits.GPIO_Speed = GPIO_Speed_50MHz;
+	led_inits.GPIO_Pin = GPIO_Pin_2;
+
+    GPIO_Init(GPIOB, &led_inits);
+
 }
 /**
  ******************************************************************************

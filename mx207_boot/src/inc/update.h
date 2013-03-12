@@ -28,7 +28,7 @@ Section: Includes
 Section: Function Definitions
 -----------------------------------------------------------------------------*/
 
-extern status uart_update(void);
+extern status_t uart_update(void);
 
 extern uint32_t get_run_status(void);
 
