@@ -17,14 +17,17 @@ SECTIONS
 
     .ARM.extab :
     {
+    	. = ALIGN(4);
         *(.ARM.extab* .gnu.linkonce.armextab.*)
-
+        . = ALIGN(4);
     } > FLASH
 
     .ARM.exidx :
     {
+    	. = ALIGN(4);
         __exidx_start = .;
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+    	. = ALIGN(4);
         __exidx_end = .;
     } > FLASH
     
@@ -37,16 +40,17 @@ SECTIONS
         _data = .;
         *(vtable)
         *(.data*)
+        . = ALIGN(4);
         _edata = .;
     } > SRAM
-    
     
     .bss :
     {
         . = ALIGN(4);
         _bss = .;
         *(.bss*)
-        *(COMMON) 
+        *(COMMON)
+        . = ALIGN(4);
         _ebss = .;
     } > SRAM
     

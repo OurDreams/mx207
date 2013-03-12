@@ -1,18 +1,19 @@
-/*
- * @file       stm32f2xx.h
- * @version    V1
- * @brief      API C source file of stm32f2xx.h
- *             Created on: 2013-3-9
- *             Author: daixuyi
- * @details      
- * @Copy       Copyrigth(C), daixuyi ,2013-2015.           
- *             
+/**
+ ******************************************************************************
+ * @file       stm32f207.h
+ * @brief      本文包含stm32f207芯片底层操作头文件.
+ * @details    This file including all API functions's declare of types.h.
+ * @copyright
+ *
+ ******************************************************************************
  */
 
+#ifndef __STM32F207_H__
+#define __STM32F207_H__
 
-#ifndef STM32F2XX_H_
-#define STM32F2XX_H_
-
+/*-----------------------------------------------------------------------------
+ Section: Includes
+ ----------------------------------------------------------------------------*/
 #include "./cpu/core_cm3.h"
 #include "./cpu/core_cmFunc.h"
 #include "./cpu/core_cmInstr.h"
@@ -45,5 +46,5 @@
 #include "./cpu/stm32f2xx_wwdg.h"
 #include "./cpu/system_stm32f2xx.h"
 
-
-#endif /* STM32F2XX_H_ */
+#endif /* __STM32F207_H__ */
+/*----------------------------End of stm32f207.h-----------------------------*/

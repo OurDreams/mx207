@@ -14,287 +14,212 @@
 #include <types.h>
 #include <target.h>
 #include <update.h>
+#include <cfg.h>
 /*----------------------------------------------------------------------------
  Section: Type Definitions
+ ----------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------
+ Section: Private Function Prototypes
+ ----------------------------------------------------------------------------*/
+static void reset_routine(void);
+static void default_routine(void);
+static void dummy(void);
+static void systick_routine(void);
+static void jump_to_app(uint32_t address);
+int main(void);
+
+/*-----------------------------------------------------------------------------
+ Section: Globals
  ----------------------------------------------------------------------------*/
 extern uint32_t _etext; //The end of text;
 extern uint32_t _bss;   //The start of bss;
 extern uint32_t _ebss;
 extern uint32_t _data;
 extern uint32_t _edata;
-typedef void (* p_routine)(void);
+
 /*-----------------------------------------------------------------------------
- Section: Private Function Prototypes
+ Section: Private Variables
  ----------------------------------------------------------------------------*/
-static void reset_routine(void);
-static void nmi_routine(void);
-static void fault_routine(void);
-static void mem_fault_routine(void);
-static void bus_fault_routine(void);
-static void usage_fault_routine(void);
-static void dummy(void);
-static void systick_routine(void);
-//static void set_msp(uint32_t main_stack);
-static void jump_to_app(uint32_t address);
-static void main(void);
-/*-----------------------------------------------------------------------------
- Section: Globals
- ----------------------------------------------------------------------------*/
-#define STACK_SIZE            (8 * 1024)    /* ’ª¥Û–°(µ•ŒªŒ™◊÷) */
-#define APP_START_ADDRESS     0x08008000u   /* ”¶”√≥Ã–Ú∆ ºµÿ÷∑£¨32K */
-static volatile uint32_t the_run_time = 0u; /* …˝º∂≥Ã–Ú‘À––¿€º∆ ±º‰(√Î) */
+static uint32_t the_run_time = 0u; /* …˝º∂≥Ã–Ú‘À––¿€º∆ ±º‰(√Î) */
 __attribute__((section(".stackarea")))
 static uint32_t the_cstack[STACK_SIZE];
+
 __attribute__((section(".isr_vector")))
-const p_routine vector_table[] =
+const VOIDFUNCPTR vector_table[] =
 {
-        (p_routine)((uint32_t) the_cstack + sizeof(the_cstack)),/* ’ª∂•÷∏’Î */
-        reset_routine, /* ∏¥Œª÷–∂œ  */
-        nmi_routine, /* NMI÷–∂œ */
-        fault_routine, /* ”≤º˛¥ÌŒÛ */
-        mem_fault_routine, /* ¥Ê¥¢∆˜π‹¿Ì¥ÌŒÛ */
-        bus_fault_routine, /* ◊‹œﬂ¥ÌŒÛ */
-        usage_fault_routine, /* ”√∑®¥ÌŒÛ */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        systick_routine, /* 15œµÕ≥∂® ±∆˜ */
+    (VOIDFUNCPTR)((uint32_t)the_cstack + sizeof(the_cstack)),/* ’ª∂•÷∏’Î */
+    reset_routine,      /* ∏¥Œª÷–∂œ  */
+    default_routine,    /* NMI÷–∂œ */
+    default_routine,    /* ”≤º˛¥ÌŒÛ */
+    default_routine,    /* ¥Ê¥¢∆˜π‹¿Ì¥ÌŒÛ */
+    default_routine,    /* ◊‹œﬂ¥ÌŒÛ */
+    default_routine,    /* ”√∑®¥ÌŒÛ */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    systick_routine, /* 15œµÕ≥∂® ±∆˜ */
 
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
 
-        dummy, /* 21ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
+    dummy, /* 21ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
 
-        dummy, /* 31ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
+    dummy, /* 31ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
 
-        dummy, /* 41ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
+    dummy, /* 41ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
 
-        dummy, /* 51ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
+    dummy, /* 51ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
 
-        dummy, /* 61ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
+    dummy, /* 61ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
 
-        dummy, /* 71ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
-        dummy, /* ø’œ– */
+    dummy, /* 71ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
+    dummy, /* ø’œ– */
 
-        dummy, /* 81ø’œ– */
-        dummy, /* 82ø’œ– */
-        dummy, /* 83 */
+    dummy, /* 81ø’œ– */
+    dummy, /* 82ø’œ– */
+    dummy, /* 83 */
 };
 
+/*-----------------------------------------------------------------------------
+ Section: Function Definitions
+ ----------------------------------------------------------------------------*/
 /**
  ******************************************************************************
- * @brief      ∏¥Œª÷–∂œ»Îø⁄
+ * @brief   ∏¥Œª÷–∂œ»Îø⁄
  * @param[in]  None
  * @param[out] None
+ *
  * @retval     None
- *
- * @details
- *
- * @note
  ******************************************************************************
  */
-static void reset_routine(void)
+static void
+reset_routine(void)
 {
     uint32_t* pul_src;
     uint32_t* pul_dest;
 
     /* ¥”…¡¥Ê∏¥÷∆≥ı ºªØ ˝æ›∂ŒµΩSRAM÷–. */
-
-    for(pul_dest = &_data, pul_src = &_etext; pul_dest < &_edata; )
+    for (pul_dest = &_data, pul_src = &_etext; pul_dest < &_edata;)
     {
         *pul_dest++ = *pul_src++;
     }
 
-    /* BSS ˝æ›∂Œ«Â¡„. */
-    for(pul_dest = &_bss; pul_dest < &_ebss; )
+    /* bss∂Œ«Â¡„ */
+    for (pul_dest = &_bss; pul_dest < &_ebss;)
     {
         *pul_dest++ = 0;
     }
-    /* Ã¯◊™µΩ÷˜≥Ã–Ú. */
+    /* Ã¯◊™µΩ÷˜≥Ã–Ú */
     main();
 }
 
 /**
  ******************************************************************************
- * @brief      NMI÷–∂œ»Îø⁄
+ * @brief   “Ï≥£÷–∂œ»Îø⁄
  * @param[in]  None
  * @param[out] None
+ *
  * @retval     None
- *
- * @details
- *
- * @note
  ******************************************************************************
  */
-static void nmi_routine(void)
+static void
+default_routine(void)
 {
     while (TRUE)
     {
     }
 }
+
 /**
  ******************************************************************************
- * @brief      ”≤º˛¥ÌŒÛ¥¶¿Ì
+ * @brief   ø’œ–÷–∂œ»Îø⁄
  * @param[in]  None
  * @param[out] None
+ *
  * @retval     None
- *
- * @details
- *
- * @note
  ******************************************************************************
  */
-static void fault_routine(void)
-{
-    while (TRUE)
-    {
-    }
-}
-/**
- ******************************************************************************
- * @brief      ¥Ê¥¢∆˜π‹¿Ì¥ÌŒÛ¥¶¿Ì
- * @param[in]  None
- * @param[out] None
- * @retval     None
- *
- * @details
- *
- * @note
- ******************************************************************************
- */
-static void mem_fault_routine(void)
-{
-    while (TRUE)
-    {
-    }
-}
-/**
- ******************************************************************************
- * @brief      ◊‹œﬂ¥ÌŒÛ¥¶¿Ì
- * @param[in]  None
- * @param[out] None
- * @retval     None
- *
- * @details
- *
- * @note
- ******************************************************************************
- */
-static void bus_fault_routine(void)
-{
-    while (TRUE)
-    {
-    }
-}
-/**
- ******************************************************************************
- * @brief      ”√∑®¥ÌŒÛ¥¶¿Ì
- * @param[in]  None
- * @param[out] None
- * @retval     None
- *
- * @details
- *
- * @note
- ******************************************************************************
- */
-static void usage_fault_routine(void)
-{
-    while (TRUE)
-    {
-    }
-}
-/**
- ******************************************************************************
- * @brief      ø’œ–÷–∂œ»Îø⁄
- * @param[in]  None
- * @param[out] None
- * @retval     None
- *
- * @details
- *
- * @note
- ******************************************************************************
- */
-static void dummy(void)
+static void
+dummy(void)
 {
     return;
 }
+
 /**
  ******************************************************************************
- * @brief      ∂® ±∆˜÷–∂œ¥¶¿Ì
+ * @brief   ∂® ±∆˜÷–∂œ¥¶¿Ì
  * @param[in]  None
  * @param[out] None
+ *
  * @retval     None
- *
- * @details
- *
- * @note       ◊¢“‚£∫“™«Û√ø∫¡√Î÷–∂œ“ª¥Œ
+ * @note
+ *  ◊¢“‚£∫“™«Û√ø∫¡√Î÷–∂œ“ª¥Œ
  ******************************************************************************
  */
-
-static void systick_routine(void)
+static void
+systick_routine(void)
 {
        static uint32_t ms = 0u; /* ∫¡√Î ˝ */
 
@@ -310,7 +235,7 @@ static void systick_routine(void)
         if (the_run_time >= (10u * 60u))
         {
             /* reboot */
-            //TODO
+            //TODO ≥¨ ±–Ë∏¥Œª
 //          print("reboot!\r\n");
 //          reset();
             return;
@@ -320,18 +245,15 @@ static void systick_routine(void)
 
 /**
  ******************************************************************************
- * @brief      …˝º∂÷˜∫Ø ˝
+ * @brief   …˝º∂÷˜∫Ø ˝
  * @param[in]  None
  * @param[out] None
+ *
  * @retval     None
- *
- * @details
- *
- * @note
  ******************************************************************************
  */
-
-void main(void)
+int32_t
+main(void)
 {
     /* ≥ı ºªØ…Ë±∏ */
     hw_init();
@@ -339,7 +261,7 @@ void main(void)
     print("\r\n");
     print("*********************************************\r\n");
     print("*               BootLoader v1.1             *\r\n");
-    print("*           Copyright 2013 mx207.           *\r\n");
+    print("*            CopyRight 2013 mx207.          *\r\n");
     print("*********************************************\r\n");
 
     /* ø™∆Ù∂® ±∆˜ */
@@ -348,7 +270,7 @@ void main(void)
     /* ¥Æø⁄…˝º∂ */
     if (OK != uart_update())
     {
-        return;
+        return -1;
     }
 
     /* πÿ±’∂® ±∆˜ */
@@ -358,40 +280,36 @@ void main(void)
     /* Ã¯◊™ */
     jump_to_app(*(volatile uint32_t *) (APP_START_ADDRESS + 4u));
 
-    while (1)
-    {
-    }
-
+    return 0;
 }
+
 /**
  ******************************************************************************
- * @brief      ªÒ»°µ±«∞œµÕ≥‘À–– ±º‰
+ * @brief   ªÒ»°µ±«∞œµÕ≥‘À–– ±º‰
  * @param[in]  None
  * @param[out] None
- * @retval     uint32_t: ‘À––µƒ ±º‰
  *
- * @details
- *
- * @note
+ * @retval  ‘À––µƒ ±º‰
  ******************************************************************************
  */
-extern uint32_t get_systime(void)
+extern uint32_t
+get_systime(void)
 {
     return the_run_time;
 }
+
 /**
  ******************************************************************************
- * @brief      Ã¯◊™µΩ”¶”√≥Ã–Úµÿ÷∑
- * @param[in]  uint32_t address
+ * @brief   Ã¯◊™µΩ”¶”√≥Ã–Úµÿ÷∑
+ * @param[in]  address  : Ã¯◊™µÿ÷∑
  * @param[out] None
+ *
  * @retval     None
- *
- * @details
- *
- * @note
+ * todo: Ω´ª„±‡∏ƒŒ™c≥Ã–Ú
  ******************************************************************************
  */
-static void jump_to_app(uint32_t address)
+static void
+jump_to_app(uint32_t address)
 {
     __asm(
             "movw    r3, #32768\n"

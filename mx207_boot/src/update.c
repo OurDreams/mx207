@@ -8,127 +8,51 @@
  *
  ******************************************************************************
  */
-
 /*-----------------------------------------------------------------------------
  Section: Includes
  ----------------------------------------------------------------------------*/
 #include <update.h>
 #include <types.h>
 #include <target.h>
+#include <cfg.h>
 /*-----------------------------------------------------------------------------
  Section: Macro Definitions
  ----------------------------------------------------------------------------*/
 /* 命令码定义  */
-/* 0x20 测试连接  */
-#define COMMAND_PING             0x20u
-/* 0x21 开始下载  */
-#define COMMAND_DOWNLOAD         0x21u
-/* 0x23 获取状态  */
-#define COMMAND_GET_STATUS       0x23u
-/* 0x24 发送数据 */
-#define COMMAND_SEND_DATA        0x24u
-/*0x25 复位 */
-#define COMMAND_RESET            0x25u
+#define COMMAND_PING             0x20u  /**< 0x20 测试连接  */
+#define COMMAND_DOWNLOAD         0x21u  /**< 0x21 开始下载  */
+#define COMMAND_GET_STATUS       0x23u  /**< 0x23 获取状态  */
+#define COMMAND_SEND_DATA        0x24u  /**< 0x24 发送数据 */
+#define COMMAND_RESET            0x25u  /**< 0x25 复位 */
+
 /* 应答码 */
-/* 0xCC 接收成功 */
-#define COMMAND_ACK              0xCCu
-/* 0x33 接收失败 */
-#define COMMAND_NAK              0x33u
+#define COMMAND_ACK              0xccu  /**< 0xcc 接收成功 */
+#define COMMAND_NAK              0x33u  /**< 0x33 接收失败 */
 
 /* 状态码 */
-/* 0x40 成功 */
-#define COMMAND_RET_SUCCESS      0x40u
-/* 0x41 未知命令 */
-#define COMMAND_RET_UNKNOWN_CMD  0x41u
-/* 0x42 非法命令 */
-#define COMMAND_RET_INVALID_CMD  0x42u
-/* 0x43 非法参数 */
-#define COMMAND_RET_INVALID_PARA 0x43u
-/* 0x44 FLASH操作失败 */
-#define COMMAND_RET_FLASH_FAIL   0x44u
-/* 0x45 缓冲区不足 */
-#define COMMAND_RET_BUFFER_FAIL  0x45u
+#define COMMAND_RET_SUCCESS      0x40u  /**< 0x40 成功 */
+#define COMMAND_RET_UNKNOWN_CMD  0x41u  /**< 0x41 未知命令 */
+#define COMMAND_RET_INVALID_CMD  0x42u  /**< 0x42 非法命令 */
+#define COMMAND_RET_INVALID_PARA 0x43u  /**< 0x43 非法参数 */
+#define COMMAND_RET_FLASH_FAIL   0x44u  /**< 0x44 FLASH操作失败 */
+#define COMMAND_RET_BUFFER_FAIL  0x45u  /**< 0x45 缓冲区不足 */
 
-/* 信息标识 */
-#define UPDATE_FLAG              "mx"
-#define MAX_UPDATE_FILE_NUM      5u
-#define FILENAME_UPDATE          "0:update_boot.mx"      /* 升级命令文件 */
-//#define FLASH_SECTOR_SIZE        (512u)
+#ifndef MAX_BUF_SIZE
+#define MAX_BUF_SIZE            (252u)          /**< 数据缓冲区大小 <= 252 */
+#endif
 
-/* 升级交换区起始偏移量*/
-#define FLASH_UPDATE_OFFSET      (0u)
-/* 升级数据内容存储起始地址 */
-#define APP_START_ADDR   FLASH_SECTOR_SIZE
-/* 升级交换区的大小512K */
-#define FLASH_UPDATE_SIZE               (512 * 1024u)
+#ifndef ESC_DELAY
+#define ESC_DELAY               (3u)            /**< 按ESC键延时时间 */
+#endif
 
-/* 数据缓冲区大小，注意:必须 <= 252 */
-#define MAX_BUF_SIZE          252
-/* 应用程序起始地址，32K */
-#define APP_START_ADDRESS     0x08008000u
+#ifndef APP_START_ADDRESS
+#define APP_START_ADDRESS       0x08008000u     /**< 应用程序起始地址 */
+#endif
 
 /*-----------------------------------------------------------------------------
  Section: Private Type Definitions
  ----------------------------------------------------------------------------*/
-/** 升级状态 */
-typedef enum
-{
-    US_IDLE = 0,       /**< 未进行 */
-    US_PROCESSING,     /**< 处理中 */
-    US_FINISH,         /**< 已完成 */
-} update_status_e;
-
-/* 保存原有对齐模式 */
-#pragma pack(push)
-/* 设定为1字节对齐 */
-#pragma pack(1)
-
-/**
- * 升级信息结构定义
- */
-typedef struct
-{
-    uint8_t flag[4]; /**< 如果等于"sxdq", 则表示需要进行升级 */
-    uint32_t addr;   /**< 升级内容在DataFlash中的存储地址 */
-    uint32_t len;    /**< 升级内容的长度 */
-    uint8_t id[16];  /**< 升级文件标识 */
-} update_t;
-
-/** 升级文件类型 */
-typedef enum
-{
-    FT_APP = 0,    /**< 应用程序 */
-    FT_PARAM,      /**< 参数数据 */
-    FT_FONTS,      /**< 字库 */
-} file_type_e;
-
-/** 升级文件信息 */
-typedef struct
-{
-    file_type_e file_type;  /**< 升级文件类型 */
-    int8_t file_name[24];     /**< 文件名 */
-    uint32_t dest_addr;       /**< 目标地址 */
-    uint32_t zip_len;         /**< 在命令包中的长度（压缩后） */
-    uint32_t raw_len;         /**< 原始长度（压缩前） */
-    uint8_t md5[16];          /**< 原始文件md5值（压缩前） */
-} file_info_t;
-
-/** 升级命令 */
-typedef struct
-{
-    uint16_t crc;             /**< CRC检验 */
-    uint32_t len;             /**< 长度，不包括crc、len */
-    uint8_t id[16];           /**< 命令标识 */
-    bool_e is_zip;          /**< 是否压缩 */
-    bool_e is_reboot;       /**< 是否需要重启 */
-    uint8_t dummy;            /**< 备用 */
-    uint8_t file_count;       /**< 文件数量 */
-    file_info_t file_info[MAX_UPDATE_FILE_NUM]; /**< 文件信息 */
-} update_cmd_t;
-
-/* 恢复原有对齐模式  */
-#pragma pack(pop)
-
+ /* NONE */
 /*-----------------------------------------------------------------------------
  Section: Private Function Prototypes
  ----------------------------------------------------------------------------*/
@@ -164,29 +88,22 @@ check_sum(const uint8_t cmd,
 static void
 send_packet(const uint8_t *packet,
         uint16_t size);
-
-
-
-
 /*-----------------------------------------------------------------------------
  Section: Private Variables
  ----------------------------------------------------------------------------*/
-static volatile uint32_t the_run_status = RS_IDLE;
-
+static update_status_e the_run_status = RS_IDLE;
 
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
 /**
  ******************************************************************************
- * @brief      从串口进行升级
+ * @brief   从串口进行升级
  * @param[in]  None
  * @param[out] None
- * @retval     status: COMMAND_RET_SUCCESS-成功、其它-失败
  *
- * @details    
- *
- * @note 
+ * @retval  OK:     成功
+ * @retval  ERROR:  失败
  ******************************************************************************
  */
 status_t
@@ -204,7 +121,7 @@ uart_update(void)
     /* 检测是否要从串口进行升级 */
     if (!esc_key_detect())
     {
-        return (OK);
+        return OK;
     }
 
     print("Receiving data ...");
@@ -264,7 +181,7 @@ uart_update(void)
                     s = COMMAND_RET_INVALID_CMD;
                     break;
                 }
-                start_address = APP_START_ADDRESS;
+                start_address = APP_START_ADDRESS;  /* 设置为固定地址 */
 
                 /* 下载字节数 */
                 transfer_size = ((uint32_t) data[4] << 24)
@@ -359,14 +276,12 @@ uart_update(void)
 
 /**
  ******************************************************************************
- * @brief      ESC按键检测
+ * @brief   ESC按键检测
  * @param[in]  None
  * @param[out] None
- * @retval     bool_e: TRUE-成功、FALSE-失败
  *
- * @details    
- *
- * @note
+ * @retval  TRUE:   成功
+ * @retval  FALSE:  失败
  ******************************************************************************
  */
 static bool_e
@@ -377,8 +292,8 @@ esc_key_detect(void)
 
     while (TRUE)
     {
-        /* 如果超过3秒，则结束等待 */
-        if (3u <= get_systime())
+        /* 如果超过延时时间，则结束等待 */
+        if (ESC_DELAY <= get_systime())
         {
             break;
         }
@@ -389,71 +304,58 @@ esc_key_detect(void)
             result = TRUE;
             break;
         }
-#if 0
-        /* 此段代码保留，用于测试串口 */
-        if (uart_try_receive(&key))
-        {
-            uart_send(key);
-            break;
-        }
-#endif
     }
     print("\r\n");
 
-    return (result);
+    return result;
 }
 
 /**
  ******************************************************************************
- * @brief      发送接收确认包
+ * @brief   发送确认包
  * @param[in]  None
  * @param[out] None
  * @retval     None
  *
  * @details    注意:只说明数据包合法并已被处理，而不意味着流程正确
- *
- * @note
  ******************************************************************************
  */
 static void
 send_ack(void)
 {
-    /* 确认包 */
-    const uint8_t packet_ack[] =
-    { 0, 0, COMMAND_ACK };
+    const uint8_t packet_ack[] = {0, 0, COMMAND_ACK};
     send_packet(packet_ack, ARRAY_SIZE(packet_ack));
 }
 
 /**
  ******************************************************************************
- * @brief      返回接收否认包
+ * @brief   发送否认包
  * @param[in]  None
  * @param[out] None
+ *
  * @retval     None
- *
- * @details    
- *
- * @note
  ******************************************************************************
  */
 static void
 send_nak(void)
 {
-    const uint8_t packet_nak[] =
-    { 0, 0, COMMAND_NAK };
+    const uint8_t packet_nak[] = {0, 0, COMMAND_NAK};
     send_packet(packet_nak, ARRAY_SIZE(packet_nak));
 }
 
 /**
  ******************************************************************************
- * @brief      发送握手报文
+ * @brief   建立会话
  * @param[in]  None
  * @param[out] None
- * @retval     bool_e: TRUE-已建立、 FALSE-未建立
  *
- * @details    建立通道，过滤多余按键或串口切换产生的错误字节
+ * @retval  TRUE:   成功
+ * @retval  FALSE:  失败
  *
- * @note
+ * @details
+ *  1. 过滤多余按键或串口切换产生的错误字节
+ *  2. 等待接收握手报文；
+ *  3. 返回确认报文。
  ******************************************************************************
  */
 static bool_e
@@ -472,34 +374,31 @@ send_hello(void)
     uart_receive(&data, 1u);
     if (data != 0x20)
     {
-        return (FALSE);
+        return FALSE;
     }
 
     /* 读取帧命令字 */
     uart_receive(&data, 1u);
     if (data != 0x20)
     {
-        return (FALSE);
+        return FALSE;
     }
 
     /* 返回确认包 */
     send_ack();
 
-    return (TRUE);
+    return TRUE;
 }
 
 /**
  ******************************************************************************
- * @brief      接收一个数据包
- * @param[in]  None
- * @param[out] uint8_t *cmd   : 命令字
- * @param[out] uint8_t *data  : 接收缓冲
- * @param[out] uint8_t *size  : data长度
- * @retval     bool_e: TRUE-成功、 FALSE-失败
+ * @brief   接收一个数据包
+ * @param[out] *cmd   : 命令字
+ * @param[out] *data  : 接收缓冲
+ * @param[out] *size  : data长度
  *
- * @details    
- *
- * @note
+ * @retval  TRUE:   成功
+ * @retval  FALSE:  失败
  ******************************************************************************
  */
 static bool_e
@@ -533,22 +432,19 @@ receive_packet(uint8_t *cmd,
     /* 如果帧校验错误，返回FALSE*/
     if (!check_sum(*cmd, data, *size, sum))
     {
-        return (FALSE);
+        return FALSE;
     }
 
-    return (TRUE);
+    return TRUE;
 }
 
 /**
  ******************************************************************************
- * @brief      发送状态包
- * @param[in]  uint8_t s: 状态
+ * @brief   发送状态包
+ * @param[in]  s    : 状态
  * @param[out] None
+ *
  * @retval     None
- *
- * @details    
- *
- * @note
  ******************************************************************************
  */
 static void
@@ -576,15 +472,11 @@ send_status(uint8_t s)
 
 /**
  ******************************************************************************
- * @brief      发送数据
- * @param[in]  const uint8_t *packet: 待发送数据
- * @param[in]  uint16_t size: 待发送数据长度
- * @param[out] None
+ * @brief   发送数据
+ * @param[in]   *packet:    待发送数据
+ * @param[in]   size:       待发送数据长度
+ *
  * @retval     None
- *
- * @details            
- *
- * @note
  ******************************************************************************
  */
 static void
@@ -602,17 +494,14 @@ send_packet(const uint8_t *packet,
 
 /**
  ******************************************************************************
- * @brief      检查校验值
- * @param[in]  const uint8_t cmd : 命令字
- * @param[in]  const uint8_t *data : 数据缓冲区
- * @param[in]  const uint8_t size : 数据长度
- * @param[in]  const uint8_t sum : 校验值
- * @param[out] None
- * @retval     bool_e: TRUE-正确、flase-错误
+ * @brief   检查校验值
+ * @param[in]   cmd     : 命令字
+ * @param[in]   *data   : 数据缓冲区
+ * @param[in]   size    : 数据长度
+ * @param[in]   sum     : 校验值
  *
- * @details            
- *
- * @note
+ * @retval  TRUE:   正确
+ * @retval  FALSE:  错误
  ******************************************************************************
  */
 static bool_e
@@ -631,10 +520,11 @@ check_sum(const uint8_t cmd,
         i--;
     }
 
-    return (((s & 0xFFu) == sum) ? TRUE : FALSE);
+    return (s == sum) ? TRUE : FALSE;
 }
 
 #if 0
+
 uint32_t
 get_run_status(void)
 {
