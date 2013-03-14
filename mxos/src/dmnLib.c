@@ -1,0 +1,308 @@
+/**
+ ******************************************************************************
+ * @file      dmnLib.c
+ * @brief     本文实现了任务间喂软件狗的机制.
+ * @details   This file including all API functions's implement of dmnLib.c.
+ *
+ * @copyright
+ ******************************************************************************
+ */
+ 
+/*-----------------------------------------------------------------------------
+ Section: Includes
+ ----------------------------------------------------------------------------*/
+#include <types.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <taskLib.h>
+#include <listLib.h>
+#include <dmnLib.h>
+#include <debug.h>
+#include <oshook.h>
+#include <oscfg.h>
+
+/*-----------------------------------------------------------------------------
+ Section: Type Definitions
+ ----------------------------------------------------------------------------*/
+#pragma pack(push, 1)
+typedef struct
+{
+    struct ListNode nlist;
+    TASK_ID task;
+    int16_t count;
+} dmn_t;
+#pragma pack(pop)
+
+/*-----------------------------------------------------------------------------
+ Section: Constant Definitions
+ ----------------------------------------------------------------------------*/
+#ifndef DMN_MAX_CHECK_TIME
+# define DMN_MAX_CHECK_TIME         (5u)    /**< 默认喂狗超时时间（分钟） */
+#endif
+
+#ifndef TASK_PRIORITY_DMN
+#define TASK_PRIORITY_DMN           (3u)    /**< 默认任务优先级 */
+#endif
+
+#ifndef TASK_STK_SIZE_DMN
+#define TASK_STK_SIZE_DMN         (512u)    /**< 默认任务堆栈 */
+#endif
+
+#if (DMN_MAX_CHECK_TIME > 10u)
+# error "Plesase set DMN_MAX_CHECK_TIME <= (10u)"
+#endif
+/*-----------------------------------------------------------------------------
+ Section: Global Variables
+ ----------------------------------------------------------------------------*/
+/* NONE */
+
+/*-----------------------------------------------------------------------------
+ Section: Local Variables
+ ----------------------------------------------------------------------------*/
+static struct ListNode the_registed_list;
+static SEM_ID the_dmn_sem = NULL;
+static TASK_ID the_dmn_id = NULL;
+
+/*-----------------------------------------------------------------------------
+ Section: Local Function Prototypes
+ ----------------------------------------------------------------------------*/
+static bool_e
+is_taskname_used(TASK_ID task);
+
+static void
+dmn_loop(void);
+
+/*-----------------------------------------------------------------------------
+ Section: Function Definitions
+ ----------------------------------------------------------------------------*/
+/**
+ ******************************************************************************
+ * @brief   dmnLib初始化
+ * @param[in]  None
+ * @param[out] None
+ * @retval  OK      : 初始化成功
+ * @retval  ERROR   : 初始化失败
+ ******************************************************************************
+ */
+status_t
+dmn_init(void)
+{
+    if (the_dmn_id != NULL)
+    {
+        return ERROR;
+    }
+    InitListHead(&the_registed_list);
+    the_dmn_sem = semBCreate(1);
+    D_ASSERT(the_dmn_sem != NULL);
+    the_dmn_id = taskSpawn((const signed char * const )"DAEMON",
+            TASK_PRIORITY_DMN, TASK_STK_SIZE_DMN, (OSFUNCPTR)dmn_loop, 0u);
+    D_ASSERT(the_dmn_id != NULL);
+
+    return OK;
+}
+
+/**
+ ******************************************************************************
+ * @brief      在守护任务链表中寻找是否重复任务
+ * @param[in]  None
+ * @param[out] None
+ * @retval     TRUE : 已存在
+ * @retval     FALSE: 不存在
+ ******************************************************************************
+ */
+static bool_e
+is_taskname_used(TASK_ID task)
+{
+    dmn_t* pdmn = NULL;
+    struct ListNode *piter = NULL;
+
+    LIST_FOR_EACH(piter, &the_registed_list)
+    {
+        /* 取得遍历到的对象 */
+        pdmn = MemToObj(piter, dmn_t, nlist);
+        if (pdmn->task == task)
+        {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+/**
+ ******************************************************************************
+ * @brief   向守护任务注册
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     NULL : 失败
+ * @retval  !  NULL : 注册ID
+ ******************************************************************************
+ */
+DMN_ID
+dmn_register(void)
+{
+    TASK_ID task = taskIdSelf();
+    if (TRUE == is_taskname_used(task))
+    {
+        printf("err %s already registered!\n", taskName(task));
+        return NULL;
+    }
+    dmn_t *pnew = malloc(sizeof(dmn_t));
+    if (NULL == pnew)
+    {
+        return NULL;
+    }
+    pnew->count = DMN_MAX_CHECK_TIME;
+    pnew->task = task;
+    semTake(the_dmn_sem, WAIT_FOREVER);
+    ListAddTail(&pnew->nlist, &the_registed_list);
+    semGive(the_dmn_sem);
+
+    return (DMN_ID)pnew;
+}
+
+/**
+ ******************************************************************************
+ * @brief   向守护任务喂狗
+ * @param[in]  id   : 喂狗注册时返回的id
+ *
+ * @retval     OK   : 喂狗成功
+ * @retval     ERROR: 喂狗失败
+ ******************************************************************************
+ */
+status_t
+dmn_sign(DMN_ID id)
+{
+    dmn_t *pdmn = (dmn_t *)id;
+
+    semTake(the_dmn_sem, WAIT_FOREVER);
+    if (FALSE == is_taskname_used(id))
+    {
+        semGive(the_dmn_sem);
+        return ERROR;
+    }
+
+    if (pdmn->count > 0u)
+    {
+        pdmn->count = DMN_MAX_CHECK_TIME;
+    }
+    semGive(the_dmn_sem);
+
+    return OK;
+}
+
+/**
+ ******************************************************************************
+ * @brief     向守护任务注销
+ * @param[in]  id   : 喂狗注册时返回的id
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+status_t
+dmn_unregister(DMN_ID id)
+{
+    dmn_t *pdmn = (dmn_t *)id;
+
+    semTake(the_dmn_sem, WAIT_FOREVER);
+    if (FALSE == is_taskname_used(id))
+    {
+        semGive(the_dmn_sem);
+        return ERROR;
+    }
+
+    ListDelNode(&pdmn->nlist);
+    semGive(the_dmn_sem);
+    free(pdmn);
+
+    return OK;
+}
+
+/**
+ ******************************************************************************
+ * @brief   输出dmn信息
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+void
+dmn_info(void)
+{
+    dmn_t *pdmn = NULL;
+    struct ListNode *piter = NULL;
+
+    printf("\nName");
+    printf("\r\t\t\t");
+    printf("RemainCounts\n");
+
+    semTake(the_dmn_sem, WAIT_FOREVER);
+    LIST_FOR_EACH(piter, &the_registed_list)
+    {
+        /* 取得遍历到的对象 */
+        pdmn = MemToObj(piter, dmn_t, nlist);
+        printf("%s", taskName(pdmn->task));
+        printf("\r\t\t\t");
+        printf("%d\n", pdmn->count);
+    }
+    semGive(the_dmn_sem);
+}
+
+/**
+ ******************************************************************************
+ * @brief   dmn任务执行体
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+static void
+dmn_loop(void)
+{
+    uint32_t tick = tickGet();
+    dmn_t *pdmn = NULL;
+    struct ListNode *piter = NULL;
+
+    while (1)
+    {
+        taskDelay(SYS_TICKS_PER_SECOND);
+        if (_func_feedDogHook != NULL)
+        {
+            _func_feedDogHook();    /* 喂硬件狗 */
+        }
+        if ((tickGet() - tick) < (SYS_TICKS_PER_SECOND * 60))
+        {
+            continue;
+        }
+        semTake(the_dmn_sem, WAIT_FOREVER);
+        LIST_FOR_EACH(piter, &the_registed_list)
+        {
+            /* 取得遍历到的对象 */
+            pdmn = MemToObj(piter, dmn_t, nlist);
+            if (pdmn->count >= 0)
+            {
+                pdmn->count--;
+            }
+            if (pdmn->count == 0)
+            {
+                printf("daemon reboot system...\n");
+                if (_func_dmnRestHook != NULL)
+                {
+                    _func_dmnRestHook();    /* 任务间喂狗异常 */
+                }
+                if (_func_cpuRestHook != NULL)
+                {
+                    _func_cpuRestHook();    /* reset CPU */
+                }
+            }
+
+        }
+        semGive(the_dmn_sem);
+    }
+    taskDelete(NULL);
+}
+
+/*--------------------------------dmnLib.c-----------------------------------*/

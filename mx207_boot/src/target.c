@@ -79,12 +79,15 @@ systick_open(void)
 	RCC_ClocksTypeDef clocks_status;
 
 	RCC_GetClocksFreq(&clocks_status);
+#if 0
 
     SysTick->LOAD = ((clocks_status.HCLK_Frequency / 1000)
             & SysTick_LOAD_RELOAD_Msk) - 1;
     SysTick->VAL = 0;
     SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk
             | SysTick_CTRL_ENABLE_Msk;
+#endif
+    SysTick_Config(clocks_status.HCLK_Frequency / 1000);
     return;
 }
 
