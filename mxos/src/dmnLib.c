@@ -55,7 +55,7 @@ typedef struct
 /*-----------------------------------------------------------------------------
  Section: Global Variables
  ----------------------------------------------------------------------------*/
-/* NONE */
+bool_e theRebootSignal = FALSE;
 
 /*-----------------------------------------------------------------------------
  Section: Local Variables
@@ -252,6 +252,24 @@ dmn_info(void)
 
 /**
  ******************************************************************************
+ * @brief   向dmn请求复位
+ * @param[in]  None
+ * @param[out] None
+ * @retval     None
+ *
+ * @details
+ *
+ * @note
+ ******************************************************************************
+ */
+void
+dmn_reboot(void)
+{
+    theRebootSignal = TRUE;
+}
+
+/**
+ ******************************************************************************
  * @brief   dmn任务执行体
  * @param[in]  None
  * @param[out] None
@@ -266,7 +284,9 @@ dmn_loop(void)
     dmn_t *pdmn = NULL;
     struct ListNode *piter = NULL;
 
-    while (1)
+    theRebootSignal = FALSE;
+
+    FOREVER
     {
         taskDelay(SYS_TICKS_PER_SECOND);
         if (_func_feedDogHook != NULL)
@@ -288,7 +308,7 @@ dmn_loop(void)
             }
             if (pdmn->count == 0)
             {
-                printf("daemon reboot system...\n");
+                printf("dmn reboot system...\n");
                 if (_func_dmnRestHook != NULL)
                 {
                     _func_dmnRestHook();    /* 任务间喂狗异常 */
@@ -301,6 +321,13 @@ dmn_loop(void)
 
         }
         semGive(the_dmn_sem);
+    }
+    printf("dmn will reboot system after 10s...\n");
+    /* wait a moment */
+    taskDelay(SYS_TICKS_PER_SECOND * 10u);
+    if (_func_cpuRestHook != NULL)
+    {
+        _func_cpuRestHook();    /* reset CPU */
     }
     taskDelete(NULL);
 }
