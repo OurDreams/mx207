@@ -175,6 +175,8 @@ dev_create(const char_t* pname, const fileopt_t* pfileopt, int32_t serial)
     D_ASSERT(pname != NULL);
     D_ASSERT(pfileopt != NULL);
 
+    (void)devlib_init();
+
     /* ·ÀÖ¹ÖØ¸´×¢²á */
     if (find_dev_by_name(pname) != NULL)
     {
@@ -252,10 +254,10 @@ dev_release(const char_t* pname)
         }
     }
 
+    semDelete(pnode->lock);
     semTake(the_devlib_lock, WAIT_FOREVER);
     ListDelNode(&pnode->list);
     semGive(the_devlib_lock);
-    semDelete(pnode->lock);
     free(pnode);
 
     return OK;

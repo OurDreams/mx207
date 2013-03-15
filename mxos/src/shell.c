@@ -2,9 +2,9 @@
  ******************************************************************************
  * @file       shell.c
  * @version    V0.0.1
- * @brief      shell模块.
+ * @brief      本文实现了shell功能.
  * @details    This file including all API functions's implement of shell.
- * @copy       Copyrigth(C)
+ * @copyright
  *
  ******************************************************************************
  */
@@ -14,26 +14,41 @@
 #include <debug.h>
 #include <taskLib.h>
 //#include <ttylib.h>
+#include <oscfg.h>
 
 /*-----------------------------------------------------------------------------
-Section: Constant Definitions
------------------------------------------------------------------------------*/
-#define CFG_CBSIZE 50
+ Section: Constant Definitions
+ ----------------------------------------------------------------------------*/
+#ifndef TASK_PRIORITY_SHELL
+# define TASK_PRIORITY_SHELL        (1u)    /**< shell任务优先级 */
+#endif
+
+#ifndef TASK_STK_SIZE_SHELL
+# define TASK_STK_SIZE_SHELL     (1024u)    /**< shell任务堆栈 */
+#endif
+
+#ifndef CFG_MAXARGS
+# define CFG_MAXARGS                (8u)    /**< 命令行最大参数数量 */
+#endif
+
+#ifndef CFG_CBSIZE
+# define CFG_CBSIZE                (50u)    /**< 命令行字节数 */
+#endif
 #define SHELL_GETCHAR       bsp_getchar     /**< 读取一个字符 */
 #define SHELL_PRINTF        printf          /**< 字符串输出 */
 
 /*-----------------------------------------------------------------------------
-Section: Global Variables
------------------------------------------------------------------------------*/
+ Section: Global Variables
+ ----------------------------------------------------------------------------*/
 extern cmd_tbl_t  __shell_cmd_start;
 extern cmd_tbl_t  __shell_cmd_end;
 
 /*-----------------------------------------------------------------------------
-Section: Local Variables
------------------------------------------------------------------------------*/
+ Section: Local Variables
+ ----------------------------------------------------------------------------*/
 static uint8_t console_buffer[CFG_CBSIZE]; /* console I/O buffer   */
 static const char_t erase_seq[] = "\b \b";
-static const char_t *prompt = "->";
+static const char_t const *prompt = "->";
 static cmd_tbl_t *pmatch_cmd = NULL;
 static TASK_ID shellTaskId = 0;
 /*-----------------------------------------------------------------------------
@@ -508,8 +523,9 @@ shell_init(void)
     if (shellTaskId != 0)
         return (ERROR); /* already called */
 
-    shellTaskId = taskSpawn((const signed char * const )"Shell", 2,
-            2048,(OSFUNCPTR)shell_loop, 0);
+    shellTaskId = taskSpawn((const signed char * const )"Shell",
+            TASK_PRIORITY_SHELL, TASK_STK_SIZE_SHELL,
+            (OSFUNCPTR)shell_loop, 0);
 
     D_ASSERT(shellTaskId != NULL);
     return (OK);

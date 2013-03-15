@@ -42,11 +42,11 @@ typedef struct
 #endif
 
 #ifndef TASK_PRIORITY_DMN
-#define TASK_PRIORITY_DMN           (3u)    /**< 默认任务优先级 */
+# define TASK_PRIORITY_DMN           (3u)    /**< 默认任务优先级 */
 #endif
 
 #ifndef TASK_STK_SIZE_DMN
-#define TASK_STK_SIZE_DMN         (512u)    /**< 默认任务堆栈 */
+# define TASK_STK_SIZE_DMN         (512u)    /**< 默认任务堆栈 */
 #endif
 
 #if (DMN_MAX_CHECK_TIME > 10u)

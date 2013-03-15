@@ -1,8 +1,8 @@
 /**
  ******************************************************************************
- * @file      oshook.c
- * @brief     os外提给提供的钩子接口库.
- * @details   This file including all API functions's  implement of mxhook.c.
+ * @file      osLib.c
+ * @brief     本文实现了OS的公共函数库.
+ * @details   This file including all API functions's implement of osinit.c.
  *
  * @copyright
  ******************************************************************************
@@ -12,6 +12,9 @@
  Section: Includes
  ----------------------------------------------------------------------------*/
 #include <types.h>
+#include <stdio.h>
+#include <osLib.h>
+#include <oscfg.h>
 
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
@@ -26,21 +29,7 @@
 /*-----------------------------------------------------------------------------
  Section: Global Variables
  ----------------------------------------------------------------------------*/
-/**
- *  @brief 喂硬件狗函数钩子
- */
-FUNCPTR     _func_feedDogHook = NULL;
-
-/**
- *  @brief 芯片复位函数钩子
- */
-FUNCPTR     _func_cpuRestHook = NULL;
-
-/**
- *  @brief 任务超时未喂狗异常时函数钩子
- */
-FUNCPTR     _func_dmnRestHook = NULL;
-
+/* NONE */
 
 /*-----------------------------------------------------------------------------
  Section: Local Variables
@@ -55,6 +44,53 @@ FUNCPTR     _func_dmnRestHook = NULL;
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
-/* NONE */
+/**
+ ******************************************************************************
+ * @brief   输出os logo
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+void
+os_print_logo(void)
+{
+    printf("\r\n"
+           " \\|/\n"
+           "--O-- The CM3 RTOS is starting...\n"
+           " /|\\\n");
+}
 
-/*--------------------------------oshook.c-----------------------------------*/
+/**
+ ******************************************************************************
+ * @brief   输出os版本
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+void
+os_print_banner(void)
+{
+    printf("\n\tOS Version: "OS_RELEASE
+           "\n\tBuild Time: "__DATE__ __TIME__
+           "\n\tCopyRight : Xxxx Xxxx..");
+}
+
+/**
+ ******************************************************************************
+ * @brief   os资源初始化
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+status_t
+os_resource_init(void)
+{
+    return OK;
+}
+/*----------------------------osinit.c--------------------------------*/

@@ -2,8 +2,7 @@
  ******************************************************************************
  * @file      listLib.c
  * @brief     通用链表处理.
- * @details   This file including all API functions's 
- *            implement of list.c.	
+ * @details   This file including all API functions's implement of list.c.
  *
  ******************************************************************************
  */

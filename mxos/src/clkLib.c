@@ -2,8 +2,7 @@
  ******************************************************************************
  * @file      clkLib.c
  * @brief     系统时钟接口模块.
- * @details   This file including all API functions's 
- *            implement of clkLib.c.
+ * @details   This file including all API functions's implement of clkLib.c.
  ******************************************************************************
  */
 /*-----------------------------------------------------------------------------
@@ -101,12 +100,10 @@ clockLibInit(void)
 
 /**
  ******************************************************************************
- * @brief      get the current time of the clock.
- * @param[in]
- *              clock_id : clock ID (always CLOCK_REALTIME)
+ * @brief   get the current time of the clock.
+ * @param[in]   clock_id : clock ID (always CLOCK_REALTIME)
  *
- * @param[out]
- *             tp :  where to store current time
+ * @param[out]  tp :  where to store current time
  * @retval     0 (OK), or -1 (ERROR) if clock_id is invalid or  tp  is NULL.
  *
  * @details

@@ -26,6 +26,7 @@ typedef unsigned long long   uint64_t;
 typedef          float       float32_t;
 typedef          double      float64_t;
 typedef long     double      float128_t;
+//typedef signed   int         size_t;
 
 typedef enum
 {

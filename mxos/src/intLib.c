@@ -51,7 +51,6 @@ int intCnt = 0;
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
-
 /**
  ******************************************************************************
  * @brief      根据传入的中断号找到并调用相应的ISR.
@@ -96,12 +95,9 @@ dummy(void);
  * @param[in]    irq_num   : 中断号(16 ~ MAX_INT_COUNT)
  * @param[in]    routine   : 中断服务
  * @param[in]    parameter : 中断参数
- * @retval
- *             status_t    : 成功-OK, 失败-ERROR
  *
- * @details
- *
- * @note
+ * @retval  OK   : 成功
+ * @retval  ERROR: 失败
  ******************************************************************************
  */
 extern status_t
@@ -122,12 +118,9 @@ intConnect(uint32_t irq_num, VOIDFUNCPTR routine, uint32_t parameter)
  ******************************************************************************
  * @brief      注销中断ROUTINE.
  * @param[in]   irq_num   : 中断号(16 ~ MAX_INT_COUNT)
- * @retval
- *             status_t    : 成功-OK, 失败-ERROR
  *
- * @details
- *
- * @note
+ * @retval  OK   : 成功
+ * @retval  ERROR: 失败
  ******************************************************************************
  */
 extern status_t
@@ -148,12 +141,8 @@ intDisconnect(uint32_t irq_num)
  * @param[in]   irq_num   : 中断号(16 ~ MAX_INT_COUNT)
  * @param[in]   prio      : 中断优先级
  *
- * @retval
- *             status_t    : 成功-OK, 失败-ERROR
- *
- * @details
- *
- * @note
+ * @retval  OK   : 成功
+ * @retval  ERROR: 失败
  ******************************************************************************
  */
 extern status_t
@@ -251,7 +240,9 @@ intLibInit(void)
     }
 
     // 使能BusFault、memFault、usgFault 可考虑在excLib初始化时使能
-    SCB->SHCSR |= (SCB_SHCSR_BUSFAULTENA_Msk | SCB_SHCSR_USGFAULTENA_Msk | SCB_SHCSR_MEMFAULTENA_Msk);
+    SCB->SHCSR |= (SCB_SHCSR_BUSFAULTENA_Msk
+            | SCB_SHCSR_USGFAULTENA_Msk
+            | SCB_SHCSR_MEMFAULTENA_Msk);
 
 }
 
@@ -291,4 +282,4 @@ extern void intUnlock(void) {
 * @}
 */
 
-/*----------------------------intLib.c--------------------------------*/
+/*--------------------------------intLib.c-----------------------------------*/

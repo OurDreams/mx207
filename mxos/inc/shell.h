@@ -19,7 +19,6 @@
  Section: Macro Definitions
  ----------------------------------------------------------------------------*/
 #define INCLUDE_SHELL
-#define CFG_MAXARGS 8
 
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
