@@ -12,6 +12,7 @@
  Section: Includes
  ----------------------------------------------------------------------------*/
 #include <types.h>
+#include <oscfg.h>
 
 /*-----------------------------------------------------------------------------
  Section: Macro Definitions
@@ -193,6 +194,7 @@ void    routine57   (void)  { intHandler(   57  ); }
 void    routine58   (void)  { intHandler(   58  ); }
 void    routine59   (void)  { intHandler(   59  ); }
 
+#if (OS_BUILD_VER == CPU_STM32F207)
 void    routine60   (void)  { intHandler(   60  ); }
 void    routine61   (void)  { intHandler(   61  ); }
 void    routine62   (void)  { intHandler(   62  ); }
@@ -238,6 +240,7 @@ void    routine100  (void)  { intHandler(   100 ); }
 void    routine101  (void)  { intHandler(   101 ); }
 void    routine102  (void)  { intHandler(   102 ); }
 void    routine103  (void)  { intHandler(   103 ); }
+#endif
 
 /* 中断向量表 */
 __attribute__((section(".isr_vector")))
@@ -275,6 +278,7 @@ const INTVECT_ITEM __vector_table[] =
     {ROUTINE(52 )}, {ROUTINE(53 )}, {ROUTINE(54 )}, {ROUTINE(55 )},
     {ROUTINE(56 )}, {ROUTINE(57 )}, {ROUTINE(58 )}, {ROUTINE(59 )},
 
+#if (OS_BUILD_VER == CPU_STM32F207)
     {ROUTINE(60 )}, {ROUTINE(61 )}, {ROUTINE(62 )}, {ROUTINE(63 )},
     {ROUTINE(64 )}, {ROUTINE(65 )}, {ROUTINE(66 )}, {ROUTINE(67 )},
     {ROUTINE(68 )}, {ROUTINE(69 )}, {ROUTINE(70 )}, {ROUTINE(71 )},
@@ -286,6 +290,7 @@ const INTVECT_ITEM __vector_table[] =
     {ROUTINE(92 )}, {ROUTINE(93 )}, {ROUTINE(94 )}, {ROUTINE(95 )},
     {ROUTINE(96 )}, {ROUTINE(97 )}, {ROUTINE(98 )}, {ROUTINE(99 )},
     {ROUTINE(100)}, {ROUTINE(101)}, {ROUTINE(102)}, {ROUTINE(103)}
+#endif
 };
 
 /*---------------------------- startup_m3.c ---------------------------------*/

@@ -2859,7 +2859,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	        memset(str, 0, sizeof(str));
 	        sprintf((char_t *)str, "%d/%d(%3d%%)", usStackUsed,pxNextTCB->usStackSize,usStackUsed*100/pxNextTCB->usStackSize);
 
-	        printf("%-16s %3u %-10s %8X %20s %8X\r\n", pxNextTCB->pcTaskName,
+	        printf("%-8s %3u %-7s %8X %16s %8X\r\n", pxNextTCB->pcTaskName,
 	        (unsigned int)(configMAX_PRIORITIES-1 - pxNextTCB->uxPriority),cStatus,(unsigned int) pxNextTCB->pxTopOfStack,
 	        str,(unsigned int) pxNextTCB);
 
@@ -2882,8 +2882,8 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	uint32_t vTaskInfo ()
 	{
 	    // Êä³öÁÐÃû
-	    printf("%-16s %3s %-10s %8s %20s %10s\n\r", "NAME", "PRI", "STATUS", "SP", "USED/SIZE", "TCBID");
-	    printf("---------------- --- ---------- -------- -------------------- ----------\n\r");
+	    printf("%-8s %3s %-7s %8s %16s %8s\n\r", "NAME", "PRI", "STATUS", "SP", "USED/SIZE", "TCBID");
+	    printf("-------- --- ------- -------- ---------------- --------\n\r");
 
 	   // vTaskSuspendAll();
 
