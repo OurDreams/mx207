@@ -473,6 +473,11 @@ dev_close(int32_t fd)
 void
 show_devlib_info(void)
 {
+    if (OK != devlib_init())
+    {
+        printf("devlib init err!\n");
+        return ;
+    }
     printf("   list devices:\n");
     printf("  -- dev name -- \r\t\t-- opend num --\n");
     device_t* pnode = NULL;

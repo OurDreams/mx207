@@ -29,7 +29,7 @@
 typedef struct
 {
     struct ListNode nlist;
-    TASK_ID task;
+    TASK_ID taskid;
     int16_t count;
 } dmn_t;
 #pragma pack(pop)
@@ -38,7 +38,7 @@ typedef struct
  Section: Constant Definitions
  ----------------------------------------------------------------------------*/
 #ifndef DMN_MAX_CHECK_TIME
-# define DMN_MAX_CHECK_TIME         (5u)    /**< 默认喂狗超时时间（分钟） */
+# define DMN_MAX_CHECK_TIME         (6u)    /**< 默认喂狗超时时间（6*10秒） */
 #endif
 
 #ifndef TASK_PRIORITY_DMN
@@ -112,7 +112,7 @@ dmn_init(void)
  ******************************************************************************
  */
 static bool_e
-is_taskname_used(TASK_ID task)
+is_taskname_used(TASK_ID taskid)
 {
     dmn_t* pdmn = NULL;
     struct ListNode *piter = NULL;
@@ -121,7 +121,7 @@ is_taskname_used(TASK_ID task)
     {
         /* 取得遍历到的对象 */
         pdmn = MemToObj(piter, dmn_t, nlist);
-        if (pdmn->task == task)
+        if (pdmn->taskid == taskid)
         {
             return TRUE;
         }
@@ -142,10 +142,10 @@ is_taskname_used(TASK_ID task)
 DMN_ID
 dmn_register(void)
 {
-    TASK_ID task = taskIdSelf();
-    if (TRUE == is_taskname_used(task))
+    TASK_ID taskid = taskIdSelf();
+    if (TRUE == is_taskname_used(taskid))
     {
-        printf("err %s already registered!\n", taskName(task));
+        printf("err %s already registered!\n", taskName(taskid));
         return NULL;
     }
     dmn_t *pnew = malloc(sizeof(dmn_t));
@@ -153,8 +153,8 @@ dmn_register(void)
     {
         return NULL;
     }
+    pnew->taskid = taskid;
     pnew->count = DMN_MAX_CHECK_TIME;
-    pnew->task = task;
     semTake(the_dmn_sem, WAIT_FOREVER);
     ListAddTail(&pnew->nlist, &the_registed_list);
     semGive(the_dmn_sem);
@@ -177,11 +177,14 @@ dmn_sign(DMN_ID id)
     dmn_t *pdmn = (dmn_t *)id;
 
     semTake(the_dmn_sem, WAIT_FOREVER);
-    if (FALSE == is_taskname_used(id))
+
+#if 1
+    if (FALSE == is_taskname_used(pdmn->taskid))
     {
         semGive(the_dmn_sem);
         return ERROR;
     }
+#endif
 
     if (pdmn->count > 0u)
     {
@@ -222,32 +225,33 @@ dmn_unregister(DMN_ID id)
 /**
  ******************************************************************************
  * @brief   输出dmn信息
- * @param[in]  None
- * @param[out] None
+ * @param[in]  is_sem   : 是否需要信号量保护
  *
  * @retval     None
  ******************************************************************************
  */
 void
-dmn_info(void)
+dmn_info(bool_e is_sem)
 {
     dmn_t *pdmn = NULL;
     struct ListNode *piter = NULL;
 
-    printf("\nName");
-    printf("\r\t\t\t");
-    printf("RemainCounts\n");
+    printf("\n  Name\r\t\t\tRemainCounts\n");
 
-    semTake(the_dmn_sem, WAIT_FOREVER);
+    if (is_sem == TRUE)
+    {
+        semTake(the_dmn_sem, WAIT_FOREVER);
+    }
     LIST_FOR_EACH(piter, &the_registed_list)
     {
         /* 取得遍历到的对象 */
         pdmn = MemToObj(piter, dmn_t, nlist);
-        printf("%s", taskName(pdmn->task));
-        printf("\r\t\t\t");
-        printf("%d\n", pdmn->count);
+        printf("  %s\r\t\t\t%d\n", taskName(pdmn->taskid), pdmn->count);
     }
-    semGive(the_dmn_sem);
+    if (is_sem == TRUE)
+    {
+        semGive(the_dmn_sem);
+    }
 }
 
 /**
@@ -293,10 +297,11 @@ dmn_loop(void)
         {
             _func_feedDogHook();    /* 喂硬件狗 */
         }
-        if ((tickGet() - tick) < (SYS_TICKS_PER_SECOND * 60))
+        if ((tickGet() - tick) < (SYS_TICKS_PER_SECOND * 10))
         {
             continue;
         }
+        tick = tickGet();
         semTake(the_dmn_sem, WAIT_FOREVER);
         LIST_FOR_EACH(piter, &the_registed_list)
         {
@@ -308,7 +313,10 @@ dmn_loop(void)
             }
             if (pdmn->count == 0)
             {
-                printf("dmn reboot system...\n");
+                printf("\n  TASK(%s) Sign Out Of Time!\n",
+                        taskName(pdmn->taskid));
+                dmn_info(FALSE);
+                printf("  dmn reboot system...\n");
                 if (_func_dmnRestHook != NULL)
                 {
                     _func_dmnRestHook();    /* 任务间喂狗异常 */
@@ -329,7 +337,6 @@ dmn_loop(void)
     {
         _func_cpuRestHook();    /* reset CPU */
     }
-    taskDelete(NULL);
 }
 
 /*--------------------------------dmnLib.c-----------------------------------*/

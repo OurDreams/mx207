@@ -13,6 +13,7 @@
  ----------------------------------------------------------------------------*/
 #include <types.h>
 #include <stdio.h>
+#include <devLib.h>
 #include <osLib.h>
 #include <oscfg.h>
 
@@ -74,11 +75,13 @@ os_print_logo(void)
 void
 os_print_banner(void)
 {
-    printf("\n\tOS Version: "OS_RELEASE
-           "\n\tBuild Time: "__DATE__ __TIME__
-           "\n\tCopyRight : Xxxx Xxxx..");
+    printf("\n  OS Version: "OS_RELEASE
+           "\n  Build Time: "__DATE__" "__TIME__
+           "\n  CopyRight : Xxxx Xxxx..\n");
 }
 
+extern status_t
+devnull_create(void);
 /**
  ******************************************************************************
  * @brief   os资源初始化
@@ -91,6 +94,9 @@ os_print_banner(void)
 status_t
 os_resource_init(void)
 {
+    (void)devlib_init();
+    (void)devnull_create();
+
     return OK;
 }
 /*----------------------------osinit.c--------------------------------*/

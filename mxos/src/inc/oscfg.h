@@ -54,13 +54,14 @@ Section: Macro Definitions
 #define TASK_PRIORITY_SHELL         (1u)    /**< shell任务优先级 */
 #define TASK_STK_SIZE_SHELL      (1024u)    /**< shell任务堆栈 */
 
-
+/* dmn任务配置 */
 
 #define TASK_PRIORITY_DMN           (1u)    /**< DMN任务优先级 */
-#define TASK_STK_SIZE_DMN        (1024u)    /**< DMN任务堆栈 */
+#define TASK_STK_SIZE_DMN         (512u)    /**< DMN任务堆栈 */
+#define DMN_MAX_CHECK_TIME          (6u)    /**< 默认喂狗超时时间（6*10秒） */
 
-#define TASK_PRIORITY_EXC
-#define TASK_STK_SIZE_EXC
+#define TASK_PRIORITY_EXC           (0u)    /**< 异常中断处理任务的优先 */
+#define TASK_STK_SIZE_EXC         (512u)    /**< 异常中断处理任务的堆栈大小 */
 
 
 #endif /* __OSCFG_H__ */

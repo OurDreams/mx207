@@ -46,7 +46,7 @@ extern status_t
 dmn_unregister(DMN_ID id);
 
 extern void
-dmn_info(void);
+dmn_info(bool_e is_sem);
 
 extern void
 dmn_reboot(void);

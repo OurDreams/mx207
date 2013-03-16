@@ -13,6 +13,7 @@
 #include <shell.h>
 #include <debug.h>
 #include <taskLib.h>
+#include <dmnLib.h>
 //#include <ttylib.h>
 #include <oscfg.h>
 
@@ -51,6 +52,8 @@ static const char_t erase_seq[] = "\b \b";
 static const char_t const *prompt = "->";
 static cmd_tbl_t *pmatch_cmd = NULL;
 static TASK_ID shellTaskId = 0;
+static DMN_ID the_dmnid = NULL;
+
 /*-----------------------------------------------------------------------------
  Section: static Function Prototypes
  ----------------------------------------------------------------------------*/
@@ -194,6 +197,7 @@ readline(void)
     //fflush(stdout);
     while (TRUE)
     {
+        dmn_sign(the_dmnid);
         taskDelay(1);
         // ºÏ≤‚ ‰»Î
         if ((c = bsp_getchar()) == 0)
@@ -498,6 +502,10 @@ SHELL_CMD(help, CFG_MAXARGS, do_help, "Print this list\r\n");
 void
 shell_loop(void)
 {
+    the_dmnid = dmn_register();
+
+    D_ASSERT(the_dmnid != NULL);
+
     while (1)
     {
         if (readline())

@@ -15,15 +15,21 @@
 #include <stdlib.h>
 #include <taskLib.h>
 #include <debug.h>
+#include <oscfg.h>
 
 /*-----------------------------------------------------------------------------
  Section: Macro Definitions
  ----------------------------------------------------------------------------*/
-#define MAX_EXC_MSG_SIZE	    2	  //< 系统处理任务消息队列的深度
-#define EXC_MAX_ARGS	        6	  //< 异常消息的参数最大个数
+#define MAX_EXC_MSG_SIZE	        (2u)	/**< 系统处理任务消息队列的深度 */
+#define EXC_MAX_ARGS	            (6u)	/**< 异常消息的参数最大个数 */
 
-#define OS_TASK_EXC_PRIO        0     //<异常中断处理任务的优先
-#define EXC_TASK_STACK_SIZE     1024  //<异常中断处理任务的堆栈大小
+#ifndef TASK_PRIORITY_EXC
+# define TASK_PRIORITY_EXC          (0u)    /**< 异常中断处理任务的优先 */
+#endif
+
+#ifndef TASK_STK_SIZE_EXC
+# define TASK_STK_SIZE_EXC        (512u)    /**< 异常中断处理任务的堆栈大小 */
+#endif
 
 /*-----------------------------------------------------------------------------
  Section: Private Type Definitions
@@ -134,7 +140,7 @@ status_t excJobAdd(VOIDFUNCPTR func, int arg1, int arg2, int arg3, int arg4,
  * @note
  ******************************************************************************
  */
-status_t excInit()
+status_t excInit(void)
 
 {
     if (excTaskId != NULL)
@@ -144,7 +150,7 @@ status_t excInit()
     D_ASSERT(excMsgQId != NULL);
 
     excTaskId = taskSpawn((const signed char * const ) "tExcTask",
-            OS_TASK_EXC_PRIO, EXC_TASK_STACK_SIZE, (OSFUNCPTR) excTask, 0);
+            TASK_PRIORITY_EXC, TASK_STK_SIZE_EXC, (OSFUNCPTR) excTask, 0);
     D_ASSERT(excTaskId != NULL);
 
     _func_excJobAdd = excJobAdd;

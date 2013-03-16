@@ -41,6 +41,12 @@ FUNCPTR     _func_cpuRestHook = NULL;
  */
 FUNCPTR     _func_dmnRestHook = NULL;
 
+/**
+ *  @brief 内核任务堆栈溢出发生时，调用的钩子函数，
+ *  可用于在文件中保存现场信息。
+ *  _func_evtLogOverStackHook(taskId,pcTaskName);
+ */
+VOIDFUNCPTR _func_evtLogOverStackHook;
 
 /*-----------------------------------------------------------------------------
  Section: Local Variables

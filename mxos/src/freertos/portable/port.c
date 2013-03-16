@@ -159,12 +159,21 @@ static void prvPortStartFirstTask( void ) __attribute__ (( naked ));
 #endif /* configUSE_TICKLESS_IDLE */
 
 /*-----------------------------------------------------------*/
-
+static void
+onTaskReturn(void)
+{
+    vTaskDelete(NULL);
+    while (1)
+    {
+        vTaskDelay(1);
+    }
+}
 /*
  * See header file for description.
  */
 portSTACK_TYPE *pxPortInitialiseStack( portSTACK_TYPE *pxTopOfStack, pdTASK_CODE pxCode, void *pvParameters )
 {
+#if 0
 	/* Simulate the stack frame as it would be created by a context switch
 	interrupt. */
 	pxTopOfStack--; /* Offset added to account for the way the MCU uses the stack on entry/exit of interrupts. */
@@ -176,7 +185,27 @@ portSTACK_TYPE *pxPortInitialiseStack( portSTACK_TYPE *pxTopOfStack, pdTASK_CODE
 	pxTopOfStack -= 5;	/* R12, R3, R2 and R1. */
 	*pxTopOfStack = ( portSTACK_TYPE ) pvParameters;	/* R0 */
 	pxTopOfStack -= 8;	/* R11, R10, R9, R8, R7, R6, R5 and R4. */
+#endif
 
+    /* Registers stacked as if auto-saved on exception    */
+    *(pxTopOfStack)    = (portSTACK_TYPE)0x01000000uL;  /* xPSR */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)pxCode;        /* Entry Point */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)onTaskReturn;  /* R14 (LR) TaskReturn*/
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x12121212uL;  /* R12 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x03030303uL;  /* R3 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x02020202uL;  /* R2 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x01010101uL;  /* R1 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)pvParameters;  /* R0 : argument */
+
+        /* Remaining registers saved on process stack */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x11111111uL;            /* R11 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x10101010uL;            /* R10 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x09090909uL;            /* R9 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x08080808uL;            /* R8 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x07070707uL;            /* R7 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x06060606uL;            /* R6 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x05050505uL;            /* R5 */
+    *(--pxTopOfStack)  = (portSTACK_TYPE)0x04040404uL;            /* R4 */
 	return pxTopOfStack;
 }
 /*-----------------------------------------------------------*/
