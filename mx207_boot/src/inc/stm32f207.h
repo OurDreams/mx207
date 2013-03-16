@@ -14,10 +14,6 @@
 /*-----------------------------------------------------------------------------
  Section: Includes
  ----------------------------------------------------------------------------*/
-#include "./cpu/core_cm3.h"
-#include "./cpu/core_cmFunc.h"
-#include "./cpu/core_cmInstr.h"
-#include "./cpu/misc.h"
 #include "./cpu/stm32f2xx.h"
 #include "./cpu/stm32f2xx_adc.h"
 #include "./cpu/stm32f2xx_can.h"
@@ -45,6 +41,10 @@
 #include "./cpu/stm32f2xx_usart.h"
 #include "./cpu/stm32f2xx_wwdg.h"
 #include "./cpu/system_stm32f2xx.h"
+#include "./cpu/core_cm3.h"
+#include "./cpu/core_cmFunc.h"
+#include "./cpu/core_cmInstr.h"
+#include "./cpu/misc.h"
 
 #endif /* __STM32F207_H__ */
 /*----------------------------End of stm32f207.h-----------------------------*/

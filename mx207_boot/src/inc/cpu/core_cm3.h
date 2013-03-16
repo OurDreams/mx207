@@ -118,11 +118,11 @@
     /* add preprocessor checks */
 #endif
 
-#include <types.h>
 //#include <stdint.h>                      /*!< standard types definitions                      */
+#include <types.h>
 #include "core_cmInstr.h"                /*!< Core Instruction Access                         */
 #include "core_cmFunc.h"                 /*!< Core Function Access                            */
-#include "stm32f2xx.h"
+
 #endif /* __CORE_CM3_H_GENERIC */
 
 #ifndef __CMSIS_GENERIC
