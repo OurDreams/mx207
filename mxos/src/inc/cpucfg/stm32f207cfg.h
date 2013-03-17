@@ -49,7 +49,7 @@ Section: Macro Definitions
 
 /* shell任务配置 */
 #define TASK_PRIORITY_SHELL         (1u)    /**< shell任务优先级 */
-#define TASK_STK_SIZE_SHELL      (1024u)    /**< shell任务堆栈 */
+#define TASK_STK_SIZE_SHELL      (2048u)    /**< shell任务堆栈 */
 
 /* dmn任务配置 */
 #define TASK_PRIORITY_DMN           (1u)    /**< DMN任务优先级 */

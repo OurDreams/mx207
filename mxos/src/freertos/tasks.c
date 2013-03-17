@@ -98,6 +98,10 @@ typedef struct tskTaskControlBlock
 {
 	volatile portSTACK_TYPE	*pxTopOfStack;		/*< Points to the location of the last item placed on the tasks stack.  THIS MUST BE THE FIRST MEMBER OF THE TCB STRUCT. */
 
+#if ( configGENERATE_RUN_TIME_STATS == 1 )
+    unsigned long ulRunTimeCounter;             /*< Stores the amount of time the task has spent in the Running state. */
+#endif
+
 	#if ( portUSING_MPU_WRAPPERS == 1 )
 		xMPU_SETTINGS xMPUSettings;				/*< The MPU settings are defined as part of the port layer.  THIS MUST BE THE SECOND MEMBER OF THE TCB STRUCT. */
 	#endif
@@ -130,11 +134,6 @@ typedef struct tskTaskControlBlock
 	#if ( configUSE_APPLICATION_TASK_TAG == 1 )
 		pdTASK_HOOK_CODE pxTaskTag;
 	#endif
-
-	#if ( configGENERATE_RUN_TIME_STATS == 1 )
-		unsigned long ulRunTimeCounter;			/*< Stores the amount of time the task has spent in the Running state. */
-	#endif
-
 } tskTCB;
 
 
@@ -191,10 +190,12 @@ PRIVILEGED_DATA static volatile portTickType xNextTaskUnblockTime				= ( portTic
 
 #if ( configGENERATE_RUN_TIME_STATS == 1 )
 
-	PRIVILEGED_DATA static char pcStatsString[ 50 ] ;
 	PRIVILEGED_DATA static unsigned long ulTaskSwitchedInTime = 0UL;	/*< Holds the value of a timer/counter the last time a task was switched in. */
+	PRIVILEGED_DATA static unsigned long ulTaskSwitchedInTime_base = 0UL;	/*< Holds the value of a timer/counter the last time a task was switched in. */
+#if 0
+	PRIVILEGED_DATA static char pcStatsString[ 50 ] ;
 	static void prvGenerateRunTimeStatsForTasksInList( const signed char *pcWriteBuffer, xList *pxList, unsigned long ulTotalRunTime ) PRIVILEGED_FUNCTION;
-
+#endif
 #endif
 
 /* Debugging and trace facilities private variables and macros. ------------*/
@@ -449,7 +450,8 @@ static tskTCB *prvAllocateTCBAndStack( unsigned short usStackDepth, portSTACK_TY
  * THIS FUNCTION IS INTENDED FOR DEBUGGING ONLY, AND SHOULD NOT BE CALLED FROM
  * NORMAL APPLICATION CODE.
  */
-#if ( configUSE_TRACE_FACILITY == 1 )
+#if 0
+//#if ( configUSE_TRACE_FACILITY == 1 )
 
 	static void prvListTaskWithinSingleList( const signed char *pcWriteBuffer, xList *pxList, signed char cStatus ) PRIVILEGED_FUNCTION;
 
@@ -1491,7 +1493,8 @@ unsigned portBASE_TYPE uxTaskGetNumberOfTasks( void )
 #endif
 /*-----------------------------------------------------------*/
 
-#if ( configUSE_TRACE_FACILITY == 1 )
+#if 0
+//#if ( configUSE_TRACE_FACILITY == 1 )
 
 	void vTaskList( signed char *pcWriteBuffer )
 	{
@@ -1553,8 +1556,8 @@ unsigned portBASE_TYPE uxTaskGetNumberOfTasks( void )
 
 #endif
 /*----------------------------------------------------------*/
-
-#if ( configGENERATE_RUN_TIME_STATS == 1 )
+#if 0
+//#if ( configGENERATE_RUN_TIME_STATS == 1 )
 
 	void vTaskGetRunTimeStats( signed char *pcWriteBuffer )
 	{
@@ -1841,7 +1844,7 @@ void vTaskSwitchContext( void )
 				#ifdef portALT_GET_RUN_TIME_COUNTER_VALUE
 					portALT_GET_RUN_TIME_COUNTER_VALUE( ulTempCounter );
 				#else
-					ulTempCounter = portGET_RUN_TIME_COUNTER_VALUE();
+					ulTempCounter = portGET_RUN_TIME_COUNTER_VALUE() - ulTaskSwitchedInTime_base;
 				#endif
 
 				/* Add the amount of time the task has been running to the accumulated
@@ -2431,8 +2434,8 @@ tskTCB *pxNewTCB;
 	return pxNewTCB;
 }
 /*-----------------------------------------------------------*/
-
-#if ( configUSE_TRACE_FACILITY == 1 )
+#if 0
+//#if ( configUSE_TRACE_FACILITY == 1 )
 
 	static void prvListTaskWithinSingleList( const signed char *pcWriteBuffer, xList *pxList, signed char cStatus )
 	{
@@ -2463,8 +2466,8 @@ tskTCB *pxNewTCB;
 
 #endif
 /*-----------------------------------------------------------*/
-
-#if ( configGENERATE_RUN_TIME_STATS == 1 )
+#if 0
+//#if ( configGENERATE_RUN_TIME_STATS == 1 )
 
 	static void prvGenerateRunTimeStatsForTasksInList( const signed char *pcWriteBuffer, xList *pxList, unsigned long ulTotalRunTime )
 	{
@@ -2834,10 +2837,11 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 
 #if ( configUSE_TRACE_FACILITY == 1 )
 
-	static void vTaskInfoList(xList *pxList, char *cStatus )
+	static void vTaskInfoList(xList *pxList, char *cStatus, unsigned long ulTotalRunTime)
 	{
 	volatile tskTCB *pxNextTCB, *pxFirstTCB;
 	unsigned short usStackRemaining;
+    unsigned long ulStatsAsPercentage;
 
 	    /* Write the details of all the TCB's in pxList into the buffer. */
 	    listGET_OWNER_OF_NEXT_ENTRY( pxFirstTCB, pxList );
@@ -2855,14 +2859,34 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	        #endif
 
 	        unsigned short usStackUsed = pxNextTCB->usStackSize - usStackRemaining*sizeof( portSTACK_TYPE );
+
+            /* What percentage of the total run time has the task used?
+            This will always be rounded down to the nearest integer.
+            ulTotalRunTime has already been divided by 100. */
+            ulStatsAsPercentage = pxNextTCB->ulRunTimeCounter / ulTotalRunTime;
+            uint8_t strusage[5];
+            memset(strusage, 0, sizeof(strusage));
+            if (pxNextTCB->ulRunTimeCounter == 0)
+            {
+                sprintf((char_t *)strusage, "0");
+            }
+            else if (ulStatsAsPercentage > 0L)
+            {
+                sprintf((char_t *)strusage, "%3d", (uint32_t)ulStatsAsPercentage);
+            }
+            else
+            {
+                sprintf((char_t *)strusage, "<1");
+            }
+
 	        uint8_t str[20];
 	        memset(str, 0, sizeof(str));
 	        sprintf((char_t *)str, "%d/%d(%3d%%)", usStackUsed,pxNextTCB->usStackSize,usStackUsed*100/pxNextTCB->usStackSize);
 
-	        printf("%-8s %3u %-7s %8X %16s %8X\r\n", pxNextTCB->pcTaskName,
+	        printf("%-14s %2u %7s   %8X %15s %8X %10d %3s%%\r\n", pxNextTCB->pcTaskName,
 	        (unsigned int)(configMAX_PRIORITIES-1 - pxNextTCB->uxPriority),cStatus,(unsigned int) pxNextTCB->pxTopOfStack,
-	        str,(unsigned int) pxNextTCB);
-
+	        str,(unsigned int) pxNextTCB, ( unsigned int ) pxNextTCB->ulRunTimeCounter, strusage);
+	        pxNextTCB->ulRunTimeCounter = 0u;
 
 	    } while( pxNextTCB != pxFirstTCB );
 	}
@@ -2881,12 +2905,23 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	 */
 	uint32_t vTaskInfo ()
 	{
+
 	    // Êä³öÁÐÃû
-	    printf("%-8s %3s %-7s %8s %16s %8s\n\r", "NAME", "PRI", "STATUS", "SP", "USED/SIZE", "TCBID");
-	    printf("-------- --- ------- -------- ---------------- --------\n\r");
+	    printf("     NAME      PRI  STATUS     SP     MAX USED/SIZE   TCBID    CPU TIME  ( %% )\n");
+	    printf("-------------- --- -------- -------- --------------- -------- ---------- -----\n\r");
 
-	   // vTaskSuspendAll();
+	    vTaskSuspendAll();
 
+	    unsigned long ulTotalRunTime;
+        #ifdef portALT_GET_RUN_TIME_COUNTER_VALUE
+            portALT_GET_RUN_TIME_COUNTER_VALUE( ulTotalRunTime );
+        #else
+            ulTotalRunTime = portGET_RUN_TIME_COUNTER_VALUE() - ulTaskSwitchedInTime_base;
+        #endif
+
+        /* Divide ulTotalRunTime by 100 to make the percentage caluclations
+        simpler in the prvGenerateRunTimeStatsForTasksInList() function. */
+        ulTotalRunTime /= 100UL;
 	    unsigned portBASE_TYPE uxQueue;
 	    uxQueue = uxTopUsedPriority + 1;
 
@@ -2896,26 +2931,26 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 
 	        if( !listLIST_IS_EMPTY( &( pxReadyTasksLists[ uxQueue ] ) ) )
 	        {
-	            vTaskInfoList( ( xList * ) &( pxReadyTasksLists[ uxQueue ] ), "READY" );
+	            vTaskInfoList( ( xList * ) &( pxReadyTasksLists[ uxQueue ] ), "READY", ulTotalRunTime );
 	        }
 	    }while( uxQueue > ( unsigned short ) tskIDLE_PRIORITY );
 
 
 	    if( !listLIST_IS_EMPTY( pxDelayedTaskList ) )
 	    {
-	        vTaskInfoList( ( xList * ) pxDelayedTaskList, "BLOCK" );
+	        vTaskInfoList( ( xList * ) pxDelayedTaskList, "BLOCK", ulTotalRunTime );
 	    }
 
 	    if( !listLIST_IS_EMPTY( pxOverflowDelayedTaskList ) )
 	    {
-	        vTaskInfoList( ( xList * ) pxOverflowDelayedTaskList, "BLOCK" );
+	        vTaskInfoList( ( xList * ) pxOverflowDelayedTaskList, "BLOCK", ulTotalRunTime );
 	    }
 
 	    #if( INCLUDE_vTaskDelete == 1 )
 	    {
 	        if( !listLIST_IS_EMPTY( &xTasksWaitingTermination ) )
 	        {
-	            vTaskInfoList( ( xList * ) &xTasksWaitingTermination, "DELETE" );
+	            vTaskInfoList( ( xList * ) &xTasksWaitingTermination, "DELETE", ulTotalRunTime );
 	        }
 	    }
 	    #endif
@@ -2924,12 +2959,13 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	    {
 	        if( !listLIST_IS_EMPTY( &xSuspendedTaskList ) )
 	        {
-	            vTaskInfoList( ( xList * ) &xSuspendedTaskList, "SUSPEND");
+	            vTaskInfoList( ( xList * ) &xSuspendedTaskList, "SUSPEND", ulTotalRunTime );
 	        }
 	    }
 	    #endif
-
-	    //xTaskResumeAll();
+	    ulTaskSwitchedInTime_base = portGET_RUN_TIME_COUNTER_VALUE();
+	    ulTaskSwitchedInTime = 0;
+	    xTaskResumeAll();
         return 1;
 	}
 

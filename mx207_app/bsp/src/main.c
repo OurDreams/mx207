@@ -8,7 +8,7 @@
  * @copyright
  ******************************************************************************
  */
- 
+
 /*-----------------------------------------------------------------------------
  Section: Includes
  ----------------------------------------------------------------------------*/
@@ -17,6 +17,7 @@
 #include <memLib.h>
 #include <taskLib.h>
 #include <shell.h>
+#include <intLib.h>
 #include <dmnLib.h>
 #include <devLib.h>
 
@@ -47,6 +48,7 @@ extern char heap_low; /* Defined by the linker */
 extern char cstack_top;
 
 extern void sysHwInit0(void);
+extern void sysHwInit(void);
 extern void vTaskStartScheduler( void );
 extern status_t excInit(void);
 extern void os_resource_init(void);

@@ -100,6 +100,7 @@
 #define configIDLE_SHOULD_YIELD		1
 #define configUSE_MUTEXES			1
 #define configCHECK_FOR_STACK_OVERFLOW  ( 2 )
+#define configGENERATE_RUN_TIME_STATS   1
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES 		0
@@ -130,6 +131,11 @@ priority values, 0 to 15.  This must correspond to the
 configKERNEL_INTERRUPT_PRIORITY setting.  Here 15 corresponds to the lowest
 NVIC value of 255. */
 #define configLIBRARY_KERNEL_INTERRUPT_PRIORITY	15
+
+extern void timer_start(void);
+extern uint32_t timer_get(void);
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() timer_start()
+#define portGET_RUN_TIME_COUNTER_VALUE()    timer_get()
 
 #endif /* FREERTOS_CONFIG_H */
 

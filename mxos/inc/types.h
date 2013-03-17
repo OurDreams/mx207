@@ -28,6 +28,7 @@ typedef          double      float64_t;
 typedef long     double      float128_t;
 //typedef signed   int         size_t;
 
+#define __INLINE    inline
 typedef enum
 {
     FALSE = 0,
