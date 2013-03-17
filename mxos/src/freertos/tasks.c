@@ -2841,7 +2841,6 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	{
 	volatile tskTCB *pxNextTCB, *pxFirstTCB;
 	unsigned short usStackRemaining;
-    unsigned long ulStatsAsPercentage;
 
 	    /* Write the details of all the TCB's in pxList into the buffer. */
 	    listGET_OWNER_OF_NEXT_ENTRY( pxFirstTCB, pxList );
@@ -2860,10 +2859,11 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 
 	        unsigned short usStackUsed = pxNextTCB->usStackSize - usStackRemaining*sizeof( portSTACK_TYPE );
 
+#if ( configGENERATE_RUN_TIME_STATS == 1 )
             /* What percentage of the total run time has the task used?
             This will always be rounded down to the nearest integer.
             ulTotalRunTime has already been divided by 100. */
-            ulStatsAsPercentage = pxNextTCB->ulRunTimeCounter / ulTotalRunTime;
+	        unsigned long ulStatsAsPercentage = pxNextTCB->ulRunTimeCounter / ulTotalRunTime;
             uint8_t strusage[5];
             memset(strusage, 0, sizeof(strusage));
             if (pxNextTCB->ulRunTimeCounter == 0)
@@ -2878,15 +2878,23 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
             {
                 sprintf((char_t *)strusage, "<1");
             }
+            uint8_t str[20];
+            memset(str, 0, sizeof(str));
+            sprintf((char_t *)str, "%d/%d(%3d%%)", usStackUsed,pxNextTCB->usStackSize,usStackUsed*100/pxNextTCB->usStackSize);
 
+            printf("%-14s %2u %7s   %8X %15s %8X %10d %3s%%\r\n", pxNextTCB->pcTaskName,
+            (unsigned int)(configMAX_PRIORITIES-1 - pxNextTCB->uxPriority),cStatus,(unsigned int) pxNextTCB->pxTopOfStack,
+            str,(unsigned int) pxNextTCB, ( unsigned int ) pxNextTCB->ulRunTimeCounter, strusage);
+            pxNextTCB->ulRunTimeCounter = 0u;
+#else
 	        uint8_t str[20];
 	        memset(str, 0, sizeof(str));
 	        sprintf((char_t *)str, "%d/%d(%3d%%)", usStackUsed,pxNextTCB->usStackSize,usStackUsed*100/pxNextTCB->usStackSize);
 
-	        printf("%-14s %2u %7s   %8X %15s %8X %10d %3s%%\r\n", pxNextTCB->pcTaskName,
+	        printf("%-14s %2u %7s   %8X %15s %8X\r\n", pxNextTCB->pcTaskName,
 	        (unsigned int)(configMAX_PRIORITIES-1 - pxNextTCB->uxPriority),cStatus,(unsigned int) pxNextTCB->pxTopOfStack,
-	        str,(unsigned int) pxNextTCB, ( unsigned int ) pxNextTCB->ulRunTimeCounter, strusage);
-	        pxNextTCB->ulRunTimeCounter = 0u;
+	        str,(unsigned int) pxNextTCB);
+#endif
 
 	    } while( pxNextTCB != pxFirstTCB );
 	}
@@ -2907,12 +2915,18 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	{
 
 	    // Êä³öÁÐÃû
-	    printf("     NAME      PRI  STATUS     SP     MAX USED/SIZE   TCBID    CPU TIME  ( %% )\n");
+#if ( configGENERATE_RUN_TIME_STATS == 1 )
+	    printf("     NAME      PRI  STATUS     SP     MAX USED/SIZE   TCBID    CPU TIME  ( %% )\n\r");
 	    printf("-------------- --- -------- -------- --------------- -------- ---------- -----\n\r");
+#else
+        printf("     NAME      PRI  STATUS     SP     MAX USED/SIZE   TCBID\n\r");
+        printf("-------------- --- -------- -------- --------------- --------\n\r");
+#endif
 
 	    vTaskSuspendAll();
 
-	    unsigned long ulTotalRunTime;
+	    unsigned long ulTotalRunTime = 0u;
+#if ( configGENERATE_RUN_TIME_STATS == 1 )
         #ifdef portALT_GET_RUN_TIME_COUNTER_VALUE
             portALT_GET_RUN_TIME_COUNTER_VALUE( ulTotalRunTime );
         #else
@@ -2922,6 +2936,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
         /* Divide ulTotalRunTime by 100 to make the percentage caluclations
         simpler in the prvGenerateRunTimeStatsForTasksInList() function. */
         ulTotalRunTime /= 100UL;
+#endif
 	    unsigned portBASE_TYPE uxQueue;
 	    uxQueue = uxTopUsedPriority + 1;
 
@@ -2963,8 +2978,10 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	        }
 	    }
 	    #endif
+#if ( configGENERATE_RUN_TIME_STATS == 1 )
 	    ulTaskSwitchedInTime_base = portGET_RUN_TIME_COUNTER_VALUE();
 	    ulTaskSwitchedInTime = 0;
+#endif
 	    xTaskResumeAll();
         return 1;
 	}
