@@ -46,6 +46,8 @@
  ----------------------------------------------------------------------------*/
 extern char heap_low; /* Defined by the linker */
 extern char cstack_top;
+extern int32_t _the_console_fd;
+
 
 extern void sysHwInit0(void);
 extern void sysHwInit(void);
@@ -53,6 +55,7 @@ extern void vTaskStartScheduler( void );
 extern status_t excInit(void);
 extern void os_resource_init(void);
 extern void os_print_banner(void);
+extern void uart_init0(void);
 
 /*-----------------------------------------------------------------------------
  Section: Local Function Prototypes
@@ -65,13 +68,26 @@ extern void os_print_banner(void);
 static void
 rootTask(void *p_arg)
 {
+    taskDelay(10);
+    uart_init0();
+    _the_console_fd = dev_open("tty0", O_RDWR);
+    if (_the_console_fd <= 0)
+    {
+        return;
+    }
+
     //printf BSP version
     excInit();
     dmn_init();
     shell_init();
     os_resource_init();
     os_print_banner();
+
     printf("....STM32F207 APP START...\n");
+
+//    taskDelay(10);
+//    char *pstr = "I like apple very much!\n";
+//    dev_write(_the_console_fd, pstr, strlen(pstr));
 }
 
 int main (void)

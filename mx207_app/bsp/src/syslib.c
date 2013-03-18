@@ -23,7 +23,7 @@
 /*-----------------------------------------------------------------------------
  Section: Constant Definitions
  ----------------------------------------------------------------------------*/
-/* NONE */ 
+/* NONE */
 
 /*-----------------------------------------------------------------------------
  Section: Global Variables
@@ -47,7 +47,40 @@ void
 sysHwInit0(void)
 {
     SystemInit();
+    //
+    //使能外设
+    //
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOEEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOFEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOGEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOHEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOIEN;
+    RCC->APB2ENR |= RCC_APB2Periph_SYSCFG;
+    RCC->APB1ENR |= RCC_APB1Periph_TIM5;
+
+    RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
+    RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
+    RCC->APB1ENR |= RCC_APB1ENR_UART4EN;
+    RCC->APB1ENR |= RCC_APB1ENR_UART5EN;
+    RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
+    RCC->APB2ENR |= RCC_APB2ENR_USART6EN;
+
+    RCC->APB1ENR |= RCC_APB1Periph_SPI2;
+    RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
+    RCC->APB1ENR |= RCC_APB1Periph_TIM3;
+    RCC->APB1ENR |= RCC_APB1Periph_TIM2;
+    RCC->APB2ENR |= RCC_APB2Periph_TIM1;
+    RCC->APB1ENR |= RCC_APB1Periph_TIM4;
+    RCC->APB2ENR |= RCC_APB2Periph_TIM8;
+    RCC->APB1ENR |= RCC_APB1Periph_TIM7;
+    RCC->APB1ENR |= RCC_APB1Periph_TIM6;
+    RCC->APB2ENR |= RCC_APB2Periph_TIM9;
 }
+
 
 void
 sysHwInit(void)
@@ -55,7 +88,11 @@ sysHwInit(void)
     intLock();
 
     intUnlock();
+
+
 }
+
+
 
 int32_t bsp_getchar(void)
 {
