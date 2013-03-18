@@ -14,7 +14,7 @@
 #include <debug.h>
 #include <taskLib.h>
 #include <dmnLib.h>
-//#include <ttylib.h>
+#include <devLib.h>
 #include <oscfg.h>
 
 /*-----------------------------------------------------------------------------
@@ -35,7 +35,6 @@
 #ifndef CFG_CBSIZE
 # define CFG_CBSIZE                (50u)    /**< ÃüÁîÐÐ×Ö½ÚÊý */
 #endif
-#define SHELL_GETCHAR       bsp_getchar     /**< ¶ÁÈ¡Ò»¸ö×Ö·û */
 #define SHELL_PRINTF        printf          /**< ×Ö·û´®Êä³ö */
 
 /*-----------------------------------------------------------------------------
@@ -43,6 +42,7 @@
  ----------------------------------------------------------------------------*/
 extern cmd_tbl_t  __shell_cmd_start;
 extern cmd_tbl_t  __shell_cmd_end;
+extern int32_t _the_console_fd;
 
 /*-----------------------------------------------------------------------------
  Section: Local Variables
@@ -200,7 +200,8 @@ readline(void)
         dmn_sign(the_dmnid);
         taskDelay(1);
         // ¼ì²âÊäÈë
-        if ((c = bsp_getchar()) == 0)
+//        if ((c = bsp_getchar()) == 0)
+        if (dev_read(_the_console_fd, &c, 1) != 1)
         //if (ttyRead(consoleFd, &c, 1) == 0) todo
         {
             continue;

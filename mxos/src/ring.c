@@ -3,10 +3,11 @@
  * @file       ring.h
  * @version    V0.0.1
  * @brief      ring buf模块.
- * @details    提供环形缓冲区服务, Modify from djyos.
+ * @details    提供环形缓冲区服务
  *
  ******************************************************************************
  */
+#include <intLib.h>
 #include <string.h>
 #include <ring.h>
 
@@ -24,7 +25,7 @@
  ******************************************************************************
  */
 void
-ring_init(struct ring_buf *ring, uint8_t *buf, uint32_t len)
+ring_init(struct ring_buf *ring, uint8_t *buf, uint16_t len)
 {
     ring->buf = buf;
     ring->max_len = len;
@@ -43,7 +44,7 @@ ring_init(struct ring_buf *ring, uint8_t *buf, uint32_t len)
  * 返回缓冲区容量
  ******************************************************************************
  */
-uint32_t
+uint16_t
 ring_capacity(struct ring_buf *ring)
 {
     return ring->max_len;
@@ -84,11 +85,11 @@ ring_get_buf(struct ring_buf *ring)
  * 缓冲区没有足够的空间,按实际剩余空间写入
  ******************************************************************************
  */
-uint32_t
-ring_write(struct ring_buf *ring, uint8_t *buffer, uint32_t len)
+uint16_t
+ring_write(struct ring_buf *ring, const uint8_t *buffer, uint16_t len)
 {
-    uint32_t wr_len;
-    uint32_t partial;
+    uint16_t wr_len;
+    uint16_t partial;
 
     wr_len = ring->max_len - ring->len;
     if (wr_len == 0)
@@ -111,11 +112,57 @@ ring_write(struct ring_buf *ring, uint8_t *buffer, uint32_t len)
         memcpy(&ring->buf[ring->offset_write], buffer, wr_len);
         ring->offset_write += wr_len;
     }
+
+    intLock();
     ring->len += wr_len;
+    intUnlock();
 
     return wr_len;
 }
 
+/**
+ ******************************************************************************
+ * @brief      环形缓冲区写入(强制覆盖最老的数据)
+ * @param[in]  *ring    : 目标环形缓冲区结构指针
+ * @param[in]  *buffer  : 待写入的数据指针
+ * @param[in]   len     : 待写入的数据长度.单位是字节数
+ * @retval     实际写入的字节数,如果缓冲区有足够的空间,=len
+ *
+ * @details
+ * 环形缓冲区写入若干个字节,返回实际写入的数据量,并移动写指针,如果环形
+ * 缓冲区没有足够的空间,按实际剩余空间写入
+ ******************************************************************************
+ */
+uint16_t
+ring_write_force(struct ring_buf *ring, const uint8_t *buffer, uint16_t len)
+{
+    uint16_t wr_len = len;
+    uint16_t partial;
+
+    if (len > ring->max_len)
+    {
+        wr_len = len % ring->max_len;
+        buffer += len - wr_len;
+    }
+    if ((ring->offset_write + wr_len) > ring->max_len)
+    { //数据发生环绕
+        partial = ring->max_len - ring->offset_write;
+        memcpy(&ring->buf[ring->offset_write], buffer, partial); //写第一部分
+        memcpy(ring->buf, &buffer[partial], wr_len - partial); //写第二部分
+        ring->offset_write = wr_len - partial;
+    }
+    else
+    { //不发生环绕
+        memcpy(&ring->buf[ring->offset_write], buffer, wr_len);
+        ring->offset_write += wr_len;
+    }
+
+    intLock();
+    ring->len += wr_len;
+    intUnlock();
+
+    return wr_len;
+}
 /**
  ******************************************************************************
  * @brief      从环形缓冲区读
@@ -129,15 +176,15 @@ ring_write(struct ring_buf *ring, uint8_t *buffer, uint32_t len)
  * 缓冲区内数据不足，按实际数量读取。
  ******************************************************************************
  */
-uint32_t
-ring_read(struct ring_buf *ring, uint8_t *buffer, uint32_t len)
+uint16_t
+ring_read(struct ring_buf *ring, uint8_t *buffer, uint16_t len)
 {
-    uint32_t wr_len;
+    uint16_t wr_len;
 
     wr_len = (ring->len < len) ? ring->len : len;
     if ((ring->offset_read + wr_len) > ring->max_len)
     { //数据发生环绕
-        uint32_t partial;
+        uint16_t partial;
         partial = ring->max_len - ring->offset_read;
         memcpy(buffer, &ring->buf[ring->offset_read], partial); //写第一部分
         memcpy(&buffer[partial], ring->buf, wr_len - partial); //写第二部分
@@ -148,7 +195,9 @@ ring_read(struct ring_buf *ring, uint8_t *buffer, uint32_t len)
         memcpy(buffer, &ring->buf[ring->offset_read], wr_len);
         ring->offset_read += wr_len;
     }
+    intLock();
     ring->len -= wr_len;
+    intUnlock();
 
     return wr_len;
 }
@@ -162,7 +211,7 @@ ring_read(struct ring_buf *ring, uint8_t *buffer, uint32_t len)
  * @details    检查指定的环形缓冲区中的数据量,返回字节数.
  ******************************************************************************
  */
-uint32_t
+uint16_t
 ring_check(struct ring_buf *ring)
 {
     return ring->len;
@@ -227,10 +276,10 @@ ring_flush(struct ring_buf *ring)
  * @details 从读指针开始,释放掉指定大小的数据,相当于哑读了len个字节
  ******************************************************************************
  */
-uint32_t
-ring_dumb_read(struct ring_buf *ring, uint32_t len)
+uint16_t
+ring_dumb_read(struct ring_buf *ring, uint16_t len)
 {
-    uint32_t result;
+    uint16_t result;
 
     result = (ring->len < len) ? ring->len : len;
     if ((ring->offset_read + result) > ring->max_len)
@@ -259,10 +308,10 @@ ring_dumb_read(struct ring_buf *ring, uint32_t len)
  * 原来的数据。
  ******************************************************************************
  */
-uint32_t
-ring_recede_read(struct ring_buf *ring, uint32_t len)
+uint16_t
+ring_recede_read(struct ring_buf *ring, uint16_t len)
 {
-    uint32_t result;
+    uint16_t result;
 
     if ((ring->max_len - ring->len) > len) //空闲长度大于欲退回的长度
     {
@@ -296,10 +345,10 @@ ring_recede_read(struct ring_buf *ring, uint32_t len)
  * @details  取消已经写入线性缓冲区的若干数据，就像从来没有写入一样。
  ******************************************************************************
  */
-uint32_t
-ring_skip_tail(struct ring_buf *ring, uint32_t size)
+uint16_t
+ring_skip_tail(struct ring_buf *ring, uint16_t size)
 {
-    uint32_t result;
+    uint16_t result;
 
     if (ring->len > size)
     {
@@ -328,15 +377,15 @@ ring_skip_tail(struct ring_buf *ring, uint32_t size)
  * @brief      查找字符
  * @param[in]  *ring    : 目标环形缓冲区结构指针
  * @param[in]   c       : 需查找的字符
- * @retval     c出现的位置,如果没有出现则返回 CN_LIMIT_UINT32
+ * @retval     c出现的位置,如果没有出现则返回 CN_LIMIT_UINT16
  *
  * @details    从ring当前读位置开始查找字符c的位置
  ******************************************************************************
  */
-uint32_t
+uint16_t
 ring_search_ch(struct ring_buf *ring, char_t c)
 {
-    uint32_t i;
+    uint16_t i;
     uint8_t *buf = ring->buf;
 
     if (ring->offset_read > ring->offset_write)
@@ -366,7 +415,7 @@ ring_search_ch(struct ring_buf *ring, char_t c)
             }
         }
     }
-    return CN_LIMIT_UINT32;
+    return CN_LIMIT_UINT16;
 }
 
 /**
@@ -376,24 +425,24 @@ ring_search_ch(struct ring_buf *ring, char_t c)
  * @param[in]  *string  : 需查找的字符序列
  * @param[in]   str_len : 字符序列长度
  * @retval     string出现的位置相对offset_read的偏移量,
- *             如果没有出现返回 CN_LIMIT_UINT32
+ *             如果没有出现返回 CN_LIMIT_UINT16
  *
  * @details  从ring当前读位置开始查找字符序列的位置,字符序列不以0结束,而是指定长度
  *
  * @note 这个功能可能比较常用,所以在编写时注意了速度优化,但却使代码量大增.
  ******************************************************************************
  */
-uint32_t
-ring_search_str(struct ring_buf *ring, char_t *string, uint32_t str_len)
+uint16_t
+ring_search_str(struct ring_buf *ring, char_t *string, uint16_t str_len)
 {
-    uint32_t i, j;
+    uint16_t i, j;
     bool_e next;
     uint8_t *buf;
-    uint32_t end, start;
+    uint16_t end, start;
 
     if (ring->len < str_len)
     {
-        return CN_LIMIT_UINT32;
+        return CN_LIMIT_UINT16;
     }
     buf = ring->buf;
     if (ring->offset_read <= ring->offset_write)
@@ -486,7 +535,7 @@ ring_search_str(struct ring_buf *ring, char_t *string, uint32_t str_len)
             next = FALSE;
             for (; i < (ring->offset_read + ring->len - str_len); i++)
             {
-                uint32_t end, start;
+                uint16_t end, start;
                 next = FALSE;
                 //string分成两部分,end个字符在缓冲区末端,start个字符在缓冲区首
                 end = ring->max_len - i;
@@ -515,5 +564,5 @@ ring_search_str(struct ring_buf *ring, char_t *string, uint32_t str_len)
             }
         }
     }
-    return CN_LIMIT_UINT32;
+    return CN_LIMIT_UINT16;
 }

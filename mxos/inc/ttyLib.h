@@ -14,7 +14,7 @@
 Section: Includes
 -----------------------------------------------------------------------------*/
 #include <types.h>
-
+#include <ring.h>
 /*-----------------------------------------------------------------------------
 Section: Macro Definitions
 -----------------------------------------------------------------------------*/
@@ -30,6 +30,11 @@ Section: Macro Definitions
 #define Parity_Even                    ((uint16_t)0x0400)
 #define Parity_Odd                     ((uint16_t)0x0600)
 
+/* serial device I/O controls */
+#define TTY_BAUD_SET        0x1003
+#define TTY_BAUD_GET        0x1004
+#define TTY_FIOFLUSH        0x1010
+#define TTY_FIONREAD        0x1011
 /*-----------------------------------------------------------------------------
 Section: Type Definitions
 -----------------------------------------------------------------------------*/
@@ -41,6 +46,25 @@ typedef struct
     uint16_t parity;        /**< 校验位 */
 } tty_param_t;
 
+typedef struct
+{
+    struct ring_buf rd;
+    struct ring_buf wt;
+} tty_ring_t;
+
+typedef struct tty_exparam tty_exparam_t;
+typedef struct
+{
+    void (*tx_enable)(tty_exparam_t* pexparam, bool_e s);      /**< 开始发送 */
+    void (*rx_enable)(tty_exparam_t* pexparam, bool_e s);
+    void (*tr_enable)(tty_exparam_t* pexparam, bool_e s);
+} tty_opt;
+struct tty_exparam
+{
+    const tty_opt *popt;
+    uint32_t baseregs;
+    tty_ring_t ring;
+};
 /*-----------------------------------------------------------------------------
 Section: Globals
 -----------------------------------------------------------------------------*/
@@ -49,7 +73,14 @@ Section: Globals
 /*-----------------------------------------------------------------------------
 Section: Function Prototypes
 -----------------------------------------------------------------------------*/
-/* NONE */
+extern __INLINE uint16_t
+ttylib_getchar(tty_exparam_t *pexparam, uint8_t *pch);
+
+extern __INLINE void
+ttylib_putchar(tty_exparam_t *pexparam, uint8_t ch);
+
+extern status_t
+tty_create(uint8_t ttyno, tty_exparam_t *pexparam, uint16_t rdsz, uint16_t wtsz);
 
 #endif /* __TTYLIB_H__ */
 /*----------------------------End of ttyLib.h--------------------------------*/

@@ -10,22 +10,22 @@
  */
 #include <stdarg.h>
 #include <types.h>
-//#include <ttylib.h>
+#include <devLib.h>
 
 #ifdef putchar
     #undef putchar
 #endif
 int putchar(int c)
 {
-#if 0
-extern uint32_t consoleFd;
+#if 1
+    extern int32_t _the_console_fd;
     if((c) == '\n')
     {
         char ch = '\r';
-        ttyWrite(consoleFd, (uint8_t* )&ch, 1);
+        dev_write(_the_console_fd, (uint8_t* )&ch, 1);
     }
 
-    ttyWrite(consoleFd, (uint8_t* )&c, 1);
+    dev_write(_the_console_fd, (uint8_t* )&c, 1);
 #else
 extern void bsp_putchar(char_t c);
     if (c == '\n')

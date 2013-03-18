@@ -173,7 +173,7 @@ const static fileopt_t the_testopt =
 status_t
 devnull_create(void)
 {
-    if (OK != dev_create("NULL", &the_testopt, MKDEV(0, 0)))
+    if (OK != dev_create("NULL", &the_testopt, MKDEV(0, 0), NULL))
     {
         printf("devnull create err\n");
         return ERROR;

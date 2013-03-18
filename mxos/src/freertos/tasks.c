@@ -2923,7 +2923,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
         printf("-------------- --- -------- -------- --------------- --------\n\r");
 #endif
 
-	    vTaskSuspendAll();
+//	    vTaskSuspendAll();
 
 	    unsigned long ulTotalRunTime = 0u;
 #if ( configGENERATE_RUN_TIME_STATS == 1 )
@@ -2944,26 +2944,26 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	    {
 	        uxQueue--;
 
-	        if( !listLIST_IS_EMPTY( &( pxReadyTasksLists[ uxQueue ] ) ) )
+	        if( listLIST_IS_EMPTY( &( pxReadyTasksLists[ uxQueue ] ) ) == pdFALSE)
 	        {
 	            vTaskInfoList( ( xList * ) &( pxReadyTasksLists[ uxQueue ] ), "READY", ulTotalRunTime );
 	        }
 	    }while( uxQueue > ( unsigned short ) tskIDLE_PRIORITY );
 
 
-	    if( !listLIST_IS_EMPTY( pxDelayedTaskList ) )
+	    if( listLIST_IS_EMPTY( pxDelayedTaskList ) == pdFALSE)
 	    {
 	        vTaskInfoList( ( xList * ) pxDelayedTaskList, "BLOCK", ulTotalRunTime );
 	    }
 
-	    if( !listLIST_IS_EMPTY( pxOverflowDelayedTaskList ) )
+	    if( listLIST_IS_EMPTY( pxOverflowDelayedTaskList ) == pdFALSE )
 	    {
 	        vTaskInfoList( ( xList * ) pxOverflowDelayedTaskList, "BLOCK", ulTotalRunTime );
 	    }
 
 	    #if( INCLUDE_vTaskDelete == 1 )
 	    {
-	        if( !listLIST_IS_EMPTY( &xTasksWaitingTermination ) )
+	        if( listLIST_IS_EMPTY( &xTasksWaitingTermination ) == pdFALSE )
 	        {
 	            vTaskInfoList( ( xList * ) &xTasksWaitingTermination, "DELETE", ulTotalRunTime );
 	        }
@@ -2972,7 +2972,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 
 	    #if ( INCLUDE_vTaskSuspend == 1 )
 	    {
-	        if( !listLIST_IS_EMPTY( &xSuspendedTaskList ) )
+	        if( listLIST_IS_EMPTY( &xSuspendedTaskList ) == pdFALSE )
 	        {
 	            vTaskInfoList( ( xList * ) &xSuspendedTaskList, "SUSPEND", ulTotalRunTime );
 	        }
@@ -2982,7 +2982,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	    ulTaskSwitchedInTime_base = portGET_RUN_TIME_COUNTER_VALUE();
 	    ulTaskSwitchedInTime = 0;
 #endif
-	    xTaskResumeAll();
+//	    xTaskResumeAll();
         return 1;
 	}
 

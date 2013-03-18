@@ -48,6 +48,8 @@ FUNCPTR     _func_dmnRestHook = NULL;
  */
 VOIDFUNCPTR _func_evtLogOverStackHook;
 
+int32_t _the_console_fd = -1;
+
 /*-----------------------------------------------------------------------------
  Section: Local Variables
  ----------------------------------------------------------------------------*/

@@ -70,7 +70,7 @@ typedef struct device
  Section: Function Prototypes
  ----------------------------------------------------------------------------*/
 extern status_t devlib_init(void);
-extern status_t dev_create(const char_t* pname, const fileopt_t* pfileopt, int32_t serial);
+extern status_t dev_create(const char_t* pname, const fileopt_t* pfileopt, int32_t serial, void* pexparam);
 extern status_t dev_release(const char_t* pname);
 extern int32_t dev_open(const char_t* pname, int32_t flags);
 extern int32_t dev_read(int32_t fd, void* buf, int32_t count);

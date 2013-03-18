@@ -170,7 +170,7 @@ devlib_init(void)
  ******************************************************************************
  */
 status_t
-dev_create(const char_t* pname, const fileopt_t* pfileopt, int32_t serial)
+dev_create(const char_t* pname, const fileopt_t* pfileopt, int32_t serial, void* pexparam)
 {
     D_ASSERT(pname != NULL);
     D_ASSERT(pfileopt != NULL);
@@ -200,6 +200,7 @@ dev_create(const char_t* pname, const fileopt_t* pfileopt, int32_t serial)
     strncpy(new->name, pname, sizeof(new->name));
     memcpy(&new->fileopt, pfileopt, sizeof(fileopt_t));
     new->serial = serial;
+    new->param = pexparam;
     if (new->fileopt.init != NULL)
     {
         if (new->fileopt.init(new) != OK)
