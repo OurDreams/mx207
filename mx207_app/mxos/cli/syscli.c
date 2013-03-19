@@ -111,10 +111,10 @@ SHELL_CMD(
  * @note
  ******************************************************************************
  */
-extern void show_devlib_info(void);
+extern void devlib_show_info(void);
 uint32_t  do_devshow(cmd_tbl_t * cmdtp, uint32_t argc, const uint8_t *argv[])
 {
-    show_devlib_info();
+    devlib_show_info();
     return 0;
 }
 
@@ -134,6 +134,17 @@ SHELL_CMD(
     "Print dmn infomation \n"
 );
 
+extern void tty_show_info(void);
+uint32_t  do_ttyshow(cmd_tbl_t * cmdtp, uint32_t argc, const uint8_t *argv[])
+{
+    tty_show_info();
+    return 0;
+}
+
+SHELL_CMD(
+    ttyshow,   CFG_MAXARGS,        do_ttyshow,
+    "Print tty infomation \n"
+);
 
 uint32_t do_time_info (cmd_tbl_t * cmdtp, uint32_t argc, const uint8_t *argv[])
 {
