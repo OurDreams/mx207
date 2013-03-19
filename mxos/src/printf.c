@@ -12,6 +12,7 @@
 #include <types.h>
 #include <devLib.h>
 #include <intLib.h>
+#include <oshook.h>
 #include <oscfg.h>
 
 #ifdef putchar
@@ -20,7 +21,6 @@
 int putchar(int c)
 {
     extern int32_t _the_console_fd;
-    extern void bsp_putchar(char_t c);
     extern long xTaskGetSchedulerState( void );
     if ((intContext() == TRUE) || (_the_console_fd <= 0)) //|| (xTaskGetSchedulerState() != 1))
     {

@@ -86,17 +86,18 @@ dmn_loop(void);
  ******************************************************************************
  */
 status_t
-dmn_init(void)
+dmn_init(uint32_t stacksize)
 {
     if (the_dmn_id != NULL)
     {
         return ERROR;
     }
+    stacksize = (stacksize == 0) ? TASK_STK_SIZE_DMN : stacksize;
     InitListHead(&the_registed_list);
     the_dmn_sem = semBCreate(1);
     D_ASSERT(the_dmn_sem != NULL);
     the_dmn_id = taskSpawn((const signed char * const )"daemon",
-            TASK_PRIORITY_DMN, TASK_STK_SIZE_DMN, (OSFUNCPTR)dmn_loop, 0u);
+            TASK_PRIORITY_DMN, stacksize, (OSFUNCPTR)dmn_loop, 0u);
     D_ASSERT(the_dmn_id != NULL);
 
     return OK;

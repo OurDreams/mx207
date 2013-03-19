@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
  * @file      oshook.h
- * @brief     os对外钩子接口库.
+ * @brief     os移植接口库.
  * @details   This file including all API functions's  implement of mxhook.c.
  *
  * @copyright
@@ -28,25 +28,40 @@
 /*-----------------------------------------------------------------------------
  Section: Globals
  ----------------------------------------------------------------------------*/
-/**
- *  @brief 喂硬件狗函数钩子
- */
+/*--------------- 下面是os非必要方法，外部像os注册的钩子函数-------------------*/
+/* 1. 喂硬件狗函数钩子 */
 extern FUNCPTR     _func_feedDogHook;
 
-/**
- *  @brief 芯片复位函数钩子
- */
+/* 2. 芯片复位函数钩子 */
 extern FUNCPTR     _func_cpuRestHook;
 
-/**
- *  @brief 任务超时未喂狗异常时函数钩子
- */
+/* 3. 任务超时未喂狗异常时函数钩子 */
 extern FUNCPTR     _func_dmnRestHook;
+
+/* 4. shell操作句柄 */
+extern int32_t _the_console_fd;
 
 /*-----------------------------------------------------------------------------
  Section: Function Prototypes
  ----------------------------------------------------------------------------*/
-/* NONE */
+/*------------------- 下面是os移植在bsp中必须实现的方法 -----------------------*/
+
+/* 1. uart底层输出字节，非中断模式 */
+extern void bsp_putchar(char_t c);
+
+/* 2. uart底层读取字节，查询模式，若无数据返回0 （使用tty时非必要）*/
+extern int32_t bsp_getchar(void);
+
+/* 3. bsp底层实现复位函数，可以复位cpu也可以掉电复位 */
+extern void bsp_reboot(void);
+
+/* 4. bsp实现微秒定时器用于_usleep和任务统计功能 */
+
+/* 4.1 启动定时器 */
+extern void bsp_timer_start(void);
+
+/* 4.2 获取计数器值 */
+extern uint32_t bsp_timer_get(void);
 
 
 #endif /* __OSHOOK_H__ */

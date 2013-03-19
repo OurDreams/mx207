@@ -18,33 +18,21 @@ Section: Includes
 /*-----------------------------------------------------------------------------
 Section: Macro Definitions
 -----------------------------------------------------------------------------*/
-#define MEM_BOUNDS_CHECK
-#define MEM_CHECK_VALUE 2000
-
-
-/**
- *  定义处理器的最大中断数量
- */
+/** 定义处理器的最大中断数量 */
 #define MAX_INT_COUNT 103
 
 #if MAX_INT_COUNT > 103
-#error "超出最大中断数"
+# error "file: stm32f207cfg.h MAX_INT_COUNT > 103"
 #endif
 
-/**
- *  定义CPU的主频120MHZ
- */
-#define SYS_CPU_CLOCK_HZ      120000000
+/** 定义CPU的主频120MHZ */
+#define SYS_CPU_CLOCK_HZ    (120000000u)
 
-/**
- *  定义时钟周期终端的频率
- */
-#define  SYS_TICKS_PER_SECOND       100
+/* 定义时钟周期终端的频率 */
+#define  SYS_TICKS_PER_SECOND     (100u)
 
-/**
- *  定义操作系统任务的最高优先级
- */
-#define  MAX_TASK_PRIORITIES          8
+/* 定义操作系统任务的最高优先级 */
+#define  MAX_TASK_PRIORITIES        (8u)
 
 
 /* shell任务配置 */

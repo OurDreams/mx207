@@ -73,6 +73,7 @@
 #include <oscfg.h>
 #include <types.h>
 #include <debug.h>
+#include <oshook.h>
 
 /*-----------------------------------------------------------
  * Application specific definitions.
@@ -132,10 +133,8 @@ configKERNEL_INTERRUPT_PRIORITY setting.  Here 15 corresponds to the lowest
 NVIC value of 255. */
 #define configLIBRARY_KERNEL_INTERRUPT_PRIORITY	15
 
-extern void timer_start(void);
-extern uint32_t timer_get(void);
-#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() timer_start()
-#define portGET_RUN_TIME_COUNTER_VALUE()    timer_get()
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() bsp_timer_start()
+#define portGET_RUN_TIME_COUNTER_VALUE()    bsp_timer_get()
 
 #endif /* FREERTOS_CONFIG_H */
 
