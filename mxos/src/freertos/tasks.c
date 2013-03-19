@@ -70,6 +70,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <logLib.h>
 
 /* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
 all the API functions to use the MPU wrappers.  That should only be done when
@@ -2814,9 +2815,9 @@ vStackOverFlowInfoHandle(int arg1,int arg2)
 {
     int taskId = arg1;
     signed char *pcTaskName = (signed char *)arg2;
-    printf("\n\n vStackOverFlowInfoHandle: ERROR! TASK %08x STACK OVERFLOW!\n",*((uint32_t*)arg2));
+    logmsg("\n\n vStackOverFlowInfoHandle: ERROR! TASK %08x STACK OVERFLOW!\n",*((uint32_t*)arg2));
 
-    printf("\n\n vStackOverFlowInfoHandle: ERROR! TASK %x STACK OVERFLOW!\n",taskId);
+    logmsg("\n\n vStackOverFlowInfoHandle: ERROR! TASK %x STACK OVERFLOW!\n",taskId);
 
 
     extern VOIDFUNCPTR _func_evtLogOverStackHook;
@@ -2882,7 +2883,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
             memset(str, 0, sizeof(str));
             sprintf((char_t *)str, "%d/%d(%3d%%)", usStackUsed,pxNextTCB->usStackSize,usStackUsed*100/pxNextTCB->usStackSize);
 
-            printf("%-14s %2u %7s   %8X %15s %8X %10d %3s%%\r\n", pxNextTCB->pcTaskName,
+            logmsg("%-14s %2u %7s   %8X %15s %8X %10d %3s%%\r\n", pxNextTCB->pcTaskName,
             (unsigned int)(configMAX_PRIORITIES-1 - pxNextTCB->uxPriority),cStatus,(unsigned int) pxNextTCB->pxTopOfStack,
             str,(unsigned int) pxNextTCB, ( unsigned int ) pxNextTCB->ulRunTimeCounter, strusage);
             pxNextTCB->ulRunTimeCounter = 0u;
@@ -2891,7 +2892,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	        memset(str, 0, sizeof(str));
 	        sprintf((char_t *)str, "%d/%d(%3d%%)", usStackUsed,pxNextTCB->usStackSize,usStackUsed*100/pxNextTCB->usStackSize);
 
-	        printf("%-14s %2u %7s   %8X %15s %8X\r\n", pxNextTCB->pcTaskName,
+	        logmsg("%-14s %2u %7s   %8X %15s %8X\r\n", pxNextTCB->pcTaskName,
 	        (unsigned int)(configMAX_PRIORITIES-1 - pxNextTCB->uxPriority),cStatus,(unsigned int) pxNextTCB->pxTopOfStack,
 	        str,(unsigned int) pxNextTCB);
 #endif
@@ -2917,11 +2918,11 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 
 	    // Êä³öÁÐÃû
 #if ( configGENERATE_RUN_TIME_STATS == 1 )
-	    printf("     NAME      PRI  STATUS     SP     MAX USED/SIZE   TCBID    CPU TIME  ( %% )\n\r");
-	    printf("-------------- --- -------- -------- --------------- -------- ---------- -----\n\r");
+	   logmsg("\n     NAME      PRI  STATUS     SP     MAX USED/SIZE   TCBID    CPU TIME  ( %% )\n\r");
+	   logmsg("-------------- --- -------- -------- --------------- -------- ---------- -----\n\r");
 #else
-        printf("     NAME      PRI  STATUS     SP     MAX USED/SIZE   TCBID\n\r");
-        printf("-------------- --- -------- -------- --------------- --------\n\r");
+	   logmsg("     NAME      PRI  STATUS     SP     MAX USED/SIZE   TCBID\n\r");
+	   logmsg("-------------- --- -------- -------- --------------- --------\n\r");
 #endif
 
 	    unsigned long ulTotalRunTime = 0u;

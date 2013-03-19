@@ -20,6 +20,7 @@
 #include <intLib.h>
 #include <dmnLib.h>
 #include <devLib.h>
+#include <logLib.h>
 
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
@@ -56,6 +57,7 @@ extern status_t excInit(void);
 extern void os_resource_init(void);
 extern void os_print_banner(void);
 extern void uart_init0(void);
+extern void usrapp_init(void);
 
 /*-----------------------------------------------------------------------------
  Section: Local Function Prototypes
@@ -68,7 +70,6 @@ extern void uart_init0(void);
 static void
 rootTask(void *p_arg)
 {
-    taskDelay(10);
     uart_init0();
     _the_console_fd = dev_open("tty0", O_RDWR);
     if (_the_console_fd <= 0)
@@ -77,17 +78,15 @@ rootTask(void *p_arg)
     }
 
     //printf BSP version
+    loglib_init();
     excInit();
     dmn_init();
     shell_init();
     os_resource_init();
     os_print_banner();
 
-    printf("....STM32F207 APP START...\n");
-
-//    taskDelay(10);
-//    char *pstr = "I like apple very much!\n";
-//    dev_write(_the_console_fd, pstr, strlen(pstr));
+    puts("....STM32F207 APP START...");
+    usrapp_init();
 }
 
 int main (void)
@@ -103,7 +102,7 @@ int main (void)
 
     if (OK != mem_init((unsigned long)&heap_low, (unsigned long)(&cstack_top - 0x200)))
     {
-        printf("mem_init err!\n");
+        puts("mem_init err!\n");
         while(1);
     }
 

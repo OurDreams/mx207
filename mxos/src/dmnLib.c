@@ -95,7 +95,7 @@ dmn_init(void)
     InitListHead(&the_registed_list);
     the_dmn_sem = semBCreate(1);
     D_ASSERT(the_dmn_sem != NULL);
-    the_dmn_id = taskSpawn((const signed char * const )"DAEMON",
+    the_dmn_id = taskSpawn((const signed char * const )"daemon",
             TASK_PRIORITY_DMN, TASK_STK_SIZE_DMN, (OSFUNCPTR)dmn_loop, 0u);
     D_ASSERT(the_dmn_id != NULL);
 

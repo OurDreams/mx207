@@ -49,7 +49,7 @@ extern int32_t _the_console_fd;
  ----------------------------------------------------------------------------*/
 static uint8_t console_buffer[CFG_CBSIZE]; /* console I/O buffer   */
 static const char_t erase_seq[] = "\b \b";
-static const char_t const *prompt = "->";
+static const char_t const *prompt = "~#";
 static cmd_tbl_t *pmatch_cmd = NULL;
 static TASK_ID shellTaskId = 0;
 static DMN_ID the_dmnid = NULL;
@@ -532,7 +532,7 @@ shell_init(void)
     if (shellTaskId != 0)
         return (ERROR); /* already called */
 
-    shellTaskId = taskSpawn((const signed char * const )"Shell",
+    shellTaskId = taskSpawn((const signed char * const )"shell",
             TASK_PRIORITY_SHELL, TASK_STK_SIZE_SHELL,
             (OSFUNCPTR)shell_loop, 0);
 

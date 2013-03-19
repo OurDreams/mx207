@@ -12,6 +12,7 @@
 #include <types.h>
 #include <devLib.h>
 #include <intLib.h>
+#include <oscfg.h>
 
 #ifdef putchar
     #undef putchar
@@ -21,7 +22,7 @@ int putchar(int c)
     extern int32_t _the_console_fd;
     extern void bsp_putchar(char_t c);
     extern long xTaskGetSchedulerState( void );
-    if ((intContext() == TRUE) || (xTaskGetSchedulerState() != 1))
+    if ((intContext() == TRUE) || (_the_console_fd <= 0)) //|| (xTaskGetSchedulerState() != 1))
     {
         /* 在终端中或调度器未运行时直接调用底层输出保证不使用taskDelay */
         if (c == '\n')
@@ -42,6 +43,12 @@ int putchar(int c)
     return 1;
 }
 
+void printstr(const char *pStr, int len)
+{
+    while (len--) {
+        putchar(*pStr++);
+    }
+}
 
 signed int puts(const char *pStr)
 {
@@ -144,7 +151,7 @@ static int printi(char **out, int i, int b, int sg, int width, int pad, int letb
     return pc + prints (out, s, width, pad);
 }
 
-static int print(char **out, const char *format, va_list args )
+int print(char **out, const char *format, va_list args )
 {
     register int width, pad;
     register int pc = 0;

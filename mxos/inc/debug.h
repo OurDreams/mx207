@@ -50,7 +50,7 @@ extern void
 __assert_func(const char *, int, const char *, const char *);
 extern void
 printbuffer(char_t* format,
-            uint8_t* buffer,
+            const uint8_t* buffer,
             int32_t len);
 
 #endif /* __DEBUG_H__*/
