@@ -73,10 +73,10 @@ Section: Globals
 /*-----------------------------------------------------------------------------
 Section: Function Prototypes
 -----------------------------------------------------------------------------*/
-extern __INLINE uint16_t
+extern uint16_t
 ttylib_getchar(tty_exparam_t *pexparam, uint8_t *pch);
 
-extern __INLINE void
+extern void
 ttylib_putchar(tty_exparam_t *pexparam, uint8_t ch);
 
 extern status_t

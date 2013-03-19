@@ -2913,6 +2913,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	 */
 	uint32_t vTaskInfo ()
 	{
+	    vTaskSuspendAll();
 
 	    // Êä³öÁÐÃû
 #if ( configGENERATE_RUN_TIME_STATS == 1 )
@@ -2922,8 +2923,6 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
         printf("     NAME      PRI  STATUS     SP     MAX USED/SIZE   TCBID\n\r");
         printf("-------------- --- -------- -------- --------------- --------\n\r");
 #endif
-
-//	    vTaskSuspendAll();
 
 	    unsigned long ulTotalRunTime = 0u;
 #if ( configGENERATE_RUN_TIME_STATS == 1 )
@@ -2982,7 +2981,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	    ulTaskSwitchedInTime_base = portGET_RUN_TIME_COUNTER_VALUE();
 	    ulTaskSwitchedInTime = 0;
 #endif
-//	    xTaskResumeAll();
+	    xTaskResumeAll();
         return 1;
 	}
 

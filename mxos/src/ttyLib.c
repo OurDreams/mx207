@@ -200,7 +200,7 @@ ttylib_ioctl(struct device* dev, uint32_t cmd, void *args)
  * @retval     None
  ******************************************************************************
  */
-__INLINE uint16_t
+uint16_t
 ttylib_getchar(tty_exparam_t *pexparam, uint8_t *pch)
 {
     return ring_read(&pexparam->ring.wt, pch, 1u);
@@ -215,7 +215,7 @@ ttylib_getchar(tty_exparam_t *pexparam, uint8_t *pch)
  * @retval     None
  ******************************************************************************
  */
-__INLINE void
+void
 ttylib_putchar(tty_exparam_t *pexparam, uint8_t ch)
 {
     (void)ring_write_force(&pexparam->ring.rd, &ch, 1u);

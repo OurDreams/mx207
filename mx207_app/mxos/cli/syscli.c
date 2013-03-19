@@ -154,7 +154,7 @@ SHELL_CMD(
     "Print current date and time\r\n"
 );
 
-#if 1
+#if 0
 uint32_t do_mem_md (cmd_tbl_t * cmdtp, uint32_t argc, const uint8_t *argv[])
 {
     uint32_t i;

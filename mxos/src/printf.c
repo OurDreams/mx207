@@ -11,30 +11,34 @@
 #include <stdarg.h>
 #include <types.h>
 #include <devLib.h>
+#include <intLib.h>
 
 #ifdef putchar
     #undef putchar
 #endif
 int putchar(int c)
 {
-#if 1
     extern int32_t _the_console_fd;
-    if((c) == '\n')
+    extern void bsp_putchar(char_t c);
+    extern long xTaskGetSchedulerState( void );
+    if ((intContext() == TRUE) || (xTaskGetSchedulerState() != 1))
     {
-        char ch = '\r';
-        dev_write(_the_console_fd, (uint8_t* )&ch, 1);
+        /* 在终端中或调度器未运行时直接调用底层输出保证不使用taskDelay */
+        if (c == '\n')
+        {
+            bsp_putchar('\r');
+        }
+        bsp_putchar((unsigned char)c);
     }
-
-    dev_write(_the_console_fd, (uint8_t* )&c, 1);
-#else
-extern void bsp_putchar(char_t c);
-    if (c == '\n')
+    else
     {
-        bsp_putchar('\r');
+        if((c) == '\n')
+        {
+            char ch = '\r';
+            dev_write(_the_console_fd, (uint8_t* )&ch, 1);
+        }
+        dev_write(_the_console_fd, (uint8_t* )&c, 1);
     }
-
-    bsp_putchar((unsigned char)c);
-#endif
     return 1;
 }
 

@@ -216,7 +216,7 @@ intDisable(uint32_t irq_num)
 
 bool_e intContext (void)
 {
-    return (intCnt > 0);
+    return (intCnt > 0) ? TRUE : FALSE;
 }
 
 /**
