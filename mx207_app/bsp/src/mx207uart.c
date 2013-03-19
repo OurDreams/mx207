@@ -13,6 +13,7 @@
  Section: Includes
  ----------------------------------------------------------------------------*/
 #include <types.h>
+#include <stdio.h>
 #include <intLib.h>
 #include <ttyLib.h>
 #include <stm32f207.h>
@@ -53,6 +54,9 @@ uart_rxenable(tty_exparam_t *pexparam, bool_e s);
 static void
 uart_trenable(tty_exparam_t *pexparam, bool_e s);
 
+static int32_t
+uart_set_param(tty_exparam_t *pexparam, tty_param_t* p);
+
 /*-----------------------------------------------------------------------------
  Section: Local Variables
  ----------------------------------------------------------------------------*/
@@ -72,6 +76,7 @@ static const tty_opt uartopt =
     .tx_enable = uart_txenable,
     .rx_enable = uart_rxenable,
     .tr_enable = uart_trenable,
+    .set_param = uart_set_param,
 };
 
 static tty_exparam_t the_tty_exparam[MAX_UART];
@@ -215,6 +220,23 @@ uart_trenable(tty_exparam_t *pexparam, bool_e s)
 {
     FunctionalState NewState = (s == TRUE) ? ENABLE : DISABLE;
     USART_Cmd((USART_TypeDef*) (pexparam->baseregs), NewState);
+}
+
+static int32_t
+uart_set_param(tty_exparam_t *pexparam, tty_param_t* p)
+{
+    USART_InitTypeDef USART_InitStructure;
+
+    USART_InitStructure.USART_BaudRate = p->baudrate;
+    USART_InitStructure.USART_WordLength = p->wordlength;
+    USART_InitStructure.USART_StopBits = p->stopbits;
+    USART_InitStructure.USART_Parity = p->parity;
+    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+    USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+
+
+    USART_Init((USART_TypeDef*)(pexparam->baseregs), &USART_InitStructure);
+    return 0;
 }
 
 /*------------------------------mx207uart.c----------------------------------*/
