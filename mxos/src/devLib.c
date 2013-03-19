@@ -136,6 +136,32 @@ find_dev_by_name(const char_t* pname)
 
 /**
  ******************************************************************************
+ * @brief   寻找已注册的设备 (按大类号小类号查找)
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+static device_t*
+find_dev_by_serial(int32_t serial)
+{
+    device_t* pnode = NULL;
+    struct ListNode *iter;
+
+    LIST_FOR_EACH(iter, &the_dev_list)
+    {
+        /* 取得遍历到的对象 */
+        pnode = MemToObj(iter, struct device, list);
+        if (pnode->serial == serial)
+        {
+            return pnode;
+        }
+    }
+    return NULL;
+}
+/**
+ ******************************************************************************
  * @brief      设备核心初始化
  *
  * @retval     OK   : 初始化成功
@@ -178,7 +204,8 @@ dev_create(const char_t* pname, const fileopt_t* pfileopt, int32_t serial, void*
     (void)devlib_init();
 
     /* 防止重复注册 */
-    if (find_dev_by_name(pname) != NULL)
+    if ((find_dev_by_name(pname) != NULL)
+            || (find_dev_by_serial(serial) != NULL))
     {
         return ERROR;
     }
@@ -461,6 +488,46 @@ dev_close(int32_t fd)
 
 /**
  ******************************************************************************
+ * @brief      通过设备名获取设备节点信息
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+device_t*
+devlib_get_info_by_name(const char_t *pname)
+{
+    device_t *pdev = NULL;
+
+    semTake(the_devlib_lock, WAIT_FOREVER);
+    pdev = find_dev_by_name(pname);
+    semGive(the_devlib_lock);
+    return pdev;
+}
+
+/**
+ ******************************************************************************
+ * @brief      通过大类号小类号获取设备节点信息
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+device_t*
+devlib_get_info_by_serial(int32_t serial)
+{
+    device_t *pdev = NULL;
+
+    semTake(the_devlib_lock, WAIT_FOREVER);
+    pdev = find_dev_by_serial(serial);
+    semGive(the_devlib_lock);
+    return pdev;
+}
+
+/**
+ ******************************************************************************
  * @brief      显示设备信息
  * @param[in]  None
  * @param[out] None
@@ -472,7 +539,7 @@ dev_close(int32_t fd)
  ******************************************************************************
  */
 void
-show_devlib_info(void)
+devlib_show_info(void)
 {
     if (OK != devlib_init())
     {

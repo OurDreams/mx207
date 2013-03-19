@@ -46,7 +46,7 @@ typedef struct fileopt
 {
     status_t  (*init)   (struct device* dev);
     status_t  (*release)(struct device* dev);
-    int32_t   (*open)   (struct device* dev);
+    status_t  (*open)   (struct device* dev);
     status_t  (*close)  (struct device* dev);
     size_t    (*read)   (struct device* dev, int32_t pos, void *buffer, size_t size);
     size_t    (*write)  (struct device* dev, int32_t pos, const void *buffer, size_t size);
@@ -77,7 +77,9 @@ extern int32_t dev_read(int32_t fd, void* buf, int32_t count);
 extern int32_t dev_write(int32_t fd, const void* buf, int32_t count);
 extern int32_t dev_ioctl(int32_t fd, uint32_t cmd, void *args);
 extern int32_t dev_close(int32_t fd);
-extern void show_devlib_info(void);
+extern device_t* devlib_get_info_by_name(const char_t *pname);
+extern device_t* devlib_get_info_by_serial(int32_t serial);
+extern void devlib_show_info(void);
 
 #endif /* __DEVLIB_H__ */
 /*-----------------------------End of devLib.h-------------------------------*/

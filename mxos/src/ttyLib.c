@@ -49,10 +49,9 @@ Section: Function Definitions
 /**
  ******************************************************************************
  * @brief   tty设备初始化方法
- * @param[in]  None
- * @param[out] None
+ * @param[in]  dev  : 设备节点
  *
- * @retval     None
+ * @retval     OK   : 初始化成功
  ******************************************************************************
  */
 static status_t
@@ -64,10 +63,9 @@ ttylib_init(struct device* dev)
 /**
  ******************************************************************************
  * @brief   tty设备释放方法
- * @param[in]  None
- * @param[out] None
+ * @param[in]  dev  : 设备节点
  *
- * @retval     None
+ * @retval     OK   : 释放成功
  ******************************************************************************
  */
 static status_t
@@ -80,13 +78,12 @@ ttylib_release(struct device* dev)
 /**
  ******************************************************************************
  * @brief   tty设备open方法
- * @param[in]  None
- * @param[out] None
+ * @param[in]  dev  : 设备节点
  *
- * @retval     None
+ * @retval     OK   : 打开成功
  ******************************************************************************
  */
-static int32_t
+static status_t
 ttylib_open(struct device* dev)
 {
     if (TTY_EXPARAM.popt->tr_enable != NULL)
@@ -103,10 +100,9 @@ ttylib_open(struct device* dev)
 /**
  ******************************************************************************
  * @brief   tty设备close方法
- * @param[in]  None
- * @param[out] None
+ * @param[in]  dev  : 设备节点
  *
- * @retval     None
+ * @retval     OK   : 关闭成功
  ******************************************************************************
  */
 static int32_t
@@ -126,25 +122,30 @@ ttylib_close(struct device* dev)
 /**
  ******************************************************************************
  * @brief   tty设备读取方法
- * @param[in]  None
- * @param[out] None
+ * @param[in]  dev      : 设备节点
+ * @param[in]  pos      : 读取偏移
+ * @param[out] buffer   : 读取缓存
+ * @param[in]  size     : 需要读取的字节数
  *
- * @retval     size
+ * @retval     实际读取字节数
  ******************************************************************************
  */
 static size_t
 ttylib_read(struct device* dev, int32_t pos, void *buffer, size_t size)
 {
+    (void)pos;
     return ring_read(&TTY_EXPARAM.ring.rd, buffer, (uint16_t)size);
 }
 
 /**
  ******************************************************************************
  * @brief   tty设备写入方法
- * @param[in]  None
- * @param[out] None
+ * @param[in]  dev      : 设备节点
+ * @param[in]  pos      : 写入偏移
+ * @param[out] buffer   : 写入缓存
+ * @param[in]  size     : 需要写入的字节数
  *
- * @retval     size
+ * @retval     实际写入字节数
  ******************************************************************************
  */
 static size_t
@@ -169,8 +170,9 @@ ttylib_write(struct device* dev, int32_t pos, const void *buffer, size_t size)
 /**
  ******************************************************************************
  * @brief   tty设备控制方法
- * @param[in]  None
- * @param[out] None
+ * @param[in]  dev      : 设备节点
+ * @param[in]  cmd      : 控制命令
+ * @param[out] args     : 命令参数
  *
  * @retval  0
  ******************************************************************************
@@ -183,21 +185,27 @@ ttylib_ioctl(struct device* dev, uint32_t cmd, void *args)
         case TTY_FIOFLUSH:  /* 清空当前接收缓冲区 */
             ring_flush(&TTY_EXPARAM.ring.rd);
             break;
-        case TTY_FIONREAD:/* 获取当前接收缓冲区里的字符个数 */
+        case TTY_FIONREAD:  /* 获取当前接收缓冲区里的字符个数 */
             return ring_check(&TTY_EXPARAM.ring.rd);
             break;
+        case TTY_BAUD_SET:  /* 设置通讯参数 */
+            if (TTY_EXPARAM.popt->set_param != NULL)
+            {
+                return TTY_EXPARAM.popt->set_param(dev->param, args);
+            }
+            break;
     }
-    //ioctl
     return 0;
 }
 
 /**
  ******************************************************************************
  * @brief   在中断从tty的ring部分中读取数据
- * @param[in]  None
- * @param[out] None
+ * @param[in]  pexparam : tty扩展参数
+ * @param[out] pch      : 读取的数据
  *
- * @retval     None
+ * @retval     1    : 正常
+ * @retval     其他   : 非正常
  ******************************************************************************
  */
 uint16_t
@@ -209,8 +217,8 @@ ttylib_getchar(tty_exparam_t *pexparam, uint8_t *pch)
 /**
  ******************************************************************************
  * @brief   在中断写入tty的ring部分中读取数据
- * @param[in]  None
- * @param[out] None
+ * @param[in]  pexparam : tty扩展参数
+ * @param[out] pch      : 写入的数据
  *
  * @retval     None
  ******************************************************************************
@@ -221,6 +229,7 @@ ttylib_putchar(tty_exparam_t *pexparam, uint8_t ch)
     (void)ring_write_force(&pexparam->ring.rd, &ch, 1u);
 }
 
+/** tty设备操作方法 */
 const static fileopt_t the_ttylib_opt =
 {
     .init = ttylib_init,
@@ -236,10 +245,13 @@ const static fileopt_t the_ttylib_opt =
 /**
  ******************************************************************************
  * @brief   创建tty设备
- * @param[in]  None
- * @param[out] None
+ * @param[in]  ttyno    : tty设备号(小类号)
+ * @param[in]  pexparam : tty扩展参数
+ * @param[in]  rdsz     : tty读取ringbuf大小
+ * @param[in]  wtsz     : tty写入ringbuf大小
  *
- * @retval     None
+ * @retval     OK       : 创建成功
+ * @retval     ERROR    : 创建失败
  ******************************************************************************
  */
 status_t
@@ -255,11 +267,41 @@ tty_create(uint8_t ttyno, tty_exparam_t *pexparam, uint16_t rdsz, uint16_t wtsz)
 
     char_t name[5];
     (void)sprintf(name, "tty%d", ttyno);
-    if (OK != dev_create((const char_t *)name, &the_ttylib_opt, MKDEV(6, ttyno), pexparam)) //todo : opt
+    if (OK != dev_create((const char_t *)name, &the_ttylib_opt, MKDEV(TTY_MAJOR, ttyno), pexparam)) //todo : opt
     {
         printf("tty%d create err!\n", ttyno);
         return ERROR;
     }
     return OK;
 }
+
+/**
+ ******************************************************************************
+ * @brief   tty设备信息
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+void
+tty_show_info(void)
+{
+    uint8_t ttyno = 0u;
+    device_t *pdev = NULL;
+
+    printf("  TTY DEVICE INFOMATION\n");
+    while ((pdev = devlib_get_info_by_serial(MKDEV(TTY_MAJOR, ttyno++))) != NULL)
+    {
+        printf("tty:%s  rdsz:%d  wtsz:%d, read valid:%d write valid:%d\n",
+                pdev->name,
+                ((tty_exparam_t*)pdev->param)->ring.rd.max_len,
+                ((tty_exparam_t*)pdev->param)->ring.wt.max_len,
+                ((tty_exparam_t*)pdev->param)->ring.rd.len,
+                ((tty_exparam_t*)pdev->param)->ring.wt.len
+                );
+    }
+    printf("\n");
+}
+
 /*-------------------------------ttyLib.c------------------------------------*/

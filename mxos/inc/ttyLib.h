@@ -18,6 +18,7 @@ Section: Includes
 /*-----------------------------------------------------------------------------
 Section: Macro Definitions
 -----------------------------------------------------------------------------*/
+#define TTY_MAJOR   (6u)    /**< tty的主设备号为6 */
 #define WordLength_8b                  ((uint16_t)0x0000)
 #define WordLength_9b                  ((uint16_t)0x1000)
 
@@ -55,10 +56,12 @@ typedef struct
 typedef struct tty_exparam tty_exparam_t;
 typedef struct
 {
-    void (*tx_enable)(tty_exparam_t* pexparam, bool_e s);      /**< 开始发送 */
-    void (*rx_enable)(tty_exparam_t* pexparam, bool_e s);
-    void (*tr_enable)(tty_exparam_t* pexparam, bool_e s);
+    void (*tx_enable)(tty_exparam_t* , bool_e);        /**< 发送中断使能 */
+    void (*rx_enable)(tty_exparam_t* , bool_e);        /**< 接收中断使能 */
+    void (*tr_enable)(tty_exparam_t* , bool_e);        /**< 串口使能 */
+    int32_t (*set_param)(tty_exparam_t* , tty_param_t*);/**< 设置参数 */
 } tty_opt;
+
 struct tty_exparam
 {
     const tty_opt *popt;
@@ -81,6 +84,9 @@ ttylib_putchar(tty_exparam_t *pexparam, uint8_t ch);
 
 extern status_t
 tty_create(uint8_t ttyno, tty_exparam_t *pexparam, uint16_t rdsz, uint16_t wtsz);
+
+extern void
+tty_show_info(void);
 
 #endif /* __TTYLIB_H__ */
 /*----------------------------End of ttyLib.h--------------------------------*/

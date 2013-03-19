@@ -67,7 +67,7 @@ devnull_init(struct device* dev)
  * @retval     OK   : 打开成功
  ******************************************************************************
  */
-static int32_t
+static status_t
 devnull_open(struct device* dev)
 {
     return OK;
