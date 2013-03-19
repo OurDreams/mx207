@@ -148,19 +148,20 @@ loglib_loop(void)
  ******************************************************************************
  */
 status_t
-loglib_init(void)
+loglib_init(uint32_t stacksize)
 {
     if (the_logmsg_taskid != NULL)
     {
         return OK; /* already called */
     }
 
+    stacksize = (stacksize == 0) ? TASK_STK_SIZE_LOGMSG : stacksize;
     the_logmsg_qid = msgQCreate(MAX_MSGS);
 
     D_ASSERT(the_logmsg_qid != NULL);
 
     the_logmsg_taskid = taskSpawn((const signed char * const ) "LogMsg",
-            TASK_PRIORITY_LOGMSG, TASK_STK_SIZE_LOGMSG, (OSFUNCPTR) loglib_loop, 0);
+            TASK_PRIORITY_LOGMSG, stacksize, (OSFUNCPTR) loglib_loop, 0);
 
     D_ASSERT(the_logmsg_taskid != NULL);
     return (OK);
@@ -285,8 +286,9 @@ extern void printbuffer(char_t* format, const uint8_t* buffer, int32_t len);
  ******************************************************************************
  */
 status_t
-loglib_init(void)
+loglib_init(uint32_t stacksize)
 {
+    (void)stacksize;
     return OK;
 }
 

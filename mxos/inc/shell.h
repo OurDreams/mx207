@@ -47,7 +47,7 @@ const cmd_tbl_t __shell_cmd_##name Struct_Section = {#name, maxargs, cmd, usage}
 /*-----------------------------------------------------------------------------
  Section: Function Prototypes
  ----------------------------------------------------------------------------*/
-extern status_t shell_init(void);
+extern status_t shell_init(uint32_t stacksize);
 
 #endif /* __SHELL_H__ */
 

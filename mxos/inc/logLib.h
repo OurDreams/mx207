@@ -34,7 +34,7 @@
  Section: Function Prototypes
  ----------------------------------------------------------------------------*/
 extern status_t
-loglib_init(void);
+loglib_init(uint32_t stacksize);
 
 extern status_t
 logmsg(const char *fmt, ...);

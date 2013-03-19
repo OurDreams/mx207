@@ -140,23 +140,24 @@ status_t excJobAdd(VOIDFUNCPTR func, int arg1, int arg2, int arg3, int arg4,
  * @note
  ******************************************************************************
  */
-status_t excInit(void)
+status_t excInit(uint32_t stacksize)
 
 {
     if (excTaskId != NULL)
-        return (ERROR);
+        return ERROR;
     excMsgQId = msgQCreate(MAX_EXC_MSG_SIZE);
 
     D_ASSERT(excMsgQId != NULL);
 
+    stacksize = (stacksize == 0) ? TASK_STK_SIZE_EXC : stacksize;
     excTaskId = taskSpawn((const signed char * const ) "tExcTask",
-            TASK_PRIORITY_EXC, TASK_STK_SIZE_EXC, (OSFUNCPTR) excTask, 0);
+            TASK_PRIORITY_EXC, stacksize, (OSFUNCPTR) excTask, 0);
     D_ASSERT(excTaskId != NULL);
 
     _func_excJobAdd = excJobAdd;
 
     printf("excInit: DONE! \n");
-    return  (OK);
+    return  OK;
 }
 
 

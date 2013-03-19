@@ -53,9 +53,10 @@ extern int32_t _the_console_fd;
 extern void sysHwInit0(void);
 extern void sysHwInit(void);
 extern void vTaskStartScheduler( void );
-extern status_t excInit(void);
 extern void os_resource_init(void);
 extern void os_print_banner(void);
+extern status_t excInit(int32_t);
+
 extern void uart_init0(void);
 extern void usrapp_init(void);
 
@@ -78,10 +79,10 @@ rootTask(void *p_arg)
     }
 
     //printf BSP version
-    loglib_init();
-    excInit();
-    dmn_init();
-    shell_init();
+    loglib_init(1024);
+    excInit(1024);
+    dmn_init(512);
+    shell_init(2048);
     os_resource_init();
     os_print_banner();
 

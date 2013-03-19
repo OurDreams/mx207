@@ -34,7 +34,7 @@ extern bool_e theRebootSignal;
  Section: Function Prototypes
  ----------------------------------------------------------------------------*/
 extern status_t
-dmn_init(void);
+dmn_init(uint32_t stacksize);
 
 extern DMN_ID
 dmn_register(void);

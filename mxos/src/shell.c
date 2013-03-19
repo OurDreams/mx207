@@ -517,25 +517,23 @@ shell_loop(void)
 /**
  ******************************************************************************
  * @brief      shell模块初始化
- * @param[in]  None
- * @param[out] None
- * @retval     None
+ * @param[in]  stacksize    : shell任务栈大小
  *
- * @details
- *
- * @note
+ * @retval  OK      :   初始化成功
+ * @retval  ERROR   :   初始化失败
  ******************************************************************************
  */
 status_t
-shell_init(void)
+shell_init(uint32_t stacksize)
 {
     if (shellTaskId != 0)
-        return (ERROR); /* already called */
+        return ERROR; /* already called */
 
+    stacksize = (stacksize == 0) ? TASK_STK_SIZE_SHELL : stacksize;
     shellTaskId = taskSpawn((const signed char * const )"shell",
-            TASK_PRIORITY_SHELL, TASK_STK_SIZE_SHELL,
+            TASK_PRIORITY_SHELL, stacksize,
             (OSFUNCPTR)shell_loop, 0);
 
     D_ASSERT(shellTaskId != NULL);
-    return (OK);
+    return OK;
 }

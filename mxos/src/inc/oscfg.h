@@ -18,7 +18,7 @@ Section: Includes
 /*-----------------------------------------------------------------------------
 Section: Macro Definitions
 -----------------------------------------------------------------------------*/
-#define OS_RELEASE  "0.0.1"
+#define OS_RELEASE  "0.1.0"
 
 #define CPU_LM3S811     (0u)
 #define CPU_STM32F103   (1u)

@@ -122,9 +122,8 @@ void bsp_reboot(void)
     NVIC_SystemReset();
 }
 
-
 void
-timer_start(void)
+bsp_timer_start(void)
 {
 // 根据波特率设置延时时间
     uint32_t baud_timertick = 0xffffffff;
@@ -161,7 +160,7 @@ timer_start(void)
 }
 
 uint32_t
-timer_get(void)
+bsp_timer_get(void)
 {
     uint32_t starttime_ms = 0;
     starttime_ms = TIM_GetCounter(TIM2);
