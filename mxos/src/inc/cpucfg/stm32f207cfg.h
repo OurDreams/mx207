@@ -48,7 +48,7 @@ Section: Macro Definitions
 
 
 /* shell任务配置 */
-#define TASK_PRIORITY_SHELL         (1u)    /**< shell任务优先级 */
+#define TASK_PRIORITY_SHELL         (2u)    /**< shell任务优先级 */
 #define TASK_STK_SIZE_SHELL      (2048u)    /**< shell任务堆栈 */
 
 /* dmn任务配置 */
@@ -56,8 +56,16 @@ Section: Macro Definitions
 #define TASK_STK_SIZE_DMN         (512u)    /**< DMN任务堆栈 */
 #define DMN_MAX_CHECK_TIME          (6u)    /**< 默认喂狗超时时间（6*10秒） */
 
+/* 异常任务 */
 #define TASK_PRIORITY_EXC           (0u)    /**< 异常中断处理任务的优先 */
 #define TASK_STK_SIZE_EXC         (512u)    /**< 异常中断处理任务的堆栈大小 */
+
+/* logMsg任务配置 */
+#define INCLUDE_LOGMSG_SUPPORT      (1u)    /**< 支持logMsg */
+#define MAX_MSGS                   (10u)    /**< 消息队列中的最大消息个数 */
+#define MAX_BYTES_IN_A_MSG        (200u)    /**< 1个logMsg最大打印的字节数 */
+#define TASK_PRIORITY_LOGMSG        (1u)    /**< logMsg任务的优先 */
+#define TASK_STK_SIZE_LOGMSG     (1024u)    /**< logMsg任务的堆栈大小 */
 
 
 #endif /* __STM32F207CFG_H__ */

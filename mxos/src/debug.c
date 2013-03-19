@@ -79,7 +79,7 @@ __assert_func(const char *pfile, int line, const char *pfun, const char *pex)
  */
 extern void
 printbuffer(char_t* format,
-            uint8_t* buffer,
+            const uint8_t* buffer,
             int32_t len)
 {
     (void)printf(format);
