@@ -34,7 +34,7 @@
  Section: Function Prototypes
  ----------------------------------------------------------------------------*/
 extern void
-_usleep(int32_t us);
+_usleep(uint32_t us);
 
 
 #endif /* __UDELAY_H__ */
