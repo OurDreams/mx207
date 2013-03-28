@@ -3,8 +3,8 @@
  * @file      oshook.h
  * @brief     osÒÆÖ²½Ó¿Ú¿â.
  * @details   This file including all API functions's  implement of mxhook.c.
- *
  * @copyright
+ *
  ******************************************************************************
  */
 #ifndef __OSHOOK_H__

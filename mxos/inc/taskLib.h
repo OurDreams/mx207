@@ -3,6 +3,7 @@
  * @file       taskLib.h
  * @brief      API include file of taskLib.h.
  * @details    This file including all API functions's declare of taskLib.h.
+ * @copyright
  *
  ******************************************************************************
  */

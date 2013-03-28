@@ -1,10 +1,9 @@
 /**
  ******************************************************************************
  * @file       devlib.c
- * @version    V1.1.4
  * @brief      设备驱动操作
  * @details    This file including all API functions's implement of dps.
- * @copy       Copyrigth(C)
+ * @copyright
  *
  ******************************************************************************
  */

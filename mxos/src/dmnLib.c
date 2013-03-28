@@ -3,8 +3,8 @@
  * @file      dmnLib.c
  * @brief     本文实现了任务间喂软件狗的机制.
  * @details   This file including all API functions's implement of dmnLib.c.
- *
  * @copyright
+ *
  ******************************************************************************
  */
  

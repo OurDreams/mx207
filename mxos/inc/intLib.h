@@ -3,6 +3,7 @@
  * @file       intLib.h
  * @brief      API include file of intLib.h.
  * @details    This file including all API functions's declare of intLib.h.
+ * @copyright
  *
  ******************************************************************************
  */

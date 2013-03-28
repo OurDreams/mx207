@@ -3,8 +3,8 @@
  * @file      logLib.c
  * @brief     本文实现日志输出功能，用于调度器未运行或中断服务程序中的打印
  * @details   This file including all API functions's implement of logLib.c.
- *
  * @copyright
+ *
  ******************************************************************************
  */
  

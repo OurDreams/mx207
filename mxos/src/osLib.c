@@ -3,8 +3,8 @@
  * @file      osLib.c
  * @brief     本文实现了OS的公共函数库.
  * @details   This file including all API functions's implement of osinit.c.
- *
  * @copyright
+ *
  ******************************************************************************
  */
  

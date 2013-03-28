@@ -3,6 +3,7 @@
  * @file       debug.h
  * @brief      API include file of debug.h.
  * @details    This file including all API functions's declare of debug.h.
+ * @copyright
  *
  ******************************************************************************
  */

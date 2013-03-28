@@ -1,7 +1,6 @@
 /**
  ******************************************************************************
  * @file       shell.c
- * @version    V0.0.1
  * @brief      本文实现了shell功能.
  * @details    This file including all API functions's implement of shell.
  * @copyright

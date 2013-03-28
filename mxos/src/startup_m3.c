@@ -4,6 +4,7 @@
  * @brief     内核中断向量表.
  * @details   This file including all API functions's 
  *            implement of startup_m3.c.
+ * @copyright
  *
  ******************************************************************************
  */

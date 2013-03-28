@@ -4,6 +4,7 @@
  * @brief     内核接口模块.
  * @details   This file including all API functions's
  *            implement of taskLib.c.
+ * @copyright
  *
  ******************************************************************************
  */

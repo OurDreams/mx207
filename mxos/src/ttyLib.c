@@ -3,8 +3,8 @@
  * @file      ttyLib.c
  * @brief     C Source file of ttyLib.c.
  * @details   通用tty设备驱动.
- *
  * @copyright
+ *
  ******************************************************************************
  */
  

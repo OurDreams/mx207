@@ -3,6 +3,7 @@
  * @file      devlib.c
  * @brief     C Source file of devlib.c.
  * @details   设备驱动操作
+ * @copyright
  *
  ******************************************************************************
  */

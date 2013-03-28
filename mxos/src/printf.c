@@ -5,6 +5,7 @@
  *             sprintf() and so on. This reduces the memory footprint of the
  *             binary when using those methods, compared to the libc
  *             implementation.
+ * @copyright
  *
  ******************************************************************************
  */

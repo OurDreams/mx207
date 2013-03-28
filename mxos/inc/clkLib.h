@@ -3,6 +3,7 @@
  * @file       clkLib.h
  * @brief      API include file of clkLib.h.
  * @details    This file including all API functions's declare of clkLib.h.
+ * @copyright
  *
  ******************************************************************************
  */
