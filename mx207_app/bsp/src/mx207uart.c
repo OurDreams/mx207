@@ -34,6 +34,7 @@ typedef struct
 #define MAX_UART    6
 #define DEFAULT_BAUDRATE    115200
 #define RING_BUF_SIZE       128
+#define board_mx207
 /*-----------------------------------------------------------------------------
  Section: Global Variables
  ----------------------------------------------------------------------------*/
@@ -80,7 +81,26 @@ static const tty_opt uartopt =
 };
 
 static tty_exparam_t the_tty_exparam[MAX_UART];
+#ifdef board_mx207
+GPIO_TypeDef * COM_TX_PORT[MAX_UART] = {GPIOB,GPIOD,GPIOD,GPIOC,GPIOC,GPIOC};
+GPIO_TypeDef * COM_RX_PORT[MAX_UART] = {GPIOB,GPIOD,GPIOD,GPIOC,GPIOD,GPIOC};
 
+const uint8_t COM_TX_PIN_SOURCE[MAX_UART] = {GPIO_PinSource6,GPIO_PinSource5,GPIO_PinSource8,
+                                             GPIO_PinSource10,GPIO_PinSource12,GPIO_PinSource6};
+
+const uint8_t COM_RX_PIN_SOURCE[MAX_UART] = {GPIO_PinSource7,GPIO_PinSource6,GPIO_PinSource9,
+                                             GPIO_PinSource11,GPIO_PinSource2,GPIO_PinSource7};
+
+const uint8_t COM_TX_AF[MAX_UART] = {GPIO_AF_USART1,GPIO_AF_USART2,GPIO_AF_USART3,
+                                     GPIO_AF_UART4,GPIO_AF_UART5,GPIO_AF_USART6};
+
+const uint8_t COM_RX_AF[MAX_UART] =  {GPIO_AF_USART1,GPIO_AF_USART2,GPIO_AF_USART3,
+                                     GPIO_AF_UART4,GPIO_AF_UART5,GPIO_AF_USART6};
+
+const uint16_t COM_TX_PIN[MAX_UART] = {GPIO_Pin_6,GPIO_Pin_5,GPIO_Pin_8,GPIO_Pin_10,GPIO_Pin_12,GPIO_Pin_6};
+
+const uint16_t COM_RX_PIN[MAX_UART] = {GPIO_Pin_7,GPIO_Pin_6,GPIO_Pin_9,GPIO_Pin_11,GPIO_Pin_2,GPIO_Pin_7};
+#else
 GPIO_TypeDef * COM_TX_PORT[MAX_UART] = {GPIOA,GPIOD,GPIOD,GPIOC,GPIOC,GPIOC};
 GPIO_TypeDef * COM_RX_PORT[MAX_UART] = {GPIOA,GPIOD,GPIOD,GPIOC,GPIOD,GPIOC};
 
@@ -99,6 +119,7 @@ const uint8_t COM_RX_AF[MAX_UART] =  {GPIO_AF_USART1,GPIO_AF_USART2,GPIO_AF_USAR
 const uint16_t COM_TX_PIN[MAX_UART] = {GPIO_Pin_9,GPIO_Pin_5,GPIO_Pin_8,GPIO_Pin_10,GPIO_Pin_12,GPIO_Pin_6};
 
 const uint16_t COM_RX_PIN[MAX_UART] = {GPIO_Pin_10,GPIO_Pin_6,GPIO_Pin_9,GPIO_Pin_11,GPIO_Pin_2,GPIO_Pin_7};
+#endif
 
 
 /*-----------------------------------------------------------------------------

@@ -1,62 +1,81 @@
 /**
  ******************************************************************************
- * @file      usrapp.c
- * @brief     本文实现应用程序的初始化.
- * @details   This file including all API functions's implement of usrapp.c.
+ * @file      led.c
+ * @brief     C Source file of led.c.
+ * @details   This file including all API functions's 
+ *            implement of led.c.	
  *
  * @copyright
  ******************************************************************************
  */
- 
 /*-----------------------------------------------------------------------------
  Section: Includes
  ----------------------------------------------------------------------------*/
+#include <stdio.h>
+#include <devLib.h>
+#include <gpio.h>
 #include <taskLib.h>
 #include <osLib.h>
+#include <dmnLib.h>
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
  ----------------------------------------------------------------------------*/
-#define  LEDSTACKSIZE  (512)
-
+/* NONE */
 /*-----------------------------------------------------------------------------
  Section: Constant Definitions
  ----------------------------------------------------------------------------*/
-/* NONE */ 
-
+/* NONE */
 /*-----------------------------------------------------------------------------
  Section: Global Variables
  ----------------------------------------------------------------------------*/
 /* NONE */
-
 /*-----------------------------------------------------------------------------
  Section: Local Variables
  ----------------------------------------------------------------------------*/
 /* NONE */
-
+/*-----------------------------------------------------------------------------
+ Section: Global Function Prototypes
+ ----------------------------------------------------------------------------*/
+/* NONE */
 /*-----------------------------------------------------------------------------
  Section: Local Function Prototypes
  ----------------------------------------------------------------------------*/
 /* NONE */
-
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
-extern void ledTask(void *p_arg);
 /**
  ******************************************************************************
- * @brief   应用程序初始化
+ * @brief   流水灯任务
  * @param[in]  None
  * @param[out] None
  *
  * @retval     None
  ******************************************************************************
  */
-void
-usrapp_init(void)
+void ledTask(void *p_arg)
 {
-	taskSpawn((const signed char*)"led", 3, LEDSTACKSIZE, (OSFUNCPTR)ledTask,0);
+	int32_t fd;
+	uint32_t ticks_per_second;
 
-    return;
+	ticks_per_second = os_ticks_per_second();
+	DMN_ID dmnid = dmn_register();
+	fd = dev_open("gpio", 0);
+	if(-1 == fd)
+	{
+		printf("open gpio error\n");
+		return ;
+	}
+	while(1)
+	{
+		dmn_sign(dmnid);
+		dev_ioctl(fd, 0,IO_LED0);
+		taskDelay(ticks_per_second);
+		dev_ioctl(fd, 1,IO_LED0);
+		taskDelay(ticks_per_second);
+	}
+	dev_close(fd);
+	dev_release("gpio");
 }
 
-/*--------------------------------usrapp.c-----------------------------------*/
+

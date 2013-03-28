@@ -21,7 +21,7 @@
 #include <dmnLib.h>
 #include <devLib.h>
 #include <logLib.h>
-
+#include <devices.h>
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
  ----------------------------------------------------------------------------*/
@@ -85,6 +85,7 @@ rootTask(void *p_arg)
     shell_init(2048);
     os_resource_init();
     os_print_banner();
+    devices_init();
 
     puts("....STM32F207 APP START...");
     usrapp_init();
