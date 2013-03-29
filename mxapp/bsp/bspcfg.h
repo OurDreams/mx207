@@ -24,9 +24,9 @@
 #if (BOARD_BUILD_VER == BOARD_MX207)
 # include "./board/mx207/boardcfg.h"
 #elif (BOARD_BUILD_VER == BOARD_DIY103)
-
+# include "./board/ti811/boardcfg.h"
 #elif (BOARD_BUILD_VER == BOARD_GY103)
-
+# include "./board/ti811/boardcfg.h"
 #elif (BOARD_BUILD_VER == BOARD_TI811)
 # include "./board/ti811/boardcfg.h"
 #else
@@ -37,8 +37,20 @@
 # error "Please define 'BOARD_BANNER' in 'boardcfg.h'!"
 #endif
 
+#ifndef MAX_INT_COUNT
+# error "Please define 'MAX_INT_COUNT' in 'boardcfg.h'!"
+#endif
+
+#ifndef CPU_CLOCK_HZ
+# error "Please define 'CPU_CLOCK_HZ' in 'boardcfg.h'!"
+#endif
+
 #ifndef SHELL_STACK_SIZE
 # error "Please define 'SHELL_STACK_SIZE' in 'boardcfg.h'!"
+#endif
+
+#ifndef ROOT_STACK_SIZE
+# error "Please define 'ROOT_STACK_SIZE' in 'boardcfg.h'!"
 #endif
 
 #ifndef DMN_STACK_SIZE
