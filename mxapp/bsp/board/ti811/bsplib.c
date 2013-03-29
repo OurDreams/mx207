@@ -50,7 +50,7 @@
 void
 mcuClkSetup(void)
 {
-    return;
+#if 1
 #if PLL_EN == 0
     /*  Not use PLL  ≤ª π”√PLL      */
     SysCtlClockSet(CCLK_DIV
@@ -64,6 +64,17 @@ mcuClkSetup(void)
             | SYSCTL_OSC_MAIN
             | EXT_CLK);
 #endif
+#endif
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
+
+    UARTConfigSet(UART0_BASE, 115200,
+            UART_CONFIG_WLEN_8 |
+            UART_CONFIG_STOP_ONE |
+            UART_CONFIG_PAR_NONE);
 }
 
 void
