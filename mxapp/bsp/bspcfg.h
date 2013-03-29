@@ -19,14 +19,14 @@
 #define BOARD_GY103     (3u)
 #define BOARD_TI811     (4u)
 
-#define BOARD_BUILD_VER BOARD_TI811
+#define BOARD_BUILD_VER BOARD_DIY103
 
 #if (BOARD_BUILD_VER == BOARD_MX207)
 # include "./board/mx207/boardcfg.h"
 #elif (BOARD_BUILD_VER == BOARD_DIY103)
-# include "./board/ti811/boardcfg.h"
+# include "./board/diy103/boardcfg.h"
 #elif (BOARD_BUILD_VER == BOARD_GY103)
-# include "./board/ti811/boardcfg.h"
+# include "./board/gy103/boardcfg.h"
 #elif (BOARD_BUILD_VER == BOARD_TI811)
 # include "./board/ti811/boardcfg.h"
 #else
