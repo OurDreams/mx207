@@ -183,7 +183,11 @@ logmsg(const char *fmt, ...)
 
     if (the_logmsg_taskid == NULL)
     {
-        return ERROR;
+        va_list args;
+
+        va_start( args, fmt );
+        print( 0, fmt, args );
+        return OK;
     }
 
     if (strlen(fmt) > (MAX_BYTES_IN_A_MSG - 1))
@@ -236,7 +240,8 @@ logbuf(const uint8_t *pbuf, uint32_t len)
 
     if (the_logmsg_taskid == NULL)
     {
-        return ERROR;
+        printbuffer("", pbuf, len);
+        return OK;
     }
 
     msg = malloc(sizeof(log_msg_t));

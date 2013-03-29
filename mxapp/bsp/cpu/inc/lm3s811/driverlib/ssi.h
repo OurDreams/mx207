@@ -104,7 +104,7 @@ extern tBoolean SSIBusy(unsigned long ulBase);
 //
 //*****************************************************************************
 #ifndef DEPRECATED
-#include "driverlib/sysctl.h"
+#include "sysctl.h"
 #define SSIConfig(a, b, c, d, e)                            \
         SSIConfigSetExpClk(a, SysCtlClockGet(), b, c, d, e)
 #define SSIDataNonBlockingGet(a, b) \

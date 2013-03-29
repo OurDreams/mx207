@@ -48,7 +48,7 @@
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
 void
-cpuClkSetup(void)
+mcuClkSetup(void)
 {
     SystemInit();
     //

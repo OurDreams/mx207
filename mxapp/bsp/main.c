@@ -46,7 +46,7 @@ extern void os_print_banner(void);
 extern status_t excInit(int32_t);
 
 extern void usrapp_init(void);
-extern void cpuClkSetup(void);
+extern void mcuClkSetup(void);
 extern void bspHwInit(void);
 #if (USE_TTY == 1u)
 extern void tty_init(void);
@@ -125,7 +125,7 @@ rootTask(void *p_arg)
 int main(void)
 {
     /* 1. 初始化系统主频 */
-    cpuClkSetup();
+    mcuClkSetup();
 
     /* 2. 初始化OS内存管理单元 */
     if (OK != mem_init((uint32_t)&heap_low, (uint32_t)(&cstack_top - 0x200)))

@@ -199,11 +199,15 @@ readline(void)
         dmn_sign(the_dmnid);
         taskDelay(1);
         // 检测输入
-//        if ((c = bsp_getchar()) == 0)
-        if (dev_read(_the_console_fd, &c, 1) != 1)
-        //if (ttyRead(consoleFd, &c, 1) == 0) todo
+        if (_the_console_fd <= 0)
         {
-            continue;
+            if ((c = bsp_getchar()) == 0)
+                continue;
+        }
+        else
+        {
+            if (dev_read(_the_console_fd, &c, 1) != 1)
+                continue;
         }
         // 处理输入字符
         switch (c)
