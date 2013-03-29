@@ -1,0 +1,7 @@
+h
+speed 4800
+exec device = STM32F207ZG
+loadbin ./Debug/mx207_app.bin 0x8008000
+r
+g
+qc

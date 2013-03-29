@@ -13,26 +13,38 @@
 /*-----------------------------------------------------------------------------
 Section: Includes
 -----------------------------------------------------------------------------*/
-
+#include <oshook.h>
 
 /*-----------------------------------------------------------------------------
 Section: Macro Definitions
 -----------------------------------------------------------------------------*/
-#define OS_RELEASE  "0.1.0"
+#define OS_RELEASE  "0.1.0-rc1"
 
-#define CPU_LM3S811     (0u)
-#define CPU_STM32F103   (1u)
-#define CPU_STM32F207   (2u)
+#define MCU_CLOCK      bsp_get_mcu_clk()        /**< 获取MCU的主频 */
+#define MAX_INT_COUNT  bsp_get_max_int_count()  /**< 获取MCU最大中断数量 */
 
-#define OS_BUILD_VER    CPU_STM32F207
+#define TICKS_PER_SECOND          (100u)    /**< 定义时钟周期终端的频率 */
+#define MAX_TASK_PRIORITIES         (8u)    /**< 定义操作系统任务的最高优先级 */
 
-#if (OS_BUILD_VER == CPU_LM3S811)
-# include"./cpucfg/lm3s811cfg.h"
-#elif (OS_BUILD_VER == CPU_STM32F103)
-# include"./cpucfg/stm32f103cfg.h"
-#elif (OS_BUILD_VER == CPU_STM32F207)
-# include"./cpucfg/stm32f207cfg.h"
-#endif
+/* shell任务配置 */
+#define TASK_PRIORITY_SHELL         (2u)    /**< shell任务优先级 */
+#define TASK_STK_SIZE_SHELL      (2048u)    /**< shell任务堆栈 */
+
+/* dmn任务配置 */
+#define TASK_PRIORITY_DMN           (1u)    /**< DMN任务优先级 */
+#define TASK_STK_SIZE_DMN         (512u)    /**< DMN任务堆栈 */
+#define DMN_MAX_CHECK_TIME          (6u)    /**< 默认喂狗超时时间（6*10秒） */
+
+/* 异常任务 */
+#define TASK_PRIORITY_EXC           (0u)    /**< 异常中断处理任务的优先 */
+#define TASK_STK_SIZE_EXC         (512u)    /**< 异常中断处理任务的堆栈大小 */
+
+/* logMsg任务配置 */
+#define INCLUDE_LOGMSG_SUPPORT      (1u)    /**< 支持logMsg */
+#define MAX_MSGS                   (10u)    /**< 消息队列中的最大消息个数 */
+#define MAX_BYTES_IN_A_MSG        (200u)    /**< 1个logMsg最大打印的字节数 */
+#define TASK_PRIORITY_LOGMSG        (1u)    /**< logMsg任务的优先 */
+#define TASK_STK_SIZE_LOGMSG     (1024u)    /**< logMsg任务的堆栈大小 */
 
 #endif /* __OSCFG_H__ */
 /*------------------------------End of oscfg.h-------------------------------*/

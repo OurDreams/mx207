@@ -69,14 +69,14 @@ usageFaultRoutine:
 
 .thumb_func
 excEnterCommon:
-    CPSID   F
-    TST     LR, #0x4
-    ITE     EQ
-    MRSEQ   R0, MSP
-    MRSNE   R0, PSP
+    CPSID   F				/* Disable 异常中断 */
+    TST     LR, #0x4		/* 测试EXC_RETURN的bit2 */
+    ITE     EQ				/* 如果为0,下面包括2条指令 (P76) */
+    MRSEQ   R0, MSP			/* 如果EXC_RETURN的bit2==0 则使用MSP */
+    MRSNE   R0, PSP			/* 否则使用PSP */
 
     SUBS    R0, R0, #0x20
-    STM     R0, {R4-R11}
+    STM     R0, {R4-R11}	/* 保存R4-R11 */
 
     BL      excExcHandle
 

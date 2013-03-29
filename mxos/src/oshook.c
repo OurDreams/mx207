@@ -3,8 +3,8 @@
  * @file      oshook.c
  * @brief     os外提给提供的钩子接口库.
  * @details   This file including all API functions's  implement of mxhook.c.
- *
  * @copyright
+ *
  ******************************************************************************
  */
  

@@ -4,6 +4,7 @@
  * @brief     内核接口模块.
  * @details   This file including all API functions's
  *            implement of taskLib.c.
+ * @copyright
  *
  ******************************************************************************
  */
@@ -247,9 +248,9 @@ extern char *taskName(TASK_ID tid)
  ******************************************************************************
  */
 extern uint32_t
-sysClkRateGet(void)
+osClkRateGet(void)
 {
-    return SYS_TICKS_PER_SECOND;
+    return TICKS_PER_SECOND;
 }
 
 /*

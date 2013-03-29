@@ -3,6 +3,7 @@
  * @file      debug.c
  * @brief     调试模块的实现.
  * @details   This file including all API functions's implement of debug.c.
+ * @copyright
  *
  ******************************************************************************
  */

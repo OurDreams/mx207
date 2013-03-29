@@ -3,8 +3,8 @@
  * @file      devnull.c
  * @brief     本文实现NULL驱动.
  * @details   This file including all API functions's implement of devnull.c.
- *
  * @copyright
+ *
  ******************************************************************************
  */
  

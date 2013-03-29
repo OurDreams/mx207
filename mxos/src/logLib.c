@@ -3,8 +3,8 @@
  * @file      logLib.c
  * @brief     本文实现日志输出功能，用于调度器未运行或中断服务程序中的打印
  * @details   This file including all API functions's implement of logLib.c.
- *
  * @copyright
+ *
  ******************************************************************************
  */
  
@@ -97,7 +97,7 @@ loglib_loop(void)
     while(1)
     {
         dmn_sign(dmnid);
-        if (OK == msgQReceive(the_logmsg_qid, 30 * SYS_TICKS_PER_SECOND, (void **) &pmsg))
+        if (OK == msgQReceive(the_logmsg_qid, 30 * TICKS_PER_SECOND, (void **) &pmsg))
         {
             /* print task ID */
             if (pmsg->id == -1)
@@ -179,12 +179,15 @@ loglib_init(uint32_t stacksize)
 status_t
 logmsg(const char *fmt, ...)
 {
-
     log_msg_t *msg;
 
     if (the_logmsg_taskid == NULL)
     {
-        return ERROR;
+        va_list args;
+
+        va_start( args, fmt );
+        print( 0, fmt, args );
+        return OK;
     }
 
     if (strlen(fmt) > (MAX_BYTES_IN_A_MSG - 1))
@@ -237,7 +240,8 @@ logbuf(const uint8_t *pbuf, uint32_t len)
 
     if (the_logmsg_taskid == NULL)
     {
-        return ERROR;
+        printbuffer("", pbuf, len);
+        return OK;
     }
 
     msg = malloc(sizeof(log_msg_t));

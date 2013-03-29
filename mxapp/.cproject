@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.cross.arm.gnu.buildArtefactType.application" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.cross.arm.gnu.buildArtefactType.application" description="" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590" name="Debug" parent="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug">
+					<folderInfo id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.toolchain.debug.2011443806" name="ARM Windows GCC (Sourcery G++ Lite)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.toolchain.debug">
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.level.2046204109" name="Debug level" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.debugging.level.max" valueType="enumerated"/>
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.target.processor.1108485499" name="Processor" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.target.processor" value="org.eclipse.cdt.cross.arm.gnu.base.option.mcpu.cortex-m3" valueType="enumerated"/>
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.format.1580975330" name="Debug format" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.format" value="org.eclipse.cdt.cross.arm.gnu.base.option.debugging.format.gdb" valueType="enumerated"/>
+							<targetPlatform id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.platform.debug.132810821" isAbstract="false" name="Windows Platform" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.platform.debug"/>
+							<builder buildPath="${workspace_loc:/mxapp/Debug}" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.builder.debug.1277380434" incrementalBuildTarget="all -j4" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="ARM Sourcery Windows GNU Make builder" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.builder.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.debug.984729905" name="ARM Sourcery Windows GCC Assembler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.debug">
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.252617367" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.debug.127615455" name="ARM Sourcery Windows GCC C Compiler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.level.905238799" name="Optimization level" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.optimization.level.size" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.shortenums.196459244" name="Short enumerations (-fshort-enums)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.shortenums" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.packstruct.247713996" name="Pack structures (-fpack-struct)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.packstruct" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.functionsections.1270016161" name="Function sections (-ffunction-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.functionsections" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std.36521558" name="Language Standard" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std" value="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std.gnu99" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.signedchar.2141900072" name="'char' is signed (-fsigned-char)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.signedchar" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.unsignedbitfields.1847972851" name="Bitfields are unsigned (-funsigned-bitfields)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.unsignedbitfields" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths.863959992" name="Include paths (-I)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/mxos/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/cpu/inc}&quot;"/>
+								</option>
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.1404324752" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.compiler.debug.1204006311" name="ARM Sourcery Windows GCC C++ Compiler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.compiler.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level.1930777526" name="Optimization level" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.optimization.level.none" valueType="enumerated"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug.1167184277" name="ARM Sourcery Windows GCC C Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.gcsections.656263488" name="Remove unused sections (-Xlinker --gc-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.gcsections" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile.24405277" name="Script file (-T)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile" value="${workspace_loc:/${ProjName}}/app.ld" valueType="string"/>
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.c.linker.input.1245084910" superClass="org.eclipse.cdt.cross.arm.gnu.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.linker.debug.2003298308" name="ARM Sourcery Windows GCC C++ Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.linker.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.archiver.base.260097765" name="ARM Sourcery Windows GCC Archiver" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.archiver.base"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createflash.debug.1291428608" name="ARM Sourcery Windows GNU Create Flash Image" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createflash.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createlisting.debug.838463036" name="ARM Sourcery Windows GNU Create Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createlisting.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.printsize.debug.1446236103" name="ARM Sourcery Windows GNU Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.printsize.debug"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889" moduleId="org.eclipse.cdt.core.settings" name="DIY103">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.cross.arm.gnu.buildArtefactType.application" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.cross.arm.gnu.buildArtefactType.application" description="生成diy103应用程序" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889" name="DIY103" parent="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug">
+					<folderInfo id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.toolchain.debug.1509513658" name="ARM Windows GCC (Sourcery G++ Lite)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.toolchain.debug">
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.level.2105047542" name="Debug level" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.debugging.level.max" valueType="enumerated"/>
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.target.processor.1680523097" name="Processor" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.target.processor" value="org.eclipse.cdt.cross.arm.gnu.base.option.mcpu.cortex-m3" valueType="enumerated"/>
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.format.1776835306" name="Debug format" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.format" value="org.eclipse.cdt.cross.arm.gnu.base.option.debugging.format.gdb" valueType="enumerated"/>
+							<targetPlatform id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.platform.debug.1795182224" isAbstract="false" name="Windows Platform" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.platform.debug"/>
+							<builder buildPath="${workspace_loc:/mxapp/Debug}" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.builder.debug.96535824" incrementalBuildTarget="all -j4" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="ARM Sourcery Windows GNU Make builder" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.builder.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.debug.1364239366" name="ARM Sourcery Windows GCC Assembler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.debug">
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.980729962" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.debug.1322125725" name="ARM Sourcery Windows GCC C Compiler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.level.1797601724" name="Optimization level" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.optimization.level.size" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.shortenums.396409185" name="Short enumerations (-fshort-enums)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.shortenums" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.packstruct.2128880361" name="Pack structures (-fpack-struct)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.packstruct" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.functionsections.929842350" name="Function sections (-ffunction-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.functionsections" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std.1939969001" name="Language Standard" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std" value="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std.gnu99" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.signedchar.6860228" name="'char' is signed (-fsigned-char)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.signedchar" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.unsignedbitfields.954666133" name="Bitfields are unsigned (-funsigned-bitfields)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.unsignedbitfields" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths.434675849" name="Include paths (-I)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/mxos/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/cpu/inc}&quot;"/>
+								</option>
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.1609553462" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.compiler.debug.337886719" name="ARM Sourcery Windows GCC C++ Compiler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.compiler.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level.1335544553" name="Optimization level" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.optimization.level.none" valueType="enumerated"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug.42017749" name="ARM Sourcery Windows GCC C Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.gcsections.619707139" name="Remove unused sections (-Xlinker --gc-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.gcsections" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile.108730048" name="Script file (-T)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile" value="${workspace_loc:/${ProjName}}/bsp/cpu/lib/stm32f207.ld" valueType="string"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.paths.523017369" name="Library search path (-L)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/mxos/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/cpu/lib}&quot;"/>
+								</option>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.libs.1255087399" name="Libraries (-l)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="stm32f1lib"/>
+									<listOptionValue builtIn="false" value="mxos"/>
+								</option>
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.c.linker.input.989347369" superClass="org.eclipse.cdt.cross.arm.gnu.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.linker.debug.579487834" name="ARM Sourcery Windows GCC C++ Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.linker.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.archiver.base.1883586703" name="ARM Sourcery Windows GCC Archiver" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.archiver.base"/>
+							<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}&quot;diy103app.bin&quot;" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createflash.debug.1592065163" name="ARM Sourcery Windows GNU Create Flash Image" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createflash.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.createflash.out.choice.1660198442" name="Output file format (-O)" superClass="org.eclipse.cdt.cross.arm.gnu.createflash.out.choice" value="org.eclipse.cdt.cross.arm.gnu.createflash.out.choice.binary" valueType="enumerated"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createlisting.debug.1802646028" name="ARM Sourcery Windows GNU Create Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createlisting.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.printsize.debug.1378835326" name="ARM Sourcery Windows GNU Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.printsize.debug"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889.1235777734">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889.1235777734" moduleId="org.eclipse.cdt.core.settings" name="MX207">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.cross.arm.gnu.buildArtefactType.application" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.cross.arm.gnu.buildArtefactType.application" description="生成mx207应用程序" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889.1235777734" name="MX207" parent="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug">
+					<folderInfo id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889.1235777734." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.toolchain.debug.1333526280" name="ARM Windows GCC (Sourcery G++ Lite)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.toolchain.debug">
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.level.1362882826" name="Debug level" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.debugging.level.max" valueType="enumerated"/>
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.target.processor.1963808185" name="Processor" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.target.processor" value="org.eclipse.cdt.cross.arm.gnu.base.option.mcpu.cortex-m3" valueType="enumerated"/>
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.format.1702015981" name="Debug format" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.format" value="org.eclipse.cdt.cross.arm.gnu.base.option.debugging.format.gdb" valueType="enumerated"/>
+							<targetPlatform id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.platform.debug.304017704" isAbstract="false" name="Windows Platform" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.platform.debug"/>
+							<builder buildPath="${workspace_loc:/mxapp/Debug}" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.builder.debug.1848663773" incrementalBuildTarget="all -j4" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="ARM Sourcery Windows GNU Make builder" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.builder.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.debug.1048013342" name="ARM Sourcery Windows GCC Assembler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.debug">
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.1802781713" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.debug.1344973820" name="ARM Sourcery Windows GCC C Compiler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.level.783014621" name="Optimization level" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.optimization.level.size" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.shortenums.1174031616" name="Short enumerations (-fshort-enums)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.shortenums" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.packstruct.1603009093" name="Pack structures (-fpack-struct)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.packstruct" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.functionsections.670646584" name="Function sections (-ffunction-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.functionsections" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std.1278066087" name="Language Standard" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std" value="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std.gnu99" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.signedchar.757601070" name="'char' is signed (-fsigned-char)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.signedchar" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.unsignedbitfields.696659930" name="Bitfields are unsigned (-funsigned-bitfields)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.unsignedbitfields" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths.1798663214" name="Include paths (-I)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/mxos/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/cpu/inc}&quot;"/>
+								</option>
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.2124031936" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.compiler.debug.616283601" name="ARM Sourcery Windows GCC C++ Compiler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.compiler.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level.1518840091" name="Optimization level" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.optimization.level.none" valueType="enumerated"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug.602286291" name="ARM Sourcery Windows GCC C Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.gcsections.1438669723" name="Remove unused sections (-Xlinker --gc-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.gcsections" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile.296912907" name="Script file (-T)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile" value="${workspace_loc:/${ProjName}}/bsp/cpu/lib/stm32f103.ld" valueType="string"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.paths.1752361047" name="Library search path (-L)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/cpu/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/mxos/lib}&quot;"/>
+								</option>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.libs.162868350" name="Libraries (-l)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="stm32f2lib"/>
+									<listOptionValue builtIn="false" value="mxos"/>
+								</option>
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.c.linker.input.1451001990" superClass="org.eclipse.cdt.cross.arm.gnu.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.linker.debug.1105508924" name="ARM Sourcery Windows GCC C++ Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.linker.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.archiver.base.981323062" name="ARM Sourcery Windows GCC Archiver" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.archiver.base"/>
+							<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}&quot;mx207app.bin&quot;" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createflash.debug.629150135" name="ARM Sourcery Windows GNU Create Flash Image" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createflash.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.createflash.out.choice.664716906" name="Output file format (-O)" superClass="org.eclipse.cdt.cross.arm.gnu.createflash.out.choice" value="org.eclipse.cdt.cross.arm.gnu.createflash.out.choice.binary" valueType="enumerated"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createlisting.debug.1160039450" name="ARM Sourcery Windows GNU Create Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createlisting.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.printsize.debug.761740466" name="ARM Sourcery Windows GNU Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.printsize.debug"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889.1235777734.122561299">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889.1235777734.122561299" moduleId="org.eclipse.cdt.core.settings" name="TI811">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.cross.arm.gnu.buildArtefactType.application" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.cross.arm.gnu.buildArtefactType.application" description="生成lm3s811应用程序" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889.1235777734.122561299" name="TI811" parent="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug">
+					<folderInfo id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.828035889.1235777734.122561299." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.toolchain.debug.214072204" name="ARM Windows GCC (Sourcery G++ Lite)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.toolchain.debug">
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.level.2013861945" name="Debug level" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.debugging.level.max" valueType="enumerated"/>
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.target.processor.1109962605" name="Processor" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.target.processor" value="org.eclipse.cdt.cross.arm.gnu.base.option.mcpu.cortex-m3" valueType="enumerated"/>
+							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.format.1588046562" name="Debug format" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.option.debugging.format" value="org.eclipse.cdt.cross.arm.gnu.base.option.debugging.format.gdb" valueType="enumerated"/>
+							<targetPlatform id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.platform.debug.2029700175" isAbstract="false" name="Windows Platform" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.platform.debug"/>
+							<builder buildPath="${workspace_loc:/mxapp/Debug}" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.builder.debug.877318809" incrementalBuildTarget="all -j4" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="ARM Sourcery Windows GNU Make builder" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.builder.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.debug.424182097" name="ARM Sourcery Windows GCC Assembler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.debug">
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.1097462070" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.debug.1168710997" name="ARM Sourcery Windows GCC C Compiler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.level.1074504625" name="Optimization level" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.optimization.level.size" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.shortenums.41166425" name="Short enumerations (-fshort-enums)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.shortenums" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.packstruct.33943858" name="Pack structures (-fpack-struct)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.packstruct" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.functionsections.1212211995" name="Function sections (-ffunction-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.optimization.functionsections" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std.1487487679" name="Language Standard" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std" value="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.std.gnu99" valueType="enumerated"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.signedchar.216752051" name="'char' is signed (-fsigned-char)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.signedchar" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.unsignedbitfields.339370328" name="Bitfields are unsigned (-funsigned-bitfields)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.misc.unsignedbitfields" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths.2033231748" name="Include paths (-I)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/mxos/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/cpu/inc}&quot;"/>
+								</option>
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.1148689952" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.compiler.debug.134865136" name="ARM Sourcery Windows GCC C++ Compiler" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.compiler.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level.717262444" name="Optimization level" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.level" value="org.eclipse.cdt.cross.arm.gnu.base.option.optimization.level.none" valueType="enumerated"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug.1733821952" name="ARM Sourcery Windows GCC C Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.gcsections.893845144" name="Remove unused sections (-Xlinker --gc-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.gcsections" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile.703170363" name="Script file (-T)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.scriptfile" value="${workspace_loc:/${ProjName}}/bsp/cpu/lib/lm3s811.ld" valueType="string"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.paths.685003855" name="Library search path (-L)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/bsp/cpu/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/mxos/lib}&quot;"/>
+								</option>
+								<option id="org.eclipse.cdt.cross.arm.gnu.c.link.option.libs.28022234" name="Libraries (-l)" superClass="org.eclipse.cdt.cross.arm.gnu.c.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="lm3s811lib"/>
+									<listOptionValue builtIn="false" value="mxos"/>
+								</option>
+								<inputType id="org.eclipse.cdt.cross.arm.gnu.c.linker.input.281249290" superClass="org.eclipse.cdt.cross.arm.gnu.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.linker.debug.1153935751" name="ARM Sourcery Windows GCC C++ Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.cpp.linker.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.archiver.base.1679041825" name="ARM Sourcery Windows GCC Archiver" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.archiver.base"/>
+							<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}&quot;mx811app.bin&quot;" id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createflash.debug.298787137" name="ARM Sourcery Windows GNU Create Flash Image" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createflash.debug">
+								<option id="org.eclipse.cdt.cross.arm.gnu.createflash.out.choice.681303279" name="Output file format (-O)" superClass="org.eclipse.cdt.cross.arm.gnu.createflash.out.choice" value="org.eclipse.cdt.cross.arm.gnu.createflash.out.choice.binary" valueType="enumerated"/>
+							</tool>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createlisting.debug.318983903" name="ARM Sourcery Windows GNU Create Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.createlisting.debug"/>
+							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.printsize.debug.1074089836" name="ARM Sourcery Windows GNU Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.printsize.debug"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="mxapp.org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.2012938836" name="ARM Cross Target Application" projectType="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf"/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.debug.984729905;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.252617367">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.release.1611047901;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.release.1611047901.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.release.1497685261;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.367971454">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.210414590.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.compiler.debug.127615455;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.1404324752">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.release.1611047901;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.release.1611047901.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.assembler.release.1642906270;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.1349865308">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="refreshScope" versionNumber="1">
+		<resource resourceType="PROJECT" workspacePath="/mxapp"/>
+	</storageModule>
+</cproject>

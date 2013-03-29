@@ -3,6 +3,7 @@
  * @file      memLib.c
  * @brief     内存管理模块
  * @details   本文管理动态内存分配及释放(本文不能使用信号量)
+ * @copyright
  *
  ******************************************************************************
  */
@@ -83,7 +84,7 @@ static inline void RegionSetSize(struct MemRegion *pRegion, size_t nSize)
  ******************************************************************************
  */
 status_t
-mem_init(unsigned long start, unsigned long end)
+mem_init(uint32_t start, uint32_t end)
 {
     struct MemRegion *pFirst, *pTail;
 
