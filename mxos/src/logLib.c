@@ -97,7 +97,7 @@ loglib_loop(void)
     while(1)
     {
         dmn_sign(dmnid);
-        if (OK == msgQReceive(the_logmsg_qid, 30 * SYS_TICKS_PER_SECOND, (void **) &pmsg))
+        if (OK == msgQReceive(the_logmsg_qid, 30 * TICKS_PER_SECOND, (void **) &pmsg))
         {
             /* print task ID */
             if (pmsg->id == -1)
@@ -179,7 +179,6 @@ loglib_init(uint32_t stacksize)
 status_t
 logmsg(const char *fmt, ...)
 {
-
     log_msg_t *msg;
 
     if (the_logmsg_taskid == NULL)

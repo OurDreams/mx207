@@ -33,7 +33,7 @@ Section: Globals
 /*-----------------------------------------------------------------------------
 Section: Function Prototypes
 -----------------------------------------------------------------------------*/
-extern status_t mem_init(unsigned long start, unsigned long end);
+extern status_t mem_init(uint32_t start, uint32_t end);
 
 #endif  /* __MEMLIB_H__ */
-/*--------------------------End of memLib.h----------------------------*/
+/*------------------------------End of memLib.h------------------------------*/

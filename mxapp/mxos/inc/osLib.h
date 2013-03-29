@@ -49,9 +49,6 @@ os_print_banner(void);
 extern status_t
 os_resource_init(void);
 
-extern uint32_t
-os_ticks_per_second(void);
-
 extern void
 hex2a(const char_t * pbyte,
         char_t * pstr,

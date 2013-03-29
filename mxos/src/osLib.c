@@ -89,20 +89,6 @@ os_print_banner(void)
            "\n  CopyRight : Xxxx Xxxx..\n");
 }
 
-/**
- ******************************************************************************
- * @brief   获取调度器频率
- * @param[in]  None
- * @param[out] None
- * @retval  调度器频率
- ******************************************************************************
- */
-uint32_t
-os_ticks_per_second(void)
-{
-    return SYS_TICKS_PER_SECOND;
-}
-
 extern status_t
 devnull_create(void);
 /**

@@ -248,9 +248,9 @@ extern char *taskName(TASK_ID tid)
  ******************************************************************************
  */
 extern uint32_t
-sysClkRateGet(void)
+osClkRateGet(void)
 {
-    return SYS_TICKS_PER_SECOND;
+    return TICKS_PER_SECOND;
 }
 
 /*

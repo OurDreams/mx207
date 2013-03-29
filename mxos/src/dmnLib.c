@@ -293,12 +293,12 @@ dmn_loop(void)
 
     FOREVER
     {
-        taskDelay(SYS_TICKS_PER_SECOND);
+        taskDelay(TICKS_PER_SECOND);
         if (_func_feedDogHook != NULL)
         {
             _func_feedDogHook();    /* Î¹Ó²¼þ¹· */
         }
-        if ((tickGet() - tick) < (SYS_TICKS_PER_SECOND * 10))
+        if ((tickGet() - tick) < (TICKS_PER_SECOND * 10))
         {
             continue;
         }
@@ -333,7 +333,7 @@ dmn_loop(void)
     }
     printf("dmn will reboot system after 10s...\n");
     /* wait a moment */
-    taskDelay(SYS_TICKS_PER_SECOND * 10u);
+    taskDelay(TICKS_PER_SECOND * 10u);
     if (_func_cpuRestHook != NULL)
     {
         _func_cpuRestHook();    /* reset CPU */

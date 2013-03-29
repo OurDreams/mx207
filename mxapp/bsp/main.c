@@ -26,7 +26,7 @@
 /*-----------------------------------------------------------------------------
  Section: Constant Definitions
  ----------------------------------------------------------------------------*/
-#ifndef ROOTSTACKSIZE
+#ifndef ROOT_STACK_SIZE
 # define ROOT_STACK_SIZE     (1000u)    /**< 定义root task堆栈大小 */
 #endif
 
@@ -61,10 +61,19 @@ rootTask(void *p_arg);
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
+/**
+ ******************************************************************************
+ * @brief   根任务
+ * @param[in]  None
+ * @param[out] None
+ * @retval     None
+ ******************************************************************************
+ */
 static void
 rootTask(void *p_arg)
 {
     (void)p_arg;
+    /* 1. 初始化tty设备 */
 #if (USE_TTY == 1u)
     tty_init();
     _the_console_fd = dev_open("tty0", O_RDWR);
@@ -74,54 +83,76 @@ rootTask(void *p_arg)
     }
 #endif
 
+    /* 2. 初始化log message模块 */
 #if (LOGMSG_STACK_SIZE != 0u)
     loglib_init(LOGMSG_STACK_SIZE);
 #endif
 
+    /* 3. 初始化异常模块 */
 #if (EXC_STACK_SIZE != 0u)
     excInit(EXC_STACK_SIZE);
 #endif
 
+    /* 4. 初始化守护任务 */
 #if (DMN_STACK_SIZE != 0u)
     dmn_init(DMN_STACK_SIZE);
 #endif
 
+    /* 5. 初始化sell模块 */
 #if (SHELL_STACK_SIZE != 0u)
     shell_init(SHELL_STACK_SIZE);
 #endif
 
+    /* 6. OS其他资源模块初始化 */
     os_resource_init();
-    os_print_banner();
 
+    /* 7. 输出OS banner */
+    os_print_banner();
     puts("...."BOARD_BANNER" APP START...");
+
+    /* 8. 进入应用程序 */
     usrapp_init();
 }
 
+/**
+ ******************************************************************************
+ * @brief   主函数
+ * @param[in]  None
+ * @param[out] None
+ * @retval     None
+ ******************************************************************************
+ */
 int main(void)
 {
-    /* 初始化系统主频 */
+    /* 1. 初始化系统主频 */
     cpuClkSetup();
 
-    /* 初始化系统中断向量表 */
-    intLibInit();
-
-    /* 执行os启动之前的初始化 */
-    bspHwInit();
-
-    if (OK != mem_init((unsigned long)&heap_low, (unsigned long)(&cstack_top - 0x200)))
+    /* 2. 初始化OS内存管理单元 */
+    if (OK != mem_init((uint32_t)&heap_low, (uint32_t)(&cstack_top - 0x200)))
     {
-        puts("mem_init err!\n");
+        puts("mem_init err!");
         while(1);
     }
 
-    /*起根任务，做时钟节拍初始化*/
-    (void)taskSpawn((const signed char*)"root", 1, ROOT_STACK_SIZE, (OSFUNCPTR)rootTask,0);
+    /* 3. 初始化OS中断向量表 */
+    if (OK != intLibInit())
+    {
+        puts("intLibInit err!");
+        while(1);
+    }
 
-    /* Start scheduler */
+    /* 4. 执行OS启动之前的初始化 */
+    bspHwInit();
+
+    /* 5. 起根任务，做时钟节拍初始化 */
+    (void)taskSpawn((const signed char*)"root", 1u,
+            ROOT_STACK_SIZE, rootTask, 0u);
+
+    /* 6. 启动OS调度器 */
     vTaskStartScheduler();
 
     /* We should never get here as control is now taken by the scheduler */
-    for( ;; );
+    while (1);
 
     return 0;
 }

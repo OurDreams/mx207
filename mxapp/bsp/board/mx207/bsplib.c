@@ -166,5 +166,19 @@ bsp_timer_get(void)
 }
 
 
+/* 5. 获取MCU主频 */
+uint32_t
+bsp_get_mcu_clk(void)
+{
+    return CPU_CLOCK_HZ;
+}
+
+/* 6. 获取MCU中断数量 */
+uint32_t
+bsp_get_max_int_count(void)
+{
+    return MAX_INT_COUNT;
+}
+
 #endif
 /*----------------------------bsplib.c--------------------------------*/

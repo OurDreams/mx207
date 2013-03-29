@@ -31,7 +31,7 @@
 
 #define TV_CONVERT_TO_SEC(a,b)  \
         do { \
-        register uint32_t hz = sysClkRateGet(); \
+        register uint32_t hz = osClkRateGet(); \
     (a).tv_sec  = (time_t)((b) / hz);   \
     (a).tv_nsec = (long)(((b) % hz) * (BILLION / hz)); \
         } while (0)
@@ -80,7 +80,7 @@ clockLibInit(void)
     if (libInstalled)
         return (ERROR);
 
-    if (sysClkRateGet() < 1)
+    if (osClkRateGet() < 1)
         return (ERROR);
 
     libInstalled = TRUE;

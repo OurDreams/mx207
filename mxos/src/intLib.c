@@ -15,6 +15,7 @@
  Section: Includes
  ----------------------------------------------------------------------------*/
 #include <types.h>
+#include <stdlib.h>
 #include <core_cm3.h>
 #include <oscfg.h>
 
@@ -23,8 +24,8 @@
  ----------------------------------------------------------------------------*/
 typedef struct int_rtn
 {
-    VOIDFUNCPTR routine; /* interrupt handler */
-    int parameter; /* parameter of the handler */
+    VOIDFUNCPTR routine; /**< interrupt handler */
+    int32_t parameter;   /**< parameter of the handler */
 } INT_RTN;
 
 /*-----------------------------------------------------------------------------
@@ -36,9 +37,10 @@ typedef struct int_rtn
  Section: Global Variables
  ----------------------------------------------------------------------------*/
 /* 中断实现函数入口表 */
-INT_RTN intRtnTbl[MAX_INT_COUNT - 15];
+INT_RTN *intRtnTbl = NULL;
 /* Counter to tell if we are at interrupt (non-task) level. */
-int intCnt = 0;
+int32_t intCnt = 0;
+
 /*-----------------------------------------------------------------------------
  Section: Local Variables
  ----------------------------------------------------------------------------*/
@@ -104,6 +106,10 @@ dummy(void);
 extern status_t
 intConnect(uint32_t irq_num, VOIDFUNCPTR routine, uint32_t parameter)
 {
+    if (intRtnTbl == NULL)
+    {
+        return ERROR;
+    }
     if ((irq_num < 16) || (irq_num > MAX_INT_COUNT))
     {
         return ERROR;
@@ -127,6 +133,10 @@ intConnect(uint32_t irq_num, VOIDFUNCPTR routine, uint32_t parameter)
 extern status_t
 intDisconnect(uint32_t irq_num)
 {
+    if (intRtnTbl == NULL)
+    {
+        return ERROR;
+    }
     if ((irq_num < 16) || (irq_num > MAX_INT_COUNT))
         return ERROR;
 
@@ -229,22 +239,30 @@ bool_e intContext (void)
  * @note
  ******************************************************************************
  */
-extern void
+extern status_t
 intLibInit(void)
 {
     uint32_t irq_num;
 
-    // 初始化中断表
-    for (irq_num = 16; irq_num < MAX_INT_COUNT; irq_num++)
+    if (intRtnTbl == NULL)
     {
-        intConnect(irq_num, dummy, 0);
+        intRtnTbl = malloc(sizeof(INT_RTN) * (MAX_INT_COUNT - 15));
+        if (intRtnTbl == NULL)
+        {
+            return ERROR;
+        }
+        // 初始化中断表
+        for (irq_num = 16; irq_num < MAX_INT_COUNT; irq_num++)
+        {
+            intConnect(irq_num, dummy, 0);
+        }
+
+        // 使能BusFault、memFault、usgFault 可考虑在excLib初始化时使能
+        SCB->SHCSR |= (SCB_SHCSR_BUSFAULTENA_Msk
+                | SCB_SHCSR_USGFAULTENA_Msk
+                | SCB_SHCSR_MEMFAULTENA_Msk);
     }
-
-    // 使能BusFault、memFault、usgFault 可考虑在excLib初始化时使能
-    SCB->SHCSR |= (SCB_SHCSR_BUSFAULTENA_Msk
-            | SCB_SHCSR_USGFAULTENA_Msk
-            | SCB_SHCSR_MEMFAULTENA_Msk);
-
+    return OK;
 }
 
 

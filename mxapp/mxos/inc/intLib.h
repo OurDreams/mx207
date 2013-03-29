@@ -52,7 +52,7 @@ intDisable(uint32_t irq_num);
 bool_e
 intContext (void);
 
-extern void
+extern status_t
 intLibInit(void);
 
 extern void
