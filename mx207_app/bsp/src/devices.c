@@ -12,6 +12,7 @@
  Section: Includes
  ----------------------------------------------------------------------------*/
 #include <gpio.h>
+#include <key.h>
 #include <types.h>
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
@@ -45,5 +46,7 @@
 status_t devices_init(void)
 {
 	gpio_init();
+	key_init();
 	return OK;
 }
+/*----------------------------devices.c--------------------------------*/

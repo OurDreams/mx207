@@ -1,9 +1,9 @@
 /**
  ******************************************************************************
- * @file      led.c
- * @brief     C Source file of led.c.
+ * @file      key_test.c
+ * @brief     C Source file of key_test.c.
  * @details   This file including all API functions's 
- *            implement of led.c.	
+ *            implement of key_test.c.	
  *
  * @copyright
  ******************************************************************************
@@ -17,6 +17,11 @@
 #include <taskLib.h>
 #include <osLib.h>
 #include <dmnLib.h>
+
+#ifdef Dprintf
+#undef Dprintf
+#endif
+#define Dprintf(x...)
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
  ----------------------------------------------------------------------------*/
@@ -44,39 +49,30 @@
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
-/**
- ******************************************************************************
- * @brief   流水灯任务
- * @param[in]  None
- * @param[out] None
- *
- * @retval     None
- ******************************************************************************
- */
-void ledTask(void *p_arg)
+void keyTask(void *p_arg)
 {
-	int32_t fd = -1;
+	int32_t keyfd = -1;
+	int8_t key_val = 0;
 	uint32_t ticks_per_second;
 
 	ticks_per_second = os_ticks_per_second();
-	DMN_ID dmnid = dmn_register();
-	fd = dev_open("gpio", 0);
-	if(-1 == fd)
+	keyfd = dev_open("key", 0);
+	if(-1 == keyfd)
 	{
-		printf("open gpio error\n");
+		printf("open key error\n");
 		return ;
 	}
 	while(1)
 	{
-		dmn_sign(dmnid);
-		dev_ioctl(fd, 0,IO_LED0);
-		taskDelay(ticks_per_second);
-		dev_ioctl(fd, 1,IO_LED0);
+		key_val = dev_read(keyfd, &key_val, 1);
+		if(key_val > 0)
+		{
+			printf("Key%d is pressed\r\n", key_val);
+		}
 		taskDelay(ticks_per_second);
 	}
-	dev_close(fd);
-	dev_release("gpio");
-}
 
+}
+/*----------------------------key_test.c-----------------------------------------*/
 
 

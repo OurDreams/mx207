@@ -17,6 +17,7 @@
  Section: Type Definitions
  ----------------------------------------------------------------------------*/
 #define  LEDSTACKSIZE  (512)
+#define  KEYSTACKSIZE  (512)
 
 /*-----------------------------------------------------------------------------
  Section: Constant Definitions
@@ -42,6 +43,7 @@
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
 extern void ledTask(void *p_arg);
+extern void keyTask(void *p_arg);
 /**
  ******************************************************************************
  * @brief   应用程序初始化
@@ -55,6 +57,7 @@ void
 usrapp_init(void)
 {
 	taskSpawn((const signed char*)"led", 3, LEDSTACKSIZE, (OSFUNCPTR)ledTask,0);
+	taskSpawn((const signed char*)"key", 4, KEYSTACKSIZE, (OSFUNCPTR)keyTask,0);
 
     return;
 }
