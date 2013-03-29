@@ -36,7 +36,7 @@
  */
 #define  EXT_CLK            SYSCTL_XTAL_6MHZ    /* external clock 外部时钟      */
 #define  PLL_EN             1                   /* 1：Enable PLL  使能PLL   */
-#define  CCLK_DIV           SYSCTL_SYSDIV_1     /* CCLK divider CCLK分频系数 */
+#define  CCLK_DIV           SYSCTL_SYSDIV_2     /* CCLK divider CCLK分频系数 */
 
 #endif /* __BOARDCFG_H__ */
 /*----------------------------End of boardcfg.h------------------------------*/

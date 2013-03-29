@@ -105,23 +105,41 @@ void bsp_reboot(void)
     SysCtlReset();
 }
 
+static uint32_t the_usticks = 0u;
+static void
+timer0_isr(void)
+{
+    the_usticks++;
+    TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+}
 void
 bsp_timer_start(void)
 {
-
+    //先使能外设
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+    //配置运行模式
+    TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER);
+    //设置装载值
+    TimerLoadSet(TIMER0_BASE, TIMER_A, 1000);
+    //使能中断源
+    TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+    //GPTM模块使能
+    TimerEnable(TIMER0_BASE, TIMER_A);
+    intConnect(INT_TIMER0A, timer0_isr, 0u);
+    intEnable(INT_TIMER0A);
 }
 
 uint32_t
 bsp_timer_get(void)
 {
-    return 0;
+    return the_usticks;
 }
 
 /* 5. 获取MCU主频 */
 uint32_t
 bsp_get_mcu_clk(void)
 {
-    return CPU_CLOCK_HZ;
+    return SysCtlClockGet();
 }
 
 /* 6. 获取MCU中断数量 */
