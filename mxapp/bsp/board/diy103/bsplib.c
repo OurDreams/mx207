@@ -92,13 +92,45 @@ void bsp_reboot(void)
 void
 bsp_timer_start(void)
 {
+// 根据波特率设置延时时间
+    uint32_t baud_timertick = 0xffffffff;
 
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+
+    RCC->APB1ENR |= RCC_APB1Periph_TIM2;
+    //重新将Timer设置为缺省值
+    TIM_DeInit(TIM2);
+    //采用内部时钟给TIM2提供时钟源
+    //TIM_InternalClockConfig(TIM2);
+
+    TIM_TimeBaseStructure.TIM_Prescaler = 59;
+    //设置时钟分割
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    //设置计数器模式为向上计数模式
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    //设置计数溢出大小，每计x个数就产生一个更新事件
+    TIM_TimeBaseStructure.TIM_Period = baud_timertick;
+    //将配置应用到TIM2中
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+
+    //清除溢出中断标志
+    TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+    //禁止ARR预装载缓冲器
+    //TIM_ARRPreloadConfig(TIM2, DISABLE);
+    //开启TIM2的中断
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+    /* TIM2 counter enable */
+    TIM_Cmd(TIM2, ENABLE);
+
+    TIM_SetCounter(TIM2, 0);
 }
 
 uint32_t
 bsp_timer_get(void)
 {
-    return 0;
+    uint32_t starttime_ms = 0;
+    starttime_ms = TIM_GetCounter(TIM2);
+    return starttime_ms;
 }
 
 /* 5. 获取MCU主频 */
