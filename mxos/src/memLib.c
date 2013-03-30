@@ -84,7 +84,7 @@ static inline void RegionSetSize(struct MemRegion *pRegion, size_t nSize)
  ******************************************************************************
  */
 status_t
-mem_init(uint32_t start, uint32_t end)
+memlib_init(uint32_t start, uint32_t end)
 {
     struct MemRegion *pFirst, *pTail;
 
