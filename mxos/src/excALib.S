@@ -1,4 +1,4 @@
-/*;********************************************************************************************************
+/*;****************************************************************************
 ;                                               excALib.s
 ;                                         exception handle routine
 ;
@@ -13,63 +13,33 @@
 ; For       : ARMv7M Cortex-M3
 ; Mode      : Thumb2
 ; Toolchain : GCC
-;********************************************************************************************************/
+;*****************************************************************************/
 
-/*;********************************************************************************************************
-;                                           PUBLIC FUNCTIONS
-;********************************************************************************************************/
-
-.cpu cortex-m3
-.fpu softvfp
-.syntax unified
-.thumb
-.text
+/*;****************************************************************************
+;                      PUBLIC FUNCTIONS
+;*****************************************************************************/
+	.cpu cortex-m3
+	.fpu softvfp
+	.syntax unified
+	.thumb
+	.text
     .extern  pxCurrentTCB
-
     .extern  excExcHandle
     .extern  vTaskSwitchContext
 
-    .global  faultRoutine                                     /*; Functions declared in this file*/
-    .global  memFaultRoutine
-    .global  busFaultRoutine
-    .global  usageFaultRoutine
+    .global  excEnterCommon		/*; Functions declared in this file*/
 
 
-
-/*;********************************************************************************************************
-;                                      CODE GENERATION DIRECTIVES
-;*********************************************************************************************************
-
-        RSEG CODE:CODE:NOROOT(2)
-        THUMB
-
-*/
-
-/*;********************************************************************************************************
+/*;****************************************************************************
 ;                                         HANDLE HARD FAULT EXCEPTION
 ;                                     void EXC_ENTER_HARD_FAULT(void)
 ;
 ; Note(s) : 1) 本函数用于处理硬件FAULT异常，函数地址放置于中断向量表编号3的位置中。
-; ********************************************************************************************************/
-.thumb_func
-faultRoutine:
-    MOV	R1,#3
-	B	excEnterCommon
-.thumb_func
-memFaultRoutine:
-    MOV	R1,#4
-	B	excEnterCommon
-.thumb_func
-busFaultRoutine:
-    MOV	R1,#5
-	B	excEnterCommon
-.thumb_func
-usageFaultRoutine:
-    MOV	R1,#6
-
+; ****************************************************************************/
 .thumb_func
 excEnterCommon:
     CPSID   F				/* Disable 异常中断 */
+    MRS     R1, IPSR		/* 将异常号存入R1 */
     TST     LR, #0x4		/* 测试EXC_RETURN的bit2 */
     ITE     EQ				/* 如果为0,下面包括2条指令 (P76) */
     MRSEQ   R0, MSP			/* 如果EXC_RETURN的bit2==0 则使用MSP */

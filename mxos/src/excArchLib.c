@@ -9,7 +9,7 @@
  */
 /*-----------------------------------------------------------------------------
  Section: Includes
- -----------------------------------------------------------------------------*/
+ ----------------------------------------------------------------------------*/
 #include <types.h>
 #include <string.h>
 #include <stdio.h>
@@ -19,7 +19,7 @@
 #include <time.h>
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
- -----------------------------------------------------------------------------*/
+ ----------------------------------------------------------------------------*/
 
 typedef struct
 {
@@ -41,7 +41,7 @@ typedef struct
 
 /*-----------------------------------------------------------------------------
  Section: Macro Definitions
- -----------------------------------------------------------------------------*/
+ ----------------------------------------------------------------------------*/
 #define HARD_FALUT_FSR  0xE000ED2C
 #define MEM_FALUT_FSR   0xE000ED28
 #define BUS_FALUT_FSR   0xE000ED29
@@ -63,7 +63,7 @@ extern void
 bsp_reboot();
 /*-----------------------------------------------------------------------------
  Section: Local Variables
- -----------------------------------------------------------------------------*/
+ ----------------------------------------------------------------------------*/
 static EXC_MSG_TBL excMsgTbl[] =
     {
         { 1, "RESET" },
@@ -75,15 +75,15 @@ static EXC_MSG_TBL excMsgTbl[] =
         { 0, NULL } };
 /*-----------------------------------------------------------------------------
  Section: Local Function Prototypes
- -----------------------------------------------------------------------------*/
+ ----------------------------------------------------------------------------*/
 /* NONE */
 
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
- -----------------------------------------------------------------------------*/
+ ----------------------------------------------------------------------------*/
 
 /**
- *******************************************************************************
+ ******************************************************************************
  * @brief     printf exception information to shell.
  * @param[in]  None
  * @param[out] None
@@ -91,7 +91,7 @@ static EXC_MSG_TBL excMsgTbl[] =
  * @details
  *
  * @note
- *******************************************************************************
+ ******************************************************************************
  */
 static void
 excInfoShow()
@@ -105,33 +105,33 @@ excInfoShow()
             return;
     }
     if (excMsgTbl[i].excMsg != NULL)
-        printf("EXCEPTION OCCURRED: %s\n\r", excMsgTbl[i].excMsg);
+        logmsg("EXCEPTION OCCURRED: %s\n\r", excMsgTbl[i].excMsg);
     else
     {
-        printf("\n\rTrap to uninitialized vector no %d.\n\r", excInfo.vecAddr);
+        logmsg("\n\rTrap to uninitialized vector no %d.\n\r", excInfo.vecAddr);
         return;
     }
 
-    printf("exception fault state regs value: 0x%ux \n\r", excInfo.fsr);
+    logmsg("exception fault state regs value: 0x%ux \n\r", excInfo.fsr);
     if (excInfo.faddr != 0)
-        printf("exception occur address: 0x%08x \n\r", excInfo.faddr);
+        logmsg("exception occur address: 0x%08x \n\r", excInfo.faddr);
 
-    printf("exception occur regs : \r\n");
-    printf("    r0  =%08x    r1  =%08x    r2  =%08x    r3  =%08x \n\r",
+    logmsg("exception occur regs : \r\n");
+    logmsg("    r0  =%08x    r1  =%08x    r2  =%08x    r3  =%08x \n\r",
             excInfo.regs[8], excInfo.regs[9], excInfo.regs[10],
             excInfo.regs[11]);
-    printf("    r4  =%08x    r5  =%08x    r6  =%08x    r7  =%08x \n\r",
+    logmsg("    r4  =%08x    r5  =%08x    r6  =%08x    r7  =%08x \n\r",
             excInfo.regs[0], excInfo.regs[1], excInfo.regs[2], excInfo.regs[3]);
-    printf("    r8  =%08x    r9  =%08x    r10 =%08x    r11 =%08x \n\r",
+    logmsg("    r8  =%08x    r9  =%08x    r10 =%08x    r11 =%08x \n\r",
             excInfo.regs[4], excInfo.regs[5], excInfo.regs[6], excInfo.regs[7]);
-    printf("    sp  =%08x    lr  =%08x    pc  =%08x    xpsr=%08x \n\r",
+    logmsg("    sp  =%08x    lr  =%08x    pc  =%08x    xpsr=%08x \n\r",
             excInfo.sp, excInfo.regs[13], excInfo.regs[14], excInfo.regs[15]);
 
-    printf("exception occur in task: 0x%x \n\r", (uint32_t) excInfo.taskid);
-    printf("exception task name: %-16s \n\r", taskName(excInfo.taskid));
+    logmsg("exception occur in task: 0x%x \n\r", (uint32_t) excInfo.taskid);
+    logmsg("exception task name: %-16s \n\r", taskName(excInfo.taskid));
 
     struct tm daytime = *localtime(&excInfo.time);
-    printf("exception occur time: %04d-%02d-%02d %02d:%02d:%02d\r\n",
+    logmsg("exception occur time: %04d-%02d-%02d %02d:%02d:%02d\r\n",
             daytime.tm_year + 1900, daytime.tm_mon + 1, daytime.tm_mday,
             daytime.tm_hour, daytime.tm_min, daytime.tm_sec);
 
@@ -155,16 +155,12 @@ excInfoSave()
     // 打印信息
     excInfoShow(excInfo);
 
-    //TODO: 需要判断FTL是否已经启动，另外该代码属于业务层，在此处加一个函数指针，具体数据存储放在业务层实现
-//    if (_func_excTaskHook != NULL) /* panic hook? */
-//        (*_func_excTaskHook)(&excInfo);
-
     excInfo.valid = 0;
     excInfo.faddr = 0;
 }
 
 /**
- *******************************************************************************
+ ******************************************************************************
  * @brief    interrupt level handling of exceptions
  * @param[in]  pRegs
  * @param[in] excNo
@@ -173,7 +169,7 @@ excInfoSave()
  *    This routine handles exception traps.  It is never to be called except
  *  from the special assembly language interrupt stub routine.
  * @note
- *******************************************************************************
+ ******************************************************************************
  */
 void
 excExcHandle(void* pRegs, uint32_t excNo)
