@@ -18,7 +18,7 @@
 #define MAX_INT_COUNT         (59u)    /**< 定义中断数量 */
 #define CPU_CLOCK_HZ    (50000000u)    /**< 定义CPU的主频50MHZ */
 
-#define USE_TTY                (0u)    /**< 使用TTY设备 */
+#define USE_TTY                (1u)    /**< 使用TTY设备 */
 #define ROOT_STACK_SIZE      (512u)    /**< 定义root task堆栈大小 */
 #define SHELL_STACK_SIZE    (1024u)    /**< shell任务堆栈 */
 #define DMN_STACK_SIZE       (256u)    /**< DMN任务堆栈 */

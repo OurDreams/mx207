@@ -35,7 +35,9 @@
  ----------------------------------------------------------------------------*/
 extern char heap_low; /* Defined by the linker */
 extern char cstack_top;
+#if (USE_TTY == 1u)
 extern int32_t _the_console_fd;
+#endif
 
 /*-----------------------------------------------------------------------------
  Section: Global Function Prototypes
@@ -84,19 +86,19 @@ rootTask(void *p_arg)
     }
 #endif
 
-    /* 2. 初始化log message模块 */
-#if (LOGMSG_STACK_SIZE != 0u)
-    loglib_init(LOGMSG_STACK_SIZE);
-#endif
-
-    /* 3. 初始化异常模块 */
+    /* 2. 初始化异常模块 */
 #if (EXC_STACK_SIZE != 0u)
     excInit(EXC_STACK_SIZE);
 #endif
 
-    /* 4. 初始化守护任务 */
+    /* 3. 初始化守护任务 */
 #if (DMN_STACK_SIZE != 0u)
     dmn_init(DMN_STACK_SIZE);
+#endif
+
+    /* 4. 初始化log message模块 */
+#if (LOGMSG_STACK_SIZE != 0u)
+    loglib_init(LOGMSG_STACK_SIZE);
 #endif
 
     /* 5. 初始化sell模块 */

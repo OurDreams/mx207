@@ -1,0 +1,1 @@
+arm-none-eabi-gdb -x ctrl.gdb ../MX207/mxapp.elf
