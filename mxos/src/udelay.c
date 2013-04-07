@@ -44,7 +44,7 @@
  ----------------------------------------------------------------------------*/
 /* NONE */
 extern uint32_t
-timer_get(void);
+bsp_timer_get(void);
 
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
@@ -64,8 +64,8 @@ timer_get(void);
 void
 _usleep(uint32_t us)
 {
-    uint32_t time_out = us + timer_get();
-    while (timer_get() < time_out)
+    uint32_t time_out = us + bsp_timer_get();
+    while (bsp_timer_get() < time_out)
     {
         ;   /* Ã¦µÈ */
     }
