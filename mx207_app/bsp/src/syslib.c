@@ -44,7 +44,7 @@
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
 void
-sysHwInit0(void)
+mcuClkSetup(void)
 {
     SystemInit();
     //
@@ -83,7 +83,7 @@ sysHwInit0(void)
 
 
 void
-sysHwInit(void)
+bspHwInit(void)
 {
     intLock();
 
@@ -167,4 +167,19 @@ bsp_timer_get(void)
     return starttime_ms;
 }
 
+#define MAX_INT_COUNT        (103u)    /**< 定义中断数量 */
+#define CPU_CLOCK_HZ   (120000000u)    /**< 定义CPU的主频120MHZ */
+/* 5. 获取MCU主频 */
+uint32_t
+bsp_get_mcu_clk(void)
+{
+    return CPU_CLOCK_HZ;
+}
+
+/* 6. 获取MCU中断数量 */
+uint32_t
+bsp_get_max_int_count(void)
+{
+    return MAX_INT_COUNT;
+}
 /*----------------------------syslib.c--------------------------------*/

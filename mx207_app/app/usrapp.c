@@ -57,7 +57,7 @@ void
 usrapp_init(void)
 {
 	taskSpawn((const signed char*)"led", 3, LEDSTACKSIZE, (OSFUNCPTR)ledTask,0);
-	taskSpawn((const signed char*)"key", 4, KEYSTACKSIZE, (OSFUNCPTR)keyTask,0);
+	taskSpawn((const signed char*)"key", 3, KEYSTACKSIZE, (OSFUNCPTR)keyTask,0);
 
     return;
 }

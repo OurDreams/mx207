@@ -7,8 +7,8 @@
  *
  ******************************************************************************
  */
-#ifndef OSLIB_H_
-#define OSLIB_H_ 
+#ifndef __OSLIB_H__
+#define __OSLIB_H__
 
 /*-----------------------------------------------------------------------------
  Section: Includes
@@ -48,9 +48,6 @@ os_print_banner(void);
 
 extern status_t
 os_resource_init(void);
-
-extern uint32_t
-os_ticks_per_second(void);
 
 extern void
 hex2a(const char_t * pbyte,
@@ -181,5 +178,5 @@ extern time_t
 month_inc(time_t date,
         int32_t i);
 
-#endif /* OSLIB_H_ */
+#endif /* __OSLIB_H__ */
 /*-----------------------------End of osLib.h--------------------------------*/

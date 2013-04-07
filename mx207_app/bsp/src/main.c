@@ -50,8 +50,8 @@ extern char cstack_top;
 extern int32_t _the_console_fd;
 
 
-extern void sysHwInit0(void);
-extern void sysHwInit(void);
+extern void mcuClkSetup(void);
+extern void bspHwInit(void);
 extern void vTaskStartScheduler( void );
 extern void os_resource_init(void);
 extern void os_print_banner(void);
@@ -93,20 +93,24 @@ rootTask(void *p_arg)
 
 int main (void)
 {
-    /* 初始化系统主频 */
-    sysHwInit0();
+    /* 1. 初始化系统主频 */
+    mcuClkSetup();
 
-    /* 初始化系统中断向量表 */
-    intLibInit();
-
-    /*挂TTY 等 中断起相关任务*/
-    sysHwInit();
-
-    if (OK != mem_init((unsigned long)&heap_low, (unsigned long)(&cstack_top - 0x200)))
+    /* 2. 初始化OS内存管理单元 */
+    if (OK != memlib_init((uint32_t)&heap_low, (uint32_t)(&cstack_top - 0x200)))
     {
-        puts("mem_init err!\n");
+        puts("mem_init err!");
         while(1);
     }
+
+    /* 3. 初始化OS中断向量表 */
+    if (OK != intLibInit())
+    {
+        puts("intLibInit err!");
+        while(1);
+    }
+    /* 4. 执行OS启动之前的初始化 */
+    bspHwInit();
 
     /*起根任务，做时钟节拍初始化*/
     (void)taskSpawn((const signed char*)"root", 1, ROOTSTACKSIZE, (OSFUNCPTR)rootTask,0);

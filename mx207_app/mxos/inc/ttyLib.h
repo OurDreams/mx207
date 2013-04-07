@@ -3,7 +3,6 @@
  * @file       ttyLib.h
  * @brief      API include file of ttyLib.h.
  * @details   通用tty设备驱动.
- *
  * @copyright
  *
  ******************************************************************************

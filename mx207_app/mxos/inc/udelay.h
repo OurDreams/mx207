@@ -3,8 +3,8 @@
  * @file      udelay.c
  * @brief     本文实现微妙延时函数.
  * @details   This file including all API functions's implement of udelay.c.
- *
  * @copyright
+ *
  ******************************************************************************
  */
 #ifndef __UDELAY_H__
@@ -34,7 +34,7 @@
  Section: Function Prototypes
  ----------------------------------------------------------------------------*/
 extern void
-_usleep(int32_t us);
+_usleep(uint32_t us);
 
 
 #endif /* __UDELAY_H__ */

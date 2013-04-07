@@ -14,6 +14,7 @@
 #include <gpio.h>
 #include <key.h>
 #include <types.h>
+#include <bsptask.h>
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
  ----------------------------------------------------------------------------*/
@@ -45,6 +46,7 @@
 
 status_t devices_init(void)
 {
+	bsp_task_init();
 	gpio_init();
 	key_init();
 	return OK;

@@ -19,6 +19,9 @@
 #include <intLib.h>
 #include <clkLib.h>
 #include <time.h>
+#include <bsptask.h>
+#include <udelay.h>
+#include <taskLib.h>
 
 #ifdef Dprintf
 #undef Dprintf
@@ -27,7 +30,8 @@
 /*-----------------------------------------------------------------------------
  Section: Type Definitions
  ----------------------------------------------------------------------------*/
-#define KEY_BUF_LEN 8u
+#define KEY_BUF_LEN          8u
+
 /*-----------------------------------------------------------------------------
  Section: Constant Definitions
  ----------------------------------------------------------------------------*/
@@ -41,7 +45,7 @@
  ----------------------------------------------------------------------------*/
 static struct ring_buf key_rbuf;
 static uint8_t key_buf[KEY_BUF_LEN] = {0};
-static uint8_t key_val = 0;
+//static uint8_t key_val = 0;
 
 /*-----------------------------------------------------------------------------
  Section: Global Function Prototypes
@@ -54,7 +58,7 @@ static uint8_t key_val = 0;
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
  ----------------------------------------------------------------------------*/
-
+#if 0
 /**
  ******************************************************************************
  * @brief      按键中断服务程序
@@ -210,6 +214,150 @@ const static fileopt_t key_opt =
 status_t key_init(void)
 {
 	if (OK != dev_create("key", &key_opt, MKDEV(1, 1), NULL))
+    {
+	    printf("dev_create err\n");
+	    return ERROR;
+    }
+	return OK;
+}
+#endif
+static void key_scan(void)
+{
+    uint8_t key_val;
+	key_val = GPIO_ReadInputData(GPIOE);
+	key_val = key_val & 0x3c;
+	if(key_val != 0x3c)
+	{
+	    taskDelay(1);//10ms
+	    key_val = GPIO_ReadInputData(GPIOE);
+	    key_val = key_val & 0x3c;
+		if(key_val != 0x3c)
+		{
+		    ring_write(&key_rbuf, &key_val, 1);
+		    while(key_val != 0x3c)
+		    {
+		        key_val = GPIO_ReadInputData(GPIOE);
+		        key_val = key_val & 0x3c;
+		        taskDelay(1);//10ms
+		    }
+		}
+	}
+}
+/**
+ ******************************************************************************
+ * @brief      设备初始化，初始化ring buffer ，注册到bsp task里边
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+static status_t dev_key_init(struct device* dev)
+{
+	BSP_ID key_id;
+	ring_init(&key_rbuf, key_buf, KEY_BUF_LEN);
+	key_id = func_register((OSFUNCPTR)key_scan);
+	if(key_id == NULL)
+	{
+		return ERROR;
+	}
+	return OK;
+}
+
+/**
+ ******************************************************************************
+ * @brief      打开设备
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+static status_t  dev_key_open(struct device* dev)
+{
+	Dprintf("key open\n");
+	return OK;
+}
+/**
+ ******************************************************************************
+ * @brief      读按键
+ * @param[in]  device* dev : 设备描述
+ * @param[in]  *buffer     : 写缓存地址
+ * @param[in]  pinno       : 读取的引脚
+
+ * @retval     key_val
+ * @retval     ERROR       : 失败
+ ******************************************************************************
+ */
+static size_t dev_key_read (struct device* dev, int32_t pos, void *buffer, size_t pinno)
+{
+	uint8_t rlen;
+	uint8_t key_val;
+	rlen = ring_read(&key_rbuf, &key_val, 1);
+	if(rlen == 0)
+	{
+		return ERROR;
+	}
+	switch(key_val)
+	{
+	case 0x38:
+		key_val = 1;
+		break;
+	case 0x34:
+		key_val = 2;
+		break;
+	case 0x2c:
+		key_val = 3;
+		break;
+	case 0x1c:
+		key_val = 4;
+		break;
+	default:
+		key_val = 0;
+		break;
+	}
+	return key_val;
+}
+/**
+ ******************************************************************************
+ * @brief      设备释放
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+static status_t dev_key_release(struct device* dev)
+{
+	printf("key release\n");
+	return OK;
+}
+/**
+ ******************************************************************************
+ * @brief      关闭设备
+ * @param[in]  None
+ * @param[out] None
+ *
+ * @retval     None
+ ******************************************************************************
+ */
+static status_t  dev_key_close(struct device* dev)
+{
+	printf("key close\n");
+	return OK;
+}
+
+const static fileopt_t key_opt =
+{
+		.init = dev_key_init,
+		.release = dev_key_release,
+		.open = dev_key_open,
+		.read = dev_key_read,
+		.close = dev_key_close,
+};
+status_t key_init(void)
+{
+	if (OK != dev_create("keys", &key_opt, MKDEV(2, 0), NULL))
     {
 	    printf("dev_create err\n");
 	    return ERROR;

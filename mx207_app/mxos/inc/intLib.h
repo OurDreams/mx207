@@ -3,6 +3,7 @@
  * @file       intLib.h
  * @brief      API include file of intLib.h.
  * @details    This file including all API functions's declare of intLib.h.
+ * @copyright
  *
  ******************************************************************************
  */
@@ -51,7 +52,7 @@ intDisable(uint32_t irq_num);
 bool_e
 intContext (void);
 
-extern void
+extern status_t
 intLibInit(void);
 
 extern void

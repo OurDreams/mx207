@@ -55,8 +55,8 @@ void keyTask(void *p_arg)
 	int8_t key_val = 0;
 	uint32_t ticks_per_second;
 
-	ticks_per_second = os_ticks_per_second();
-	keyfd = dev_open("key", 0);
+	ticks_per_second = osClkRateGet();
+	keyfd = dev_open("keys", 0);
 	if(-1 == keyfd)
 	{
 		printf("open key error\n");
@@ -71,6 +71,8 @@ void keyTask(void *p_arg)
 		}
 		taskDelay(ticks_per_second);
 	}
+    dev_close(keyfd);
+    dev_release("keys");
 
 }
 /*----------------------------key_test.c-----------------------------------------*/

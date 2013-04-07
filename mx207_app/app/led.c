@@ -58,7 +58,7 @@ void ledTask(void *p_arg)
 	int32_t fd = -1;
 	uint32_t ticks_per_second;
 
-	ticks_per_second = os_ticks_per_second();
+	ticks_per_second = osClkRateGet();
 	DMN_ID dmnid = dmn_register();
 	fd = dev_open("gpio", 0);
 	if(-1 == fd)

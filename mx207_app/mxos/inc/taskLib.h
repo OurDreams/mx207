@@ -3,6 +3,7 @@
  * @file       taskLib.h
  * @brief      API include file of taskLib.h.
  * @details    This file including all API functions's declare of taskLib.h.
+ * @copyright
  *
  ******************************************************************************
  */
@@ -67,7 +68,7 @@ extern uint32_t
 tickGet(void);
 
 extern uint32_t
-sysClkRateGet(void);
+osClkRateGet(void);
 
 extern SEM_ID
 semBCreate(uint32_t cnt);

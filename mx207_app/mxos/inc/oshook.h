@@ -3,8 +3,8 @@
  * @file      oshook.h
  * @brief     os移植接口库.
  * @details   This file including all API functions's  implement of mxhook.c.
- *
  * @copyright
+ *
  ******************************************************************************
  */
 #ifndef __OSHOOK_H__
@@ -63,6 +63,11 @@ extern void bsp_timer_start(void);
 /* 4.2 获取计数器值 */
 extern uint32_t bsp_timer_get(void);
 
+/* 5. 获取MCU主频 */
+extern uint32_t bsp_get_mcu_clk(void);
+
+/* 6. 获取MCU中断数量 */
+extern uint32_t bsp_get_max_int_count(void);
 
 #endif /* __OSHOOK_H__ */
 /*-----------------------------End of oshook.h-------------------------------*/
