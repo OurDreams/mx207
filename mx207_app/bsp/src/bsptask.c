@@ -71,17 +71,17 @@ bsp_task_loop(void)
     func_t *pfunc = NULL;
 	while(1)
 	{
-		_usleep(100000);//100ms
-		semTake(the_bsp_sem, WAIT_FOREVER);
-		LIST_FOR_EACH(piter, &the_registed_list)
-		{
-			pfunc = MemToObj(piter, func_t, nlist);
-			if(pfunc->pfunc != NULL)
-			{
-				pfunc->pfunc();
-			}
-		}
-		semGive(the_bsp_sem);
+        taskDelay(1);
+        semTake(the_bsp_sem, WAIT_FOREVER);
+        LIST_FOR_EACH(piter, &the_registed_list)
+	    {
+            pfunc = MemToObj(piter, func_t, nlist);
+            if(pfunc->pfunc != NULL)
+            {
+                pfunc->pfunc();
+            }
+	    }
+        semGive(the_bsp_sem);
 	}
 }
 /**
@@ -95,40 +95,57 @@ bsp_task_loop(void)
  */
 status_t bsp_task_init(void)
 {
-	the_bsp_sem = semBCreate(1);
-	if(the_bsp_sem == NULL)
-	{
-		printf("Create bsp task semaphore error\n");
-		return ERROR;
-	}
-	InitListHead(&the_registed_list);
-	taskSpawn((const signed char * const )"bsp_task",
+    the_bsp_sem = semBCreate(1);
+    if(the_bsp_sem == NULL)
+    {
+        printf("Create bsp task semaphore error\n");
+        return ERROR;
+    }
+    InitListHead(&the_registed_list);
+    taskSpawn((const signed char * const )"bsp_task",
 	            TASK_PRIORITY_BSP, BSPSTACKSIZE, (VOIDFUNCPTR)bsp_task_loop, 0u);
-	return OK;
+    return OK;
 }
-
+/**
+ ******************************************************************************
+ * @brief      函数注册到 bsp task
+ * @param[in]  OSFUNCPTR func ：需要注册到bsp task的函数
+ * @param[out] None
+ *
+ * @retval     BSP_ID ：分配给函数的一个id
+ ******************************************************************************
+ */
 BSP_ID func_register(OSFUNCPTR func)
 {
-	func_t *pnew = malloc(sizeof(func_t));
-	if(pnew == NULL)
-	{
-		return NULL;
-	}
-	pnew->pfunc = func;
+    func_t *pnew = malloc(sizeof(func_t));
+    if(pnew == NULL)
+    {
+        return NULL;
+    }
+    pnew->pfunc = func;
     semTake(the_bsp_sem, WAIT_FOREVER);
     ListAddTail(&pnew->nlist, &the_registed_list);
     semGive(the_bsp_sem);
 
     return (BSP_ID)pnew;
 }
+/**
+ ******************************************************************************
+ * @brief      函数从 bsp task 中注销
+ * @param[in]  BSP_ID func_id ：注册时返回的id
+ * @param[out] None
+ *
+ * @retval     OK
+ ******************************************************************************
+ */
 status_t func_unregister(BSP_ID func_id)
 {
-	func_t *pfunc = (func_t *)func_id;
-	semTake(the_bsp_sem, WAIT_FOREVER);
+    func_t *pfunc = (func_t *)func_id;
+    semTake(the_bsp_sem, WAIT_FOREVER);
     ListDelNode(&pfunc->nlist);
     semGive(the_bsp_sem);
     free(pfunc);
-	return OK;
+    return OK;
 }
 /*---------------------------- bsptask.c --------------------------------*/
 

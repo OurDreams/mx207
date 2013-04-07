@@ -51,7 +51,7 @@
  ----------------------------------------------------------------------------*/
 void keyTask(void *p_arg)
 {
-	int32_t keyfd = -1;
+    int32_t keyfd = -1;
 	int8_t key_val = 0;
 	uint32_t ticks_per_second;
 

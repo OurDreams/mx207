@@ -254,14 +254,14 @@ static void key_scan(void)
  */
 static status_t dev_key_init(struct device* dev)
 {
-	BSP_ID key_id;
-	ring_init(&key_rbuf, key_buf, KEY_BUF_LEN);
-	key_id = func_register((OSFUNCPTR)key_scan);
-	if(key_id == NULL)
-	{
-		return ERROR;
-	}
-	return OK;
+    BSP_ID key_id;
+    ring_init(&key_rbuf, key_buf, KEY_BUF_LEN);
+    key_id = func_register((OSFUNCPTR)key_scan);
+    if(key_id == NULL)
+    {
+        return ERROR;
+    }
+    return OK;
 }
 
 /**
@@ -275,8 +275,8 @@ static status_t dev_key_init(struct device* dev)
  */
 static status_t  dev_key_open(struct device* dev)
 {
-	Dprintf("key open\n");
-	return OK;
+    Dprintf("key open\n");
+    return OK;
 }
 /**
  ******************************************************************************
@@ -291,32 +291,32 @@ static status_t  dev_key_open(struct device* dev)
  */
 static size_t dev_key_read (struct device* dev, int32_t pos, void *buffer, size_t pinno)
 {
-	uint8_t rlen;
-	uint8_t key_val;
-	rlen = ring_read(&key_rbuf, &key_val, 1);
-	if(rlen == 0)
-	{
-		return ERROR;
-	}
-	switch(key_val)
-	{
-	case 0x38:
-		key_val = 1;
-		break;
-	case 0x34:
+    uint8_t rlen;
+    uint8_t key_val;
+    rlen = ring_read(&key_rbuf, &key_val, 1);
+    if(rlen == 0)
+    {
+        return ERROR;
+    }
+    switch(key_val)
+    {
+    case 0x38:
+        key_val = 1;
+        break;
+    case 0x34:
 		key_val = 2;
 		break;
-	case 0x2c:
-		key_val = 3;
-		break;
+		case 0x2c:
+	    key_val = 3;
+	    break;
 	case 0x1c:
-		key_val = 4;
-		break;
+	    key_val = 4;
+	    break;
 	default:
-		key_val = 0;
-		break;
-	}
-	return key_val;
+	    key_val = 0;
+	    break;
+    }
+    return key_val;
 }
 /**
  ******************************************************************************
@@ -329,8 +329,8 @@ static size_t dev_key_read (struct device* dev, int32_t pos, void *buffer, size_
  */
 static status_t dev_key_release(struct device* dev)
 {
-	printf("key release\n");
-	return OK;
+    printf("key release\n");
+    return OK;
 }
 /**
  ******************************************************************************
@@ -343,8 +343,8 @@ static status_t dev_key_release(struct device* dev)
  */
 static status_t  dev_key_close(struct device* dev)
 {
-	printf("key close\n");
-	return OK;
+    printf("key close\n");
+    return OK;
 }
 
 const static fileopt_t key_opt =
@@ -357,11 +357,11 @@ const static fileopt_t key_opt =
 };
 status_t key_init(void)
 {
-	if (OK != dev_create("keys", &key_opt, MKDEV(2, 0), NULL))
+    if (OK != dev_create("keys", &key_opt, MKDEV(2, 0), NULL))
     {
 	    printf("dev_create err\n");
 	    return ERROR;
     }
-	return OK;
+    return OK;
 }
 /*----------------------------key.c--------------------------------*/
