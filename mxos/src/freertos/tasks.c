@@ -2810,28 +2810,13 @@ vTaskGetTaskName(xTaskHandle *pxTask)
  *      TODO:是否需要立即重启？
  ******************************************************************************
  */
-void
-vStackOverFlowInfoHandle(int arg1,int arg2)
-{
-    int taskId = arg1;
-    signed char *pcTaskName = (signed char *)arg2;
-    logmsg("\n\n vStackOverFlowInfoHandle: ERROR! TASK %08x STACK OVERFLOW!\n",*((uint32_t*)arg2));
-
-    logmsg("\n\n vStackOverFlowInfoHandle: ERROR! TASK %x STACK OVERFLOW!\n",taskId);
-
-
-    extern VOIDFUNCPTR _func_evtLogOverStackHook;
-    if (_func_evtLogOverStackHook != NULL)
-        _func_evtLogOverStackHook(taskId,pcTaskName);
-    vTaskSuspend((xTaskHandle)taskId);
-}
 void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName )
 {
-    extern FUNCPTR     _func_excJobAdd;
-    if (_func_excJobAdd != NULL)
-    {
-        _func_excJobAdd(vStackOverFlowInfoHandle,(int)pxTask,(int)pcTaskName,0,0,0,0);
-    }
+    logmsg("\n\n vStackOverFlowInfoHandle: ERROR! TASK %08x STACK OVERFLOW!\n", pcTaskName);
+    extern VOIDFUNCPTR _func_evtLogOverStackHook;
+    if (_func_evtLogOverStackHook != NULL)
+        _func_evtLogOverStackHook(pxTask,pcTaskName);
+    vTaskSuspend((xTaskHandle)pxTask);
 }
 
 

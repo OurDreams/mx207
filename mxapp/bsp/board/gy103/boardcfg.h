@@ -19,7 +19,6 @@
 #define ROOT_STACK_SIZE     (1000u)    /**< 定义root task堆栈大小 */
 #define SHELL_STACK_SIZE    (2048u)    /**< shell任务堆栈 */
 #define DMN_STACK_SIZE       (512u)    /**< DMN任务堆栈 */
-#define EXC_STACK_SIZE       (512u)    /**< 异常中断处理任务的堆栈大小 */
 #define LOGMSG_STACK_SIZE   (1024u)    /**< logMsg任务的堆栈大小 */
 
 #endif /* __BOARDCFG_H__ */

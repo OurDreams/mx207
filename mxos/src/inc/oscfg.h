@@ -35,10 +35,6 @@ Section: Macro Definitions
 #define TASK_STK_SIZE_DMN         (512u)    /**< DMN任务堆栈 */
 #define DMN_MAX_CHECK_TIME          (6u)    /**< 默认喂狗超时时间（6*10秒） */
 
-/* 异常任务 */
-#define TASK_PRIORITY_EXC           (0u)    /**< 异常中断处理任务的优先 */
-#define TASK_STK_SIZE_EXC         (512u)    /**< 异常中断处理任务的堆栈大小 */
-
 /* logMsg任务配置 */
 #define INCLUDE_LOGMSG_SUPPORT      (1u)    /**< 支持logMsg */
 #define MAX_MSGS                   (10u)    /**< 消息队列中的最大消息个数 */

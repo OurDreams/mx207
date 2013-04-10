@@ -45,7 +45,6 @@ extern int32_t _the_console_fd;
 extern void vTaskStartScheduler(void);
 extern void os_resource_init(void);
 extern void os_print_banner(void);
-extern status_t excInit(int32_t);
 
 extern uint32_t bsp_get_mcu_clk(void);
 extern void usrapp_init(void);
@@ -86,36 +85,31 @@ rootTask(void *p_arg)
     }
 #endif
 
-    /* 2. 初始化异常模块 */
-#if (EXC_STACK_SIZE != 0u)
-    excInit(EXC_STACK_SIZE);
-#endif
-
-    /* 3. 初始化守护任务 */
+    /* 2. 初始化守护任务 */
 #if (DMN_STACK_SIZE != 0u)
     dmn_init(DMN_STACK_SIZE);
 #endif
 
-    /* 4. 初始化log message模块 */
+    /* 3. 初始化log message模块 */
 #if (LOGMSG_STACK_SIZE != 0u)
     loglib_init(LOGMSG_STACK_SIZE);
 #endif
 
-    /* 5. 初始化sell模块 */
+    /* 4. 初始化sell模块 */
 #if (SHELL_STACK_SIZE != 0u)
     shell_init(SHELL_STACK_SIZE);
 #endif
 
-    /* 6. OS其他资源模块初始化 */
+    /* 5. OS其他资源模块初始化 */
     os_resource_init();
 
-    /* 7. 输出OS banner */
+    /* 6. 输出OS banner */
     os_print_banner();
     printf("  MCU is running at %d.%d MHz\n", bsp_get_mcu_clk() / 1000000,
             (bsp_get_mcu_clk() % 1000000) / 100000);
     puts("...."BOARD_BANNER" APP START...");
 
-    /* 8. 进入应用程序 */
+    /* 7. 进入应用程序 */
     usrapp_init();
 }
 

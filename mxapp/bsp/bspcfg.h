@@ -57,10 +57,6 @@
 # error "Please define 'DMN_STACK_SIZE' in 'boardcfg.h'!"
 #endif
 
-#ifndef EXC_STACK_SIZE
-# error "Please define 'EXC_STACK_SIZE' in 'boardcfg.h'!"
-#endif
-
 #ifndef LOGMSG_STACK_SIZE
 # error "Please define 'LOGMSG_STACK_SIZE' in 'boardcfg.h'!"
 #endif
