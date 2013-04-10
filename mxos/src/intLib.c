@@ -261,6 +261,7 @@ intLibInit(void)
         SCB->SHCSR |= (SCB_SHCSR_BUSFAULTENA_Msk
                 | SCB_SHCSR_USGFAULTENA_Msk
                 | SCB_SHCSR_MEMFAULTENA_Msk);
+        SCB->CCR |= SCB_CCR_DIV_0_TRP_Msk;  /* 使能除数为0异常 */
     }
     return OK;
 }

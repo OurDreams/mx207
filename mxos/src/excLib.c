@@ -57,7 +57,6 @@ excEnterCommon(void)
         ".extern  pxCurrentTCB          \n"
         ".extern  excExcHandle          \n"
         ".extern  vTaskSwitchContext    \n"
-
         "   CPSID   F                   \n"
         "   CPSID   F                   \n" /* Disable 异常中断 */
         "   MRS     R1, IPSR            \n" /* 将异常号存入R1 */
@@ -65,25 +64,20 @@ excEnterCommon(void)
         "   ITE     EQ                  \n" /* 如果为0,下面包括2条指令 (P76) */
         "   MRSEQ   R0, MSP             \n" /* 如果EXC_RETURN的bit2==0 则使用MSP */
         "   MRSNE   R0, PSP             \n" /* 否则使用PSP */
-
         "   SUBS    R0, R0, #0x20       \n"
         "   STM     R0, {R4-R11}        \n" /* 保存R4-R11 */
-
         "   BL      excExcHandle        \n"
-
         "   BL      vTaskSwitchContext  \n"
-
         "   LDR     R2, =pxCurrentTCB   \n"
-        "   LDR     R3, [R2]\n"
+        "   LDR     R3, [R2]            \n"
         "   LDR     R0, [R3]            \n" /* R0 is new process SP; SP = OSTCBHighRdy->OSTCBStkPtr;*/
         "   LDM     R0, {R4-R11}        \n" /* Restore r4-11 from new process stack*/
-        "   ADDS    R0, R0, #0x20\n"
+        "   ADDS    R0, R0, #0x20       \n"
         "   MSR     PSP, R0             \n" /* Load PSP with new process SP*/
-         /*;ORR     LR, LR, #0x04; Ensure exception return uses process stack*/
         "   LDR     LR, =0xFFFFFFFD     \n"
         "   CPSIE   F                   \n"
         "   BX      LR                  \n" /* Exception return will restore remaining context*/
-                );
+        );
 }
 
 /**
@@ -108,6 +102,7 @@ excExcHandle(void* pRegs, uint32_t excNo)
     uint32_t sp = (uint32_t)pRegs;
 
     intCnt++;
+    printf("\r\n");
     switch (excNo)
     {
         case 3:
