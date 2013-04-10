@@ -281,6 +281,7 @@ extern void intLock(void) {
            "CPSID   I\n"
            "CPSID   I\n"
           );
+     intCnt++;
 }
 
 /**
@@ -297,6 +298,7 @@ extern void intUnlock(void) {
            "CPSIE   I\n"
            "BX      LR\n"
           );
+     intCnt--;
 }
 /**
 * @}

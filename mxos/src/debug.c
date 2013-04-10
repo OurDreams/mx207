@@ -52,9 +52,6 @@ Section: Function Definitions
  * @param[out] None
  * @retval     None
  *
- * @details
- *
- * @note
  ******************************************************************************
  */
 void
@@ -66,20 +63,18 @@ __assert_func(const char *pfile, int line, const char *pfun, const char *pex)
     while(1);
 }
 #endif
+
 /**
  ******************************************************************************
  * @brief
  * @param[in]  None
  * @param[out] None
+ *
  * @retval     None
- *
- * @details
- *
- * @note
  ******************************************************************************
  */
 extern void
-printbuffer(char_t* format,
+printbuffer(const char_t* format,
             const uint8_t* buffer,
             int32_t len)
 {
@@ -90,4 +85,5 @@ printbuffer(char_t* format,
     }
     (void)printf("\r\n");
 }
-/*----------------------------debug.c--------------------------------*/
+
+/*--------------------------------debug.c------------------------------------*/

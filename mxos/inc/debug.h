@@ -50,7 +50,7 @@ Section: Macro Definitions
 extern void
 __assert_func(const char *, int, const char *, const char *);
 extern void
-printbuffer(char_t* format,
+printbuffer(const char_t* format,
             const uint8_t* buffer,
             int32_t len);
 
