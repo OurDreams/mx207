@@ -55,7 +55,7 @@ typedef struct fileopt
 typedef struct device
 {
     struct ListNode list;           /**< 通用链表节点 */
-    struct fileopt fileopt;         /**< 设备操作方法 */
+    const struct fileopt *pfileopt; /**< 设备操作方法 */
     char_t name[MAX_DEVICE_NAME];   /**< 设备名 */
     SEM_ID lock;                    /**< 设备操作锁 */
     int32_t serial;                 /**< 设备的序列号 */

@@ -226,12 +226,12 @@ dev_create(const char_t* pname, const fileopt_t* pfileopt, int32_t serial, void*
         return ERROR;
     }
     strncpy(new->name, pname, sizeof(new->name));
-    memcpy(&new->fileopt, pfileopt, sizeof(fileopt_t));
+    new->pfileopt = pfileopt;
     new->serial = serial;
     new->param = pexparam;
-    if (new->fileopt.init != NULL)
+    if (new->pfileopt->init != NULL)
     {
-        if (new->fileopt.init(new) != OK)
+        if (new->pfileopt->init(new) != OK)
         {
             semDelete(new->lock);
             free(new);
@@ -274,9 +274,9 @@ dev_release(const char_t* pname)
         return ERROR;
     }
 
-    if (pnode->fileopt.release != NULL)
+    if (pnode->pfileopt->release != NULL)
     {
-        if (OK != pnode->fileopt.release(pnode))
+        if (OK != pnode->pfileopt->release(pnode))
         {
             Dprintf("dev:%s release err!\n\n", pname);
             return ERROR;
@@ -332,10 +332,10 @@ dev_open(const char_t* pname, int32_t flags)
     }
 
     pnode->flags = flags;
-    if (pnode->fileopt.open != NULL)
+    if (pnode->pfileopt->open != NULL)
     {
         (void)semTake(pnode->lock, WAIT_FOREVER);
-        if (OK != pnode->fileopt.open(pnode))
+        if (OK != pnode->pfileopt->open(pnode))
         {
             (void)semGive(pnode->lock);
             Dprintf("dev: opend err.\n");
@@ -371,13 +371,13 @@ dev_read(int32_t fd, void* buf, int32_t count)
     }
     device_t* pnode = the_opend_devs[realfd];
 
-    if ((pnode->fileopt.read == NULL) || (pnode->flags & O_WRONLY))
+    if ((pnode->pfileopt->read == NULL) || (pnode->flags & O_WRONLY))
     {
         return -1;
     }
 
     (void)semTake(pnode->lock, WAIT_FOREVER);
-    size = pnode->fileopt.read(pnode, pnode->offset, buf, count);
+    size = pnode->pfileopt->read(pnode, pnode->offset, buf, count);
     (void)semGive(pnode->lock);
 
     return size;
@@ -406,13 +406,13 @@ dev_write(int32_t fd, const void* buf, int32_t count)
     }
     device_t* pnode = the_opend_devs[realfd];
 
-    if ((pnode->fileopt.write == NULL) || (pnode->flags & O_RDONLY))
+    if ((pnode->pfileopt->write == NULL) || (pnode->flags & O_RDONLY))
     {
         return -1;
     }
 
     (void)semTake(pnode->lock, WAIT_FOREVER);
-    size = pnode->fileopt.write(pnode, pnode->offset, buf, count);
+    size = pnode->pfileopt->write(pnode, pnode->offset, buf, count);
     (void)semGive(pnode->lock);
 
     return size;
@@ -440,13 +440,13 @@ dev_ioctl(int32_t fd, uint32_t cmd, void *args)
     }
     device_t* pnode = the_opend_devs[realfd];
 
-    if (pnode->fileopt.ioctl == NULL)
+    if (pnode->pfileopt->ioctl == NULL)
     {
         return -1;
     }
 
     (void)semTake(pnode->lock, WAIT_FOREVER);
-    int32_t ret = pnode->fileopt.ioctl(pnode, cmd, args);
+    int32_t ret = pnode->pfileopt->ioctl(pnode, cmd, args);
     (void)semGive(pnode->lock);
 
     return ret;
@@ -474,9 +474,9 @@ dev_close(int32_t fd)
     pnode->usrs--;
     if (pnode->usrs <= 0)
     {
-        if (pnode->fileopt.close != NULL)
+        if (pnode->pfileopt->close != NULL)
         {
-            if (OK != pnode->fileopt.close(pnode))
+            if (OK != pnode->pfileopt->close(pnode))
             {
                 return -1;
             }
