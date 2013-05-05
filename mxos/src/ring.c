@@ -163,6 +163,7 @@ ring_write_force(struct ring_buf *ring, const uint8_t *buffer, uint16_t len)
 
     return wr_len;
 }
+
 /**
  ******************************************************************************
  * @brief      从环形缓冲区读

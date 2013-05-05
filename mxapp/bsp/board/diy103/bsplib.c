@@ -92,7 +92,6 @@ void bsp_reboot(void)
 void
 bsp_timer_start(void)
 {
-    return ;
 // 根据波特率设置延时时间
     uint32_t baud_timertick = 0xffffffff;
 
@@ -119,7 +118,7 @@ bsp_timer_start(void)
     //禁止ARR预装载缓冲器
     //TIM_ARRPreloadConfig(TIM2, DISABLE);
     //开启TIM2的中断
-    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
+//    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
     /* TIM2 counter enable */
     TIM_Cmd(TIM2, ENABLE);
 
@@ -129,9 +128,9 @@ bsp_timer_start(void)
 uint32_t
 bsp_timer_get(void)
 {
-    uint32_t starttime_ms = 0;
-    starttime_ms = TIM_GetCounter(TIM2);
-    return starttime_ms;
+    //return (uint32_t)TIM_GetCounter(TIM2);
+    static uint32_t i = 0;
+    return i++;
 }
 
 /* 5. 获取MCU主频 */

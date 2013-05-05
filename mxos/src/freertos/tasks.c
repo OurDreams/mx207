@@ -2849,7 +2849,11 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
             /* What percentage of the total run time has the task used?
             This will always be rounded down to the nearest integer.
             ulTotalRunTime has already been divided by 100. */
-	        unsigned long ulStatsAsPercentage = pxNextTCB->ulRunTimeCounter / ulTotalRunTime;
+	        unsigned long ulStatsAsPercentage = 0;
+	        if (ulTotalRunTime != 0)
+	        {
+	            ulStatsAsPercentage = pxNextTCB->ulRunTimeCounter / ulTotalRunTime;
+	        }
             uint8_t strusage[5];
             memset(strusage, 0, sizeof(strusage));
             if (pxNextTCB->ulRunTimeCounter == 0)
