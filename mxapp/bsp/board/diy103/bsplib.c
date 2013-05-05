@@ -92,6 +92,7 @@ void bsp_reboot(void)
 void
 bsp_timer_start(void)
 {
+    return ;
 // 根据波特率设置延时时间
     uint32_t baud_timertick = 0xffffffff;
 

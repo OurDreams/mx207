@@ -123,6 +123,7 @@ rootTask(void *p_arg)
  */
 int main(void)
 {
+    printf("abcadkljfkadjflkjdlkjf\n");
     /* 1. 初始化系统主频 */
     mcuClkSetup();
 
