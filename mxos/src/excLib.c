@@ -16,6 +16,8 @@
 #include <string.h>
 #include <time.h>
 #include <taskLib.h>
+#include <FreeRTOS.h>
+#include <task.h>
 
 /*-----------------------------------------------------------------------------
  Section: Macro Definitions
@@ -169,6 +171,11 @@ excExcHandle(void* pRegs, uint32_t excNo)
     printf("exception occur time: %04d-%02d-%02d %02d:%02d:%02d\r\n",
             daytime.tm_year + 1900, daytime.tm_mon + 1, daytime.tm_mday,
             daytime.tm_hour, daytime.tm_min, daytime.tm_sec);
+    /* 若此时调度器关闭，则打开调度器 */
+    if (xTaskGetSchedulerState() == taskSCHEDULER_SUSPENDED)
+    {
+        xTaskResumeAll();
+    }
     intCnt--;
 }
 

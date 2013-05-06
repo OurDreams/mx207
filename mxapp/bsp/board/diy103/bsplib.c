@@ -128,9 +128,7 @@ bsp_timer_start(void)
 uint32_t
 bsp_timer_get(void)
 {
-    //return (uint32_t)TIM_GetCounter(TIM2);
-    static uint32_t i = 0;
-    return i++;
+    return (uint32_t)TIM_GetCounter(TIM2);
 }
 
 /* 5. »ñÈ¡MCUÖ÷Æµ */

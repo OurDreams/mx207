@@ -2853,6 +2853,7 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	        if (ulTotalRunTime != 0)
 	        {
 	            ulStatsAsPercentage = pxNextTCB->ulRunTimeCounter / ulTotalRunTime;
+	            ulStatsAsPercentage = ulStatsAsPercentage > 100 ? 100 :  ulStatsAsPercentage;
 	        }
             uint8_t strusage[5];
             memset(strusage, 0, sizeof(strusage));
