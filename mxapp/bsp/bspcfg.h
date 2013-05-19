@@ -19,7 +19,7 @@
 #define BOARD_GY103     (3u)
 #define BOARD_TI811     (4u)
 
-#define BOARD_BUILD_VER BOARD_DIY103
+#define BOARD_BUILD_VER BOARD_MX207
 
 #if (BOARD_BUILD_VER == BOARD_MX207)
 # include "./board/mx207/boardcfg.h"

@@ -2904,7 +2904,8 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	 */
 	uint32_t vTaskInfo ()
 	{
-	    vTaskSuspendAll();
+	    vPortEnterCritical();
+//	    vTaskSuspendAll();
 
 	    // Êä³öÁÐÃû
 #if ( configGENERATE_RUN_TIME_STATS == 1 )
@@ -2972,7 +2973,8 @@ void vApplicationStackOverflowHook( xTaskHandle *pxTask, signed char *pcTaskName
 	    ulTaskSwitchedInTime_base = portGET_RUN_TIME_COUNTER_VALUE();
 	    ulTaskSwitchedInTime = 0;
 #endif
-	    xTaskResumeAll();
+//	    xTaskResumeAll();
+	    vPortExitCritical();
         return 1;
 	}
 
