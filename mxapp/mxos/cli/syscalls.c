@@ -36,6 +36,24 @@ _isatty(int file)
 }
 
 int
+_exit(int a)
+{
+    return 0;
+}
+
+int
+_kill(int a)
+{
+    return 0;
+}
+
+int
+_getpid(int a)
+{
+    return 0;
+}
+
+int
 _lseek(int file, int ptr, int dir)
 {
     return 0;

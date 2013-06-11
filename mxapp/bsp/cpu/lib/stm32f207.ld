@@ -6,7 +6,7 @@ cstack_top = 0x20020000;    /* end of 128K RAM */
 MEMORY
 {
     FLASH (rx) : ORIGIN = 0x00008000, LENGTH = 496K
-    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 8K
+    SRAM (rwx) : ORIGIN = 0x20000000, LENGTH = 128K
 }
 
 SECTIONS

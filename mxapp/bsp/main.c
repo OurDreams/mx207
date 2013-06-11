@@ -50,6 +50,7 @@ extern uint32_t bsp_get_mcu_clk(void);
 extern void usrapp_init(void);
 extern void mcuClkSetup(void);
 extern void bspHwInit(void);
+extern status_t devices_init(void);
 #if (USE_TTY == 1u)
 extern void tty_init(void);
 #endif
@@ -102,6 +103,8 @@ rootTask(void *p_arg)
 
     /* 5. OS其他资源模块初始化 */
     os_resource_init();
+
+    devices_init();
 
     /* 6. 输出OS banner */
     os_print_banner();

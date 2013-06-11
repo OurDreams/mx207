@@ -16,6 +16,7 @@
 #include <types.h>
 #include <intLib.h>
 #include <stm32f2xx.h>
+#include <gpio.h>
 
 #if (BOARD_BUILD_VER == BOARD_MX207)
 
@@ -42,7 +43,7 @@
 /*-----------------------------------------------------------------------------
  Section: Local Function Prototypes
  ----------------------------------------------------------------------------*/
-/* NONE */
+extern void ETH_BSP_Config(void);
 
 /*-----------------------------------------------------------------------------
  Section: Function Definitions
@@ -91,6 +92,15 @@ bspHwInit(void)
     intLock();
 
     intUnlock();
+}
+
+status_t devices_init(void)
+{
+    gpio_init();
+
+//    ETH_BSP_Config();
+
+    return OK;
 }
 
 int32_t bsp_getchar(void)
