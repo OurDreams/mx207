@@ -130,7 +130,7 @@ int main(void)
     mcuClkSetup();
 
     /* 2. 初始化OS内存管理单元 */
-    if (OK != memlib_init((uint32_t)&heap_low, (uint32_t)(&cstack_top - 0x200)))
+    if (OK != memlib_add((uint32_t)&heap_low, (uint32_t)(&cstack_top - 0x200)))
     {
         puts("mem_init err!");
         while(1);
